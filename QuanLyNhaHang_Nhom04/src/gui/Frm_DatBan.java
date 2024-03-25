@@ -3,141 +3,159 @@ package gui;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+
+import entity.PhieuDatBan;
+import entity.PhieuDatBan_Collection;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.util.Date;
 
-public class Frm_DatBan extends JPanel {
-    private JSpinner dateSpinner;
-    private JComboBox<String> timeComboBox;
-    private JComboBox<Integer> peopleComboBox;
-    private JTextField nameTextField;
-    private JTextField phoneTextField;
-    private JTextField  adTextField;
-    private JComboBox<String> areaComboBox;
-    private JComboBox<String> roomComboBox;
-    private JTextArea noteTextArea;
-    private String[] roomOptions = new String[20];
+public class Frm_DatBan extends JPanel implements ActionListener {
+    private JSpinner spn_ngayThang;
+    private JComboBox<String> cmb_gioDat;
+    private JComboBox<Integer> cmb_soLuongNguoi;
+    private JTextField txt_hoTen;
+    private JTextField txt_sdt;
+    private JTextField  txt_diaChi;
+    private JComboBox<String> cmb_khuVuc;
+    private JComboBox<String> cmb_ban;
+	private JTextField txtMess;
+	private JButton btn_Them,btn_Tim, btn_Xoa, btn_xoaRong;
+	private JTextField txt_maPhieu;
+	private PhieuDatBan_Collection listPhieu;
+	private DefaultTableModel modelPhieu;
+	private JTable table;
 
     public Frm_DatBan() {
         setLayout(new BorderLayout());
 
+        listPhieu = new PhieuDatBan_Collection();
         JPanel mainPanel = new JPanel(new BorderLayout(15, 5));
         mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
         Color lightYellow = new Color(255, 255, 153);
         mainPanel.setBackground(Color.WHITE);
 
-        JPanel leftPanel = new JPanel(new GridLayout(6, 1, 0, 0));
-        leftPanel.setBackground(Color.WHITE); // White
+        JPanel pnl_W = new JPanel(new GridLayout(7, 1, 0, 0));
+        pnl_W.setBackground(Color.WHITE); // White
 
-        JPanel areaPanel = new JPanel(new BorderLayout());
-        areaPanel.setBackground(Color.WHITE); // White
-        areaPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Khu vực", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
-        String[] areaOptions = {"Khu vực 1", "Khu vực 2", "Tầng 1", "Tầng 2"};
-        areaComboBox = new JComboBox<>(areaOptions);
-        areaComboBox.setFont(new Font("Arial", Font.BOLD, 20));
-        areaPanel.add(areaComboBox, BorderLayout.CENTER);
-        leftPanel.add(areaPanel);
+        // Khu vực
         
-     // Room
-        JPanel roomPanel = new JPanel(new BorderLayout());
-        roomPanel.setBackground(Color.WHITE);
-        roomPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Bàn", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        JPanel pnl_khuVuc = new JPanel(new BorderLayout());
+        pnl_khuVuc.setBackground(Color.WHITE); // White
+        pnl_khuVuc.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Khu vực", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        String[] khuVuc = {"Khu vực 1", "Khu vực 2", "Tầng 1", "Tầng 2"};
+        cmb_khuVuc = new JComboBox<>(khuVuc);
+        cmb_khuVuc.setFont(new Font("Arial", Font.BOLD, 20));
+        pnl_khuVuc.add(cmb_khuVuc, BorderLayout.CENTER);
+        pnl_W.add(pnl_khuVuc);
+        
+     // Bàn
+        JPanel pnl_Ban = new JPanel(new BorderLayout());
+        pnl_Ban.setBackground(Color.WHITE);
+        pnl_Ban.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Bàn", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
 
-        String[] roomOptions = new String[25]; 
+        String[] soBan = new String[25]; 
 
 
         for (int i = 0; i < 20; i++) {
-            roomOptions[i] = "Bàn " + (i + 1);
+            soBan[i] = "Bàn " + (i + 1);
         }
 
-        roomOptions[20] = "Phòng VIP 1";
-        roomOptions[21] = "Phòng VIP 2";
-        roomOptions[22] = "Phòng VIP 3";
-        roomOptions[23] = "Phòng Karaoke 1";
-        roomOptions[24] = "Phòng Karaoke 2";
+        soBan[20] = "Phòng VIP 1";
+        soBan[21] = "Phòng VIP 2";
+        soBan[22] = "Phòng VIP 3";
+        soBan[23] = "Phòng Karaoke 1";
+        soBan[24] = "Phòng Karaoke 2";
 
-        JComboBox<String> roomComboBox = new JComboBox<>(roomOptions);
-        roomComboBox.setFont(new Font("Arial", Font.BOLD, 20));
-        roomComboBox.setForeground(Color.BLACK);
-        roomPanel.add(roomComboBox, BorderLayout.CENTER);
-        leftPanel.add(roomPanel);
-        // Name
-        JPanel namePanel = new JPanel(new BorderLayout());
-        namePanel.setBackground(Color.WHITE); // White
-        namePanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Họ tên khách hàng", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
-        nameTextField = new JTextField(30);
-        nameTextField.setFont(new Font("Roboto", Font.BOLD, 16));
-        namePanel.add(nameTextField, BorderLayout.CENTER);
-        leftPanel.add(namePanel);
+        cmb_ban = new JComboBox<>(soBan);
+        cmb_ban.setFont(new Font("Arial", Font.BOLD, 20));
+        cmb_ban.setForeground(Color.BLACK);
+        pnl_Ban.add(cmb_ban, BorderLayout.CENTER);
+        pnl_W.add(pnl_Ban);
+        
+        
+      //Mã phiếu
+        JPanel pnl_maPhieu = new JPanel(new BorderLayout());
+        pnl_maPhieu.setBackground(Color.WHITE); // White
+        pnl_maPhieu.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Mã Phiếu", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        txt_maPhieu = new JTextField(30);
+        txt_maPhieu.setFont(new Font("Roboto", Font.BOLD, 16));
+        pnl_maPhieu.add(txt_maPhieu, BorderLayout.CENTER);
+        pnl_W.add(pnl_maPhieu);
+        
+        //Tên
+        JPanel pnl_hoTen = new JPanel(new BorderLayout());
+        pnl_hoTen.setBackground(Color.WHITE); // White
+        pnl_hoTen.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Họ tên khách hàng", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        txt_hoTen = new JTextField(30);
+        txt_hoTen.setFont(new Font("Roboto", Font.BOLD, 16));
+        pnl_hoTen.add(txt_hoTen, BorderLayout.CENTER);
+        pnl_W.add(pnl_hoTen);
 
-        // Phone
-        JPanel phonePanel = new JPanel(new BorderLayout());
-        phonePanel.setBackground(Color.WHITE); // White
-        phonePanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "SĐT", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
-        phoneTextField = new JTextField(30);
-        phoneTextField.setFont(new Font("Arial", Font.BOLD, 16));
-        phonePanel.add(phoneTextField, BorderLayout.CENTER);
-        leftPanel.add(phonePanel);
+        // SDT
+        JPanel pnl_SDT = new JPanel(new BorderLayout());
+        pnl_SDT.setBackground(Color.WHITE); // White
+        pnl_SDT.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "SĐT", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        txt_sdt = new JTextField(30);
+        txt_sdt.setFont(new Font("Arial", Font.BOLD, 16));
+        pnl_SDT.add(txt_sdt, BorderLayout.CENTER);
+        pnl_W.add(pnl_SDT);
 
-     // Address
-        JPanel adPanel = new JPanel(new BorderLayout());
-        adPanel.setBackground(Color.WHITE); // White
-        adPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Địa Chỉ", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
-        adTextField = new JTextField(30);
-        adTextField.setFont(new Font("Arial", Font.BOLD, 16));
-        adPanel.add(adTextField, BorderLayout.CENTER);
-        leftPanel.add(adPanel);
+     // Địa chỉ
+        JPanel pnl_diaChi = new JPanel(new BorderLayout());
+        pnl_diaChi.setBackground(Color.WHITE); // White
+        pnl_diaChi.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Địa Chỉ", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        txt_diaChi = new JTextField(30);
+        txt_diaChi.setFont(new Font("Arial", Font.BOLD, 16));
+        pnl_diaChi.add(txt_diaChi, BorderLayout.CENTER);
+        pnl_W.add(pnl_diaChi);
 
-        JPanel notePanel = new JPanel();
-        notePanel.setLayout(new BoxLayout(notePanel, BoxLayout.X_AXIS));
-        notePanel.setBackground(Color.WHITE);
-        notePanel.setBorder(new EmptyBorder(15, 10, 0, 0));
+        JPanel pnl_btn = new JPanel();
+        pnl_btn.setLayout(new BoxLayout(pnl_btn, BoxLayout.X_AXIS));
+        pnl_btn.setBackground(Color.WHITE);
+        pnl_btn.setBorder(new EmptyBorder(15, 10, 0, 0));
 
-        JButton addButton = new JButton("Thêm");
-        JButton xoaButton = new JButton("Xóa");
-        JButton xoaRButton = new JButton("Xóa rỗng");
-        JButton searchButton = new JButton("Tìm kiếm");
+        btn_Them = new JButton("Thêm");
+        btn_Xoa = new JButton("Xóa");
+        btn_xoaRong = new JButton("Xóa rỗng");
+        btn_Tim = new JButton("Tìm kiếm");
 
-        /*addButton.setBackground(new Color(173, 216, 230)); // Light blue color
-        xoaButton.setBackground(new Color(173, 216, 230)); // Light blue color
-        xoaRButton.setBackground(new Color(173, 216, 230)); // Light blue color
-        searchButton.setBackground(new Color(173, 216, 230)); // Light blue color*/
+        /*btn_Them.setBackground(new Color(173, 216, 230)); // Light blue color
+        btn_Xoa.setBackground(new Color(173, 216, 230)); // Light blue color
+        btn_xoaRong.setBackground(new Color(173, 216, 230)); // Light blue color
+        btn_Tim.setBackground(new Color(173, 216, 230)); // Light blue color*/
         
                
-        notePanel.add(addButton);
-        notePanel.add(Box.createHorizontalStrut(10)); 
-        notePanel.add(xoaButton);
-        notePanel.add(Box.createHorizontalStrut(10)); 
-        notePanel.add(xoaRButton);
-        notePanel.add(Box.createHorizontalStrut(10)); 
-        notePanel.add(searchButton);
+        pnl_btn.add(btn_Them);
+        pnl_btn.add(Box.createHorizontalStrut(10)); 
+        pnl_btn.add(btn_Xoa);
+        pnl_btn.add(Box.createHorizontalStrut(10)); 
+        pnl_btn.add(btn_xoaRong);
+        pnl_btn.add(Box.createHorizontalStrut(10)); 
+        pnl_btn.add(btn_Tim);
 
         Font bFont = new Font("Arial", Font.BOLD, 16);
-        addButton.setFont(bFont);
-        xoaButton.setFont(bFont);
-        xoaRButton.setFont(bFont);
-        searchButton.setFont(bFont);
+        btn_Them.setFont(bFont);
+        btn_Xoa.setFont(bFont);
+        btn_xoaRong.setFont(bFont);
+        btn_Tim.setFont(bFont);
+        pnl_W.setPreferredSize(new Dimension(400,400));
+        pnl_W.add(pnl_btn);
 
-        leftPanel.add(notePanel);
-        leftPanel.setPreferredSize(new Dimension(400,400));
-       
-
-        mainPanel.add(leftPanel, BorderLayout.WEST);
+        mainPanel.add(pnl_W, BorderLayout.WEST);
 
         JPanel rightPanel = new JPanel(new BorderLayout());
 
         // Table
         String[] columnNames = {"Mã", "Khu vực", "Số bàn", "SL","Ngày đặt","Ngày lập","Giờ đặt","Họ Tên", "SDT", "Địa chỉ"};
-        Object[][] data = {
-            {"000000", "Khu vực 1", "Bàn 1", "5","11/3/2024","10/3/2024","10:00 AM", "Trần Văn A", "1234567890", "đường Nguyễn Thái Sơn, quận Gò Vấp"},
-            {"000001", "Tầng 2", "Phòng VIP 1", "5","12/3/2024", "10/3/2024","11:00 AM","Nguyễn Thị B", "9876543210", "đường Phan Văn Trị, quận Gò Vấp"}
-        };
 
-        JTable table = new JTable(data, columnNames);
+        modelPhieu = new DefaultTableModel(columnNames, 0);
+		table = new JTable(modelPhieu);
         table.setFont(new Font("Arial", Font.BOLD, 16));
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -174,42 +192,42 @@ public class Frm_DatBan extends JPanel {
         mainPanel.add(rightPanel, BorderLayout.CENTER);
 
 
-        JPanel topPanel = new JPanel(new GridLayout(1, 3, 0, 10));
-        topPanel.setBackground(Color.WHITE); 
-        topPanel.setBorder(new EmptyBorder(5, 0, 10, 0));
+        JPanel pnl_N = new JPanel(new GridLayout(1, 3, 0, 10));
+        pnl_N.setBackground(Color.WHITE); 
+        pnl_N.setBorder(new EmptyBorder(5, 0, 10, 0));
 
-        // Date
-        JPanel datePanel = new JPanel(new BorderLayout());
-        datePanel.setBackground(Color.WHITE);
-        datePanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.black, 2), "Ngày đặt", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        // Ngày tháng năm
+        JPanel pnl_ngayThang = new JPanel(new BorderLayout());
+        pnl_ngayThang.setBackground(Color.WHITE);
+        pnl_ngayThang.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.black, 2), "Ngày đặt", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
         SpinnerDateModel dateModel = new SpinnerDateModel();
-        dateSpinner = new JSpinner(dateModel);
-        dateSpinner.setEditor(new JSpinner.DateEditor(dateSpinner, "MM/dd/yyyy"));
-        dateSpinner.setFont(new Font("Arial", Font.BOLD, 20));
-        datePanel.add(dateSpinner, BorderLayout.CENTER);
-        topPanel.add(datePanel);
+        spn_ngayThang = new JSpinner(dateModel);
+        spn_ngayThang.setEditor(new JSpinner.DateEditor(spn_ngayThang, "MM/dd/yyyy"));
+        spn_ngayThang.setFont(new Font("Arial", Font.BOLD, 20));
+        pnl_ngayThang.add(spn_ngayThang, BorderLayout.CENTER);
+        pnl_N.add(pnl_ngayThang);
 
-        // Time
-        JPanel timePanel = new JPanel(new BorderLayout());
-        timePanel.setBackground(Color.WHITE); 
-        timePanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Giờ đặt", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        // Giờ đặt
+        JPanel pnl_gioDat = new JPanel(new BorderLayout());
+        pnl_gioDat.setBackground(Color.WHITE); 
+        pnl_gioDat.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Giờ đặt", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
         String[] timeOptions = {"10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"};
-        timeComboBox = new JComboBox<>(timeOptions);
-        timeComboBox.setFont(new Font("Arial", Font.BOLD, 20));
-        timePanel.add(timeComboBox, BorderLayout.CENTER);
-        topPanel.add(timePanel);
+        cmb_gioDat = new JComboBox<>(timeOptions);
+        cmb_gioDat.setFont(new Font("Arial", Font.BOLD, 20));
+        pnl_gioDat.add(cmb_gioDat, BorderLayout.CENTER);
+        pnl_N.add(pnl_gioDat);
 
-        // People
-        JPanel peoplePanel = new JPanel(new BorderLayout());
-        peoplePanel.setBackground(Color.WHITE); 
-        peoplePanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Số lượng người", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        // Số lượng người
+        JPanel pnl_soLuongNguoi = new JPanel(new BorderLayout());
+        pnl_soLuongNguoi.setBackground(Color.WHITE); 
+        pnl_soLuongNguoi.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Số lượng người", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
         Integer[] peopleOptions = {1, 2, 3, 4, 5};
-        peopleComboBox = new JComboBox<>(peopleOptions);
-        peopleComboBox.setFont(new Font("Arial", Font.BOLD, 20));
-        peoplePanel.add(peopleComboBox, BorderLayout.CENTER);
-        topPanel.add(peoplePanel);
-
-        mainPanel.add(topPanel, BorderLayout.NORTH);
+        cmb_soLuongNguoi = new JComboBox<>(peopleOptions);
+        cmb_soLuongNguoi.setFont(new Font("Arial", Font.BOLD, 20));
+        pnl_soLuongNguoi.add(cmb_soLuongNguoi, BorderLayout.CENTER);
+        pnl_N.add(pnl_soLuongNguoi);
+        pnl_W.add(pnl_N);
+        mainPanel.add(pnl_N, BorderLayout.NORTH);
 
         add(mainPanel, BorderLayout.CENTER);
         
@@ -218,6 +236,11 @@ public class Frm_DatBan extends JPanel {
         btnPanel.setLayout(new FlowLayout(FlowLayout.RIGHT)); 
         btnPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
         
+        btnPanel.add(txtMess = new JTextField());
+		txtMess.setEditable(false);
+		txtMess.setBorder(null);
+		txtMess.setForeground(Color.red);
+		txtMess.setFont(new Font("Arial", Font.ITALIC, 15));
         
         JButton btnChonMon = new JButton("Chọn món");
         JButton btnLuu = new JButton("Lưu");
@@ -246,6 +269,50 @@ public class Frm_DatBan extends JPanel {
         btnPanel.add(btnQuayLai);
 
         mainPanel.add(btnPanel, BorderLayout.SOUTH);
+                
+        btn_Them.addActionListener(this );
     }
-    	
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		Object o = e.getSource();
+		if(o.equals(btn_Them)) {
+			Date selectedDate = (Date) spn_ngayThang.getValue();
+		    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		    String ngayThang = formatter.format(selectedDate);
+			String gio = String.valueOf(cmb_gioDat.getSelectedItem());
+			Integer soLuong = (Integer) cmb_soLuongNguoi.getSelectedItem();
+			String hoTen = txt_hoTen.getText();
+			String sdt = txt_sdt.getText();
+			String diaChi = txt_diaChi.getText();
+			String khuVuc = String.valueOf(cmb_khuVuc.getSelectedItem());
+			String ma = txt_maPhieu.getText();
+			String soBan = String.valueOf(cmb_ban.getSelectedItem());
+			LocalDate ngayLap = LocalDate.now();
+			
+			PhieuDatBan p = new PhieuDatBan(ma, khuVuc, soBan, soLuong, ngayThang,ngayLap,gio,hoTen,sdt,diaChi);
+			
+			if(!listPhieu.themPhieu(p)) {
+				JOptionPane.showMessageDialog(this, "Trùng mã");
+			}
+			else {
+				modelPhieu.addRow(new Object[] {p.getMaPhieu(), p.getKhuVuc(),p.getSoBan(),p.getSoLuongNguoi(),
+				 p.getNgayThang(),p.getNgayLap(),p.getGioDat(),p.getHoTen(),p.getHoTen(),p.getDiaChi()
+				});
+			}
+		}
+
+		if(o.equals(btn_xoaRong)) {
+			txt_maPhieu.setText("");
+			txt_hoTen.setText("");
+			txt_diaChi.setText("");
+			txt_sdt.setText("");
+
+
+		}
+		
+	}
+    
+ 	
 }
