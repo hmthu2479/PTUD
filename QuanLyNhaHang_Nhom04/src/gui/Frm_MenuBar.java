@@ -4,17 +4,19 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.*;
 
-public class Frm_MenuBar extends JFrame {
-    private static Frm_MenuBar frm;
+public class Frm_MenuBar extends JFrame implements MouseListener {
 	private Frm_DatMon datMon; 
     private Frm_DatBan datBan; 
     private Frm_NhanVien nhanVien;
@@ -24,34 +26,34 @@ public class Frm_MenuBar extends JFrame {
     public Frm_MenuBar() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Ordering App");
-        setSize(1150, 650);
+        setSize(1150, 700);
         setLocationRelativeTo(null);
        
         JMenu thucDon = new JMenu("Thực đơn");
-        JMenuItem monAn = new JMenuItem("Món ăn");//when click into move to Frm_DatMon
-        JMenuItem capNhatMonAn = new JMenuItem("Cập nhật thực đơn");//when click into move to Frm_QuanLyMonAn
-        thucDon.add(monAn);
-        thucDon.add(capNhatMonAn);
+        JMenuItem mniMonAn = new JMenuItem("Món ăn");
+        JMenuItem mniCapNhatMonAn = new JMenuItem("Cập nhật món ăn");
+        thucDon.add(mniMonAn);
+        thucDon.add(mniCapNhatMonAn);
 
         JMenu ban = new JMenu("Bàn");
-        JMenuItem capNhatBan = new JMenuItem("Cập nhật");//when click into move to Frm_DatBan
-        ban.add(capNhatBan);
+        JMenuItem mniCapNhatBan = new JMenuItem("Cập nhật");
+        ban.add(mniCapNhatBan);
         
         JMenu nhanVienMenu = new JMenu("Nhân viên");
-        JMenuItem datMonItem = new JMenuItem("Đặt món");
-        JMenuItem datBanItem = new JMenuItem("Đặt bàn");//when click into move to Frm_DatBan
-        JMenuItem capNhatNhanVien = new JMenuItem("Cập nhật nhân viên");//when click into move to Frm_NhanVien
-        JMenuItem thongKeNhanVien = new JMenuItem("Thống kê doanh thu");//when click into move to Frm_ThongKe
-        nhanVienMenu.add(datMonItem);
-        nhanVienMenu.add(datBanItem);
-        nhanVienMenu.add(capNhatNhanVien);
-        nhanVienMenu.add(thongKeNhanVien);
+        JMenuItem mniDatMon = new JMenuItem("Đặt món");
+        JMenuItem mniDatBan = new JMenuItem("Đặt bàn");
+        JMenuItem mniCapNhatNhanVien = new JMenuItem("Cập nhật nhân viên");
+        JMenuItem mniThongKe = new JMenuItem("Thống kê doanh thu");
+        nhanVienMenu.add(mniDatMon);
+        nhanVienMenu.add(mniDatBan);
+        nhanVienMenu.add(mniCapNhatNhanVien);
+        nhanVienMenu.add(mniThongKe);
 
         JMenu khachHangMenu = new JMenu("Khách hàng");
-        JMenuItem timKiem = new JMenuItem("Tìm kiếm");
-        JMenuItem capNhatKhachHang = new JMenuItem("Cập nhật");
-        khachHangMenu.add(timKiem);
-        khachHangMenu.add(capNhatKhachHang);
+        JMenuItem mniTimKiem = new JMenuItem("Tìm kiếm");
+        JMenuItem mnicapNhatKhachHang = new JMenuItem("Cập nhật");
+        khachHangMenu.add(mniTimKiem);
+        khachHangMenu.add(mnicapNhatKhachHang);
 
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(thucDon);
@@ -62,68 +64,55 @@ public class Frm_MenuBar extends JFrame {
         ActionListener menuActionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == datBanItem) {
-                    if (datBan == null) {
-                        datBan = new Frm_DatBan();
-                    }
+                if (e.getSource() == mniDatBan) {
+                    datBan = new Frm_DatBan();
                     setContentPane(datBan);
-                } else if (e.getSource() == datMonItem) {
-                    if (datMon == null) {
-                        datMon = new Frm_DatMon();
-                    }
+                } else if (e.getSource() == mniDatMon) {
+                    datMon = new Frm_DatMon(); 
                     setContentPane(datMon);
-                } else if (e.getSource() == capNhatNhanVien) {
-                    if (nhanVien == null) {
-                        nhanVien = new Frm_NhanVien();
-                    }
+                } else if (e.getSource() == mniCapNhatNhanVien) {
+                    nhanVien = new Frm_NhanVien();
                     setContentPane(nhanVien);
-                } else if (e.getSource() == capNhatMonAn) {
-                    if (qly == null) {
-                        qly = new Frm_QuanLyMonAn();
-                    }
+                } else if (e.getSource() == mniCapNhatMonAn) {
+                    qly = new Frm_QuanLyMonAn();
                     setContentPane(qly);
-                } else if (e.getSource() == thongKeNhanVien) {
-                    if (thongKe == null) {
-                        thongKe = new Frm_ThongKe();
-                    }
+                } else if (e.getSource() == mniThongKe) {
+                    thongKe = new Frm_ThongKe();
                     setContentPane(thongKe);
                 }
                 revalidate();
             }
         };
 
-        datMonItem.addActionListener(menuActionListener);
-        datBanItem.addActionListener(menuActionListener);
-        capNhatNhanVien.addActionListener(menuActionListener);
-        capNhatMonAn.addActionListener(menuActionListener);
-        thongKeNhanVien.addActionListener(menuActionListener);
-        monAn.addActionListener(menuActionListener);
-        capNhatBan.addActionListener(menuActionListener);
+        mniDatMon.addActionListener(menuActionListener);
+        mniDatBan.addActionListener(menuActionListener);
+        mniCapNhatNhanVien.addActionListener(menuActionListener);
+        mniCapNhatMonAn.addActionListener(menuActionListener);
+        mniThongKe.addActionListener(menuActionListener);
+        mniMonAn.addActionListener(menuActionListener);
         
+        
+        menuBar.setLayout(new FlowLayout(FlowLayout.CENTER)); 
 
-     // Set font and size for all menu items
-        menuBar.getComponents();
-        for (Component c : menuBar.getComponents()) {
-            if (c instanceof JMenu) {
-                JMenu menu = (JMenu) c;
-                menu.setFont(new Font("Arial", Font.BOLD, 20)); 
+     for (Component c : menuBar.getComponents()) {
+         if (c instanceof JMenu) {
+             JMenu menu = (JMenu) c;
+             menu.setFont(new Font("Arial", Font.BOLD, 20));
+             menu.addMouseListener(this);
 
-                for (Component menuItem : menu.getMenuComponents()) {
-                    if (menuItem instanceof JMenuItem) {
-                        JMenuItem item = (JMenuItem) menuItem;
-                        item.setFont(new Font("Arial", Font.BOLD, 17));
-                    }
-                }
-            }
-        }
-        
-        //Image on menu bar
-        thucDon.setOpaque(false);
-        thucDon.setBackground(new Color(0, 0, 0, 0));
-        ImageIcon menuIcon = new ImageIcon(getClass().getResource("/img/icons8-manage-24.png"));
-        Image menuImage = menuIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-        thucDon.setIcon(new ImageIcon(menuImage));
-        
+             for (Component menuItem : menu.getMenuComponents()) {
+                 if (menuItem instanceof JMenuItem) {
+                     JMenuItem item = (JMenuItem) menuItem;
+                     item.setFont(new Font("Arial", Font.BOLD, 17));
+                 }
+             }
+         }
+     }
+
+        Dimension preferredSize = menuBar.getPreferredSize();
+        preferredSize.height = 42;
+        menuBar.setPreferredSize(preferredSize);
+        menuBar.setBackground(Color.white);
         
         // Image on screen
         JLabel imageLabel = new JLabel();
@@ -140,10 +129,7 @@ public class Frm_MenuBar extends JFrame {
             }
         });
 
-        Dimension preferredSize = menuBar.getPreferredSize();
-        preferredSize.height = 42;
-        menuBar.setPreferredSize(preferredSize);
-
+        
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.add(menuBar, BorderLayout.NORTH);
@@ -161,6 +147,40 @@ public class Frm_MenuBar extends JFrame {
 				frm.setVisible(true);
 			}
 		});
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+    public void mouseEntered(MouseEvent e) {
+        if (e.getSource() instanceof JMenu) {
+        	JMenu menu  = (JMenu) e.getSource();
+        	menu.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, Color.black));
+        }
+    }
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+	    if (e.getSource() instanceof JMenu) {
+	        JMenu menu = (JMenu) e.getSource();
+	        menu.setBorder(null); 
+	    }
 	}
 
 }
