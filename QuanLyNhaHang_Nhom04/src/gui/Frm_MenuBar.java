@@ -22,6 +22,9 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
     private Frm_NhanVien nhanVien;
     private Frm_ThongKe thongKe;
     private Frm_QuanLyMonAn qly ;
+    private Frm_KhuVuc khuVuc;
+    private Frm_Phong phong;
+    private Frm_Ban ban;
 
     public Frm_MenuBar() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,7 +39,11 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
         thucDon.add(mniCapNhatMonAn);
 
         JMenu ban = new JMenu("Bàn");
-        JMenuItem mniCapNhatBan = new JMenuItem("Cập nhật");
+        JMenuItem mniCapNhatKV = new JMenuItem("Cập nhật khu vực");
+        JMenuItem mniCapNhatP = new JMenuItem("Cập nhật phòng");
+        JMenuItem mniCapNhatBan = new JMenuItem("Cập nhật bàn");
+        ban.add(mniCapNhatKV);
+        ban.add(mniCapNhatP);
         ban.add(mniCapNhatBan);
         
         JMenu nhanVienMenu = new JMenu("Nhân viên");
@@ -48,6 +55,7 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
         nhanVienMenu.add(mniDatBan);
         nhanVienMenu.add(mniCapNhatNhanVien);
         nhanVienMenu.add(mniThongKe);
+
 
         JMenu khachHangMenu = new JMenu("Khách hàng");
         JMenuItem mniTimKiem = new JMenuItem("Tìm kiếm");
@@ -67,6 +75,12 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
                 if (e.getSource() == mniDatBan) {
                     datBan = new Frm_DatBan();
                     setContentPane(datBan);
+                } else if (e.getSource() == mniCapNhatKV) {
+                    showKhuVucDialog();
+                } else if (e.getSource() == mniCapNhatP) {
+                    showPhongDialog();
+                } else if (e.getSource() == mniCapNhatBan) {
+                    showBanDialog();
                 } else if (e.getSource() == mniDatMon) {
                     datMon = new Frm_DatMon(); 
                     setContentPane(datMon);
@@ -90,7 +104,9 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
         mniCapNhatMonAn.addActionListener(menuActionListener);
         mniThongKe.addActionListener(menuActionListener);
         mniMonAn.addActionListener(menuActionListener);
-        
+        mniCapNhatKV.addActionListener(menuActionListener);
+        mniCapNhatP.addActionListener(menuActionListener);
+        mniCapNhatBan.addActionListener(menuActionListener);
         
         menuBar.setLayout(new FlowLayout(FlowLayout.CENTER)); 
 
@@ -138,7 +154,40 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
         setJMenuBar(menuBar);
         setVisible(true);
     }
+    private void showKhuVucDialog() {
+        if (khuVuc == null) {
+            khuVuc = new Frm_KhuVuc();
+        }
 
+        khuVuc.setTitle("Cập nhật khu vực");
+        khuVuc.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        khuVuc.setLocationRelativeTo(this);
+        khuVuc.setModal(true);  
+        khuVuc.setVisible(true);
+    }
+    
+    private void showPhongDialog() {
+        if (phong== null) {
+        	phong = new Frm_Phong();
+        }
+
+        phong.setTitle("Cập nhật phòng");
+        phong.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        phong.setLocationRelativeTo(this);
+        phong.setModal(true);  
+        phong.setVisible(true);
+    }
+    private void showBanDialog() {
+        if (ban== null) {
+        	ban = new Frm_Ban();
+        }
+
+        ban.setTitle("Cập nhật bàn");
+        ban.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        ban.setLocationRelativeTo(this);
+        ban.setModal(true);  
+        ban.setVisible(true);
+    }
     public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
