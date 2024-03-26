@@ -1,6 +1,5 @@
 package gui;
 
-
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -32,6 +31,7 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 	private DefaultTableModel modelPhieu;
 	private JTable table;
 
+	
     public Frm_DatBan() {
         setLayout(new BorderLayout());
 
