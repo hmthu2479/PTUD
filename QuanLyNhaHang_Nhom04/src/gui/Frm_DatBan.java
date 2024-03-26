@@ -31,7 +31,6 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 	private DefaultTableModel modelPhieu;
 	private JTable table;
 
-	
     public Frm_DatBan() {
         setLayout(new BorderLayout());
 
