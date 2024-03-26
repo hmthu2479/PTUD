@@ -271,6 +271,7 @@ public class Frm_DatBan extends JPanel implements ActionListener {
         mainPanel.add(btnPanel, BorderLayout.SOUTH);
                 
         btn_Them.addActionListener(this );
+        btn_Xoa.addActionListener(this);
     }
 
 	@Override
@@ -302,12 +303,20 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 				});
 			}
 		}
+			if (o.equals(btn_Xoa)) {
+		    int r = table.getSelectedRow();
+		    modelPhieu.removeRow(r);
+		    PhieuDatBan p = listPhieu.getElement(r);
+		    if (p != null) {
+		        listPhieu.xoaPhieu(p.getMaPhieu());
+		    	}
+		    }
 
-		if(o.equals(btn_xoaRong)) {
-			txt_maPhieu.setText("");
-			txt_hoTen.setText("");
-			txt_diaChi.setText("");
-			txt_sdt.setText("");
+			if(o.equals(btn_xoaRong)) {
+				txt_maPhieu.setText("");
+				txt_hoTen.setText("");
+				txt_diaChi.setText("");
+				txt_sdt.setText("");
 
 
 		}
