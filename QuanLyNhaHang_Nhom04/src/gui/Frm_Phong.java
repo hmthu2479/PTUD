@@ -8,6 +8,7 @@ import java.awt.FlowLayout;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,6 +34,7 @@ public class Frm_Phong extends JDialog {
 	private JLabel lbl_tim;
 	private JTextField txt_tim;
 	private JButton btn_tim;
+	private JComboBox cmb_khuVuc;
 
     public Frm_Phong() {
         setTitle("Chi tiết phòng");
@@ -67,13 +69,17 @@ public class Frm_Phong extends JDialog {
         pnlButton1.setBackground(new Color(255, 255, 255));
         pnlButton1.setPreferredSize(new Dimension(100, 35));
 
-        lbl_them = new JLabel("Nhập tên phòng cần thêm: ");
+        lbl_them = new JLabel("Nhập tên phòng: ");
         lbl_them.setFont(new Font("Tahoma", Font.BOLD, 14));
+        String[] khuVuc = {"Khu vực 1", "Khu vực 2", "Tầng 1", "Tầng 2"};
+        cmb_khuVuc = new JComboBox<>(khuVuc);
         txt_them = new JTextField();
         txt_them.setFont(new Font("Tahoma", Font.BOLD, 15));
         btn_them = new JButton("Thêm");
         btn_them.setFont(new Font("Tahoma", Font.BOLD, 15));
         pnlButton1.add(lbl_them);
+        pnlButton1.add(cmb_khuVuc);
+        pnlButton1.add(Box.createHorizontalStrut(3));
         pnlButton1.add(txt_them);
         pnlButton1.add(Box.createHorizontalStrut(6));
         pnlButton1.add(btn_them);
