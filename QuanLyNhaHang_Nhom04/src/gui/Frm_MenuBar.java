@@ -17,7 +17,6 @@ import java.awt.event.MouseListener;
 import javax.swing.*;
 
 
-
 public class Frm_MenuBar extends JFrame implements MouseListener {
 	private Frm_DatMon datMon; 
     private Frm_DatBan datBan; 
