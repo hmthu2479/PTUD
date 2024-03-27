@@ -37,25 +37,18 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
 import entity.NhanVien;
-import entity.NhanVien_Collection;
+
 
 public class Frm_NhanVien extends JPanel implements ActionListener {
 	private JLabel lb_title;
-	private JPanel jpMaNV;
 	private JLabel lb_MaNV;
 	private JTextField ijpMaNV;
-	private JPanel jpHoTen;
-	private JPanel jpho;
 	private JLabel lb_ho;
 	private JTextField ijpho;
-	private JPanel jpTuoi;
 	private JLabel lb_tuoi;
 	private JTextField ijpTuoi;
-	private JPanel jpTien;
-	private JLabel lb_tien;
-	private JTextField ijptien;
-	private JPanel jpTuoi_Phai;
-	private JPanel jpPhai;
+	private JLabel lb_sdt;
+	private JTextField ijpsdt;
 	private JRadioButton nu;
 	private JPanel jpS;
 	private JPanel bTrai;
@@ -71,19 +64,18 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 	private JLabel phai;
 	private DefaultTableModel modelNV;
 	private JTable tableNhanVien;
-	private NhanVien_Collection listNV;
+	private NhanVien listNV;
 	private JRadioButton nam;
 
 	public Frm_NhanVien() {
-		setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+		setBorder(BorderFactory.createEmptyBorder(25, 0, 0, 0));
 		setBackground(Color.white);
 		jpN = new JPanel();
 		jpN.setLayout(new BoxLayout(jpN, BoxLayout.Y_AXIS));
 		jpN.setPreferredSize(new Dimension(470, 472));
 		jpN.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
-        Color lightBlue = new Color(173, 216, 230); // Light blue color
-        Color lightYellow = new Color(255, 255, 153);
+        Color lightBlue = new Color(173, 216, 230); // Light blue colorS
 		lb_title = new JLabel("THÔNG TIN NHÂN VIÊN");
 		lb_title.setFont(new Font("Arial", Font.BOLD, 35));
 		lb_title.setForeground(Color.black);
@@ -94,8 +86,8 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 		ijpho = new JTextField();
 		lb_tuoi = new JLabel("Tuổi: ");
 		ijpTuoi = new JTextField();
-		lb_tien = new JLabel("Tiền lương: ");
-		ijptien = new JTextField();
+		lb_sdt = new JLabel("Số điện thoại: ");
+		ijpsdt = new JTextField();
 		phai = new JLabel("Phái: ");
 		nu = new JRadioButton("Nữ");
 		nam = new JRadioButton("Nam");
@@ -110,8 +102,8 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 		jpFields.add(ijpho);
 		jpFields.add(lb_tuoi);
 		jpFields.add(ijpTuoi);
-		jpFields.add(lb_tien);
-		jpFields.add(ijptien);
+		jpFields.add(lb_sdt);
+		jpFields.add(ijpsdt);
 
 		JPanel jpPhai = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		jpPhai.add(phai);
@@ -128,18 +120,18 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 		ijpMaNV.setPreferredSize(textFieldSize);
 		ijpho.setPreferredSize(textFieldSize);
 		ijpTuoi.setPreferredSize(textFieldSize);
-		ijptien.setPreferredSize(textFieldSize);
+		ijpsdt.setPreferredSize(textFieldSize);
 		
 		Font textFieldFont = new Font("Arial", Font.BOLD, 16); 
 		ijpMaNV.setFont(textFieldFont);
 		ijpho.setFont(textFieldFont);
 		ijpTuoi.setFont(textFieldFont);
-		ijptien.setFont(textFieldFont);
+		ijpsdt.setFont(textFieldFont);
 		
 		lb_MaNV.setHorizontalAlignment(JLabel.CENTER);
 		lb_ho.setHorizontalAlignment(JLabel.CENTER);
 		lb_tuoi.setHorizontalAlignment(JLabel.CENTER);
-		lb_tien.setHorizontalAlignment(JLabel.CENTER);
+		lb_sdt.setHorizontalAlignment(JLabel.CENTER);
 		jpPhai.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		lb_title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -163,15 +155,15 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
         lb_MaNV.setFont(lb_MaNV.getFont().deriveFont(Font.BOLD, 18));
         lb_ho.setFont(lb_ho.getFont().deriveFont(Font.BOLD, 18));
         lb_tuoi.setFont(lb_tuoi.getFont().deriveFont(Font.BOLD, 18));
-        lb_tien.setFont(lb_tien.getFont().deriveFont(Font.BOLD, 18));
+        lb_sdt.setFont(lb_sdt.getFont().deriveFont(Font.BOLD, 18));
 
-		nam.setFont(lb_tien.getFont().deriveFont(Font.BOLD, 18));
-		nu.setFont(lb_tien.getFont().deriveFont(Font.BOLD, 18));
-		phai.setFont(lb_tien.getFont().deriveFont(Font.BOLD, 18));
+		nam.setFont(lb_sdt.getFont().deriveFont(Font.BOLD, 18));
+		nu.setFont(lb_sdt.getFont().deriveFont(Font.BOLD, 18));
+		phai.setFont(lb_sdt.getFont().deriveFont(Font.BOLD, 18));
 
 		
 		String[] columns = {
-			"Mã NV", "Họ", "Phái", "Tuổi", "Tiền lương" 	
+			"Mã NV", "Họ", "Phái", "Tuổi", "SĐT" 	
 		};
 		modelNV = new DefaultTableModel(columns, 0);
 		tableNhanVien = new JTable(modelNV);
@@ -193,7 +185,7 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         add(scrollPane, BorderLayout.EAST);
 		
-		listNV = new NhanVien_Collection();
+		listNV = new NhanVien();
 				
 				
 		jpS = new JPanel();
@@ -250,16 +242,16 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 			String ho = ijpho.getText();
 			int tuoi = Integer.parseInt(ijpTuoi.getText());
 			String phai_Nam_Nu = nam.isSelected()?"Nam" : nu.isSelected()?"Nữ":"";
-			double luong = Double.parseDouble(ijptien.getText());
+			String sdt = ijpsdt.getText();
 			
-			NhanVien nv = new NhanVien(ma, ho, phai_Nam_Nu, tuoi, luong);
+			NhanVien nv = new NhanVien(ma, ho, phai_Nam_Nu, tuoi, sdt);
 			
 			if(!listNV.themNV(nv)) {
 				JOptionPane.showMessageDialog(this, "Trùng mã");
 			}
 			else {
 				modelNV.addRow(new Object[] {nv.getMaNV(), nv.getHoNV(),
-						 phai_Nam_Nu,nv.getTuoi(), nv.getTienLuong()
+						 phai_Nam_Nu,nv.getTuoi(), nv.getSdt()
 				});
 			}
 		}
@@ -276,7 +268,7 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 			nam.setSelected(false);
 			nu.setSelected(false);
 			ijpTuoi.setText("");
-			ijptien.setText("");
+			ijpsdt.setText("");
 			//đặt lại phương thức xóa trắng
     		ButtonGroup gr = new ButtonGroup();
 			gr.add(nam);
@@ -294,7 +286,7 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
                                         "\nHọ: " + nvTim.getHoNV() +
                                         "\nTuổi: " + nvTim.getTuoi() +
                                         "\nPhái: " + nvTim.getPhai() +
-                                        "\nTiền lương: " + nvTim.getTienLuong(),
+                                        "\nTiền lương: " + nvTim.getSdt(),
                                 "Tìm kiếm thành công", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên có mã " + maTim, "Thông báo",

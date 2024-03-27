@@ -43,7 +43,7 @@ public class Frm_DangNhap extends JFrame {
 	 */
 	public Frm_DangNhap() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 798, 537);
+		setBounds(100, 100, 718, 497);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -59,7 +59,7 @@ public class Frm_DangNhap extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("/img/login.png"));
+		lblNewLabel_1.setIcon(new ImageIcon(getClass().getResource("/img/login.png")));
 		lblNewLabel_1.setBounds(36, 145, 224, 215);
 		contentPane.add(lblNewLabel_1);
 		

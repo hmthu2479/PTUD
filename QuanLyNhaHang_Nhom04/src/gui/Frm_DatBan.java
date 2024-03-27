@@ -7,7 +7,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import entity.PhieuDatBan;
-import entity.PhieuDatBan_Collection;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -27,26 +26,27 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 	private JTextField txtMess;
 	private JButton btn_Them,btn_Tim, btn_Xoa, btn_xoaRong;
 	private JTextField txt_maPhieu;
-	private PhieuDatBan_Collection listPhieu;
+	private PhieuDatBan listPhieu;
 	private DefaultTableModel modelPhieu;
 	private JTable table;
+	private JTextField txt_Tim;
+	private JLabel lbl_Tim;
 
     public Frm_DatBan() {
         setLayout(new BorderLayout());
 
-        listPhieu = new PhieuDatBan_Collection();
+        listPhieu = new PhieuDatBan();
         JPanel mainPanel = new JPanel(new BorderLayout(15, 5));
         mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
-        Color lightYellow = new Color(255, 255, 153);
         mainPanel.setBackground(Color.WHITE);
 
         JPanel pnl_W = new JPanel(new GridLayout(7, 1, 0, 0));
-        pnl_W.setBackground(Color.WHITE); // White
+        pnl_W.setBackground(Color.WHITE); 
 
         // Khu vực
         
         JPanel pnl_khuVuc = new JPanel(new BorderLayout());
-        pnl_khuVuc.setBackground(Color.WHITE); // White
+        pnl_khuVuc.setBackground(Color.WHITE); 
         pnl_khuVuc.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Khu vực", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
         String[] khuVuc = {"Khu vực 1", "Khu vực 2", "Tầng 1", "Tầng 2"};
         cmb_khuVuc = new JComboBox<>(khuVuc);
@@ -114,37 +114,41 @@ public class Frm_DatBan extends JPanel implements ActionListener {
         txt_diaChi.setFont(new Font("Arial", Font.BOLD, 16));
         pnl_diaChi.add(txt_diaChi, BorderLayout.CENTER);
         pnl_W.add(pnl_diaChi);
+        
+        //Buttons
+        JPanel pnl_btn = new JPanel(new GridLayout(2, 3));
+        pnl_btn.setBackground(Color.white);
+        pnl_btn.setBorder(new EmptyBorder(5, 2, 0, 2));
 
-        JPanel pnl_btn = new JPanel();
-        pnl_btn.setLayout(new BoxLayout(pnl_btn, BoxLayout.X_AXIS));
-        pnl_btn.setBackground(Color.WHITE);
-        pnl_btn.setBorder(new EmptyBorder(15, 10, 0, 0));
+        int horizontalGap = 5; 
+        int verticalGap = 5; 
+
+        GridLayout gridLayout = (GridLayout) pnl_btn.getLayout();
+        gridLayout.setHgap(horizontalGap);
+        gridLayout.setVgap(verticalGap);
 
         btn_Them = new JButton("Thêm");
         btn_Xoa = new JButton("Xóa");
         btn_xoaRong = new JButton("Xóa rỗng");
+        lbl_Tim = new JLabel("Nhập mã cần tìm:");
+        lbl_Tim.setFont(new Font("Arial", Font.BOLD, 15));
+        txt_Tim = new JTextField(10);
         btn_Tim = new JButton("Tìm kiếm");
 
-        /*btn_Them.setBackground(new Color(173, 216, 230)); // Light blue color
-        btn_Xoa.setBackground(new Color(173, 216, 230)); // Light blue color
-        btn_xoaRong.setBackground(new Color(173, 216, 230)); // Light blue color
-        btn_Tim.setBackground(new Color(173, 216, 230)); // Light blue color*/
-        
-               
         pnl_btn.add(btn_Them);
-        pnl_btn.add(Box.createHorizontalStrut(10)); 
         pnl_btn.add(btn_Xoa);
-        pnl_btn.add(Box.createHorizontalStrut(10)); 
         pnl_btn.add(btn_xoaRong);
-        pnl_btn.add(Box.createHorizontalStrut(10)); 
+        pnl_btn.add(lbl_Tim);
+        pnl_btn.add(txt_Tim);
         pnl_btn.add(btn_Tim);
+
 
         Font bFont = new Font("Arial", Font.BOLD, 16);
         btn_Them.setFont(bFont);
         btn_Xoa.setFont(bFont);
         btn_xoaRong.setFont(bFont);
         btn_Tim.setFont(bFont);
-        pnl_W.setPreferredSize(new Dimension(400,400));
+        pnl_W.setPreferredSize(new Dimension(400,550));
         pnl_W.add(pnl_btn);
 
         mainPanel.add(pnl_W, BorderLayout.WEST);
@@ -166,7 +170,7 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 
         JTableHeader header = table.getTableHeader();
         header.setPreferredSize(new Dimension(header.getPreferredSize().width, 40));
-        Color lightBlue = new Color(173, 216, 230); // Light blue color
+        Color lightBlue = new Color(173, 216, 230); 
         header.setBackground(lightBlue);
         header.setFont(new Font("Arial", Font.BOLD, 18));
 
@@ -202,7 +206,7 @@ public class Frm_DatBan extends JPanel implements ActionListener {
         pnl_ngayThang.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.black, 2), "Ngày đặt", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
         SpinnerDateModel dateModel = new SpinnerDateModel();
         spn_ngayThang = new JSpinner(dateModel);
-        spn_ngayThang.setEditor(new JSpinner.DateEditor(spn_ngayThang, "MM/dd/yyyy"));
+        spn_ngayThang.setEditor(new JSpinner.DateEditor(spn_ngayThang, "dd/MM/yyyy"));
         spn_ngayThang.setFont(new Font("Arial", Font.BOLD, 20));
         pnl_ngayThang.add(spn_ngayThang, BorderLayout.CENTER);
         pnl_N.add(pnl_ngayThang);
@@ -246,10 +250,6 @@ public class Frm_DatBan extends JPanel implements ActionListener {
         JButton btnLuu = new JButton("Lưu");
         JButton btnQuayLai = new JButton("Quay lại");
 
-        /*btnChonMon.setBackground(lightYellow);
-        btnLuu.setBackground(lightYellow);
-        btnQuayLai.setBackground(lightYellow);*/
-
         Font btnFont = new Font("Arial", Font.BOLD, 17); 
         btnChonMon.setFont(btnFont);
         btnLuu.setFont(btnFont);
@@ -272,6 +272,8 @@ public class Frm_DatBan extends JPanel implements ActionListener {
                 
         btn_Them.addActionListener(this );
         btn_Xoa.addActionListener(this);
+        btn_xoaRong.addActionListener(this);
+        btn_Tim.addActionListener(this);
     }
 
 	@Override
@@ -312,14 +314,19 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 		    	}
 		    }
 
-			if(o.equals(btn_xoaRong)) {
-				txt_maPhieu.setText("");
-				txt_hoTen.setText("");
-				txt_diaChi.setText("");
-				txt_sdt.setText("");
+			if (o.equals(btn_xoaRong)) {
+			    txt_maPhieu.setText("");
+			    txt_hoTen.setText("");
+			    txt_diaChi.setText("");
+			    txt_sdt.setText("");
 
+			    spn_ngayThang.setValue(new Date());
 
-		}
+			    cmb_gioDat.setSelectedIndex(0);
+			    cmb_soLuongNguoi.setSelectedIndex(0);
+			    cmb_khuVuc.setSelectedIndex(0);
+			    cmb_ban.setSelectedIndex(0);
+			}
 		
 	}
     

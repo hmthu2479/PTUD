@@ -29,7 +29,7 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
     public Frm_MenuBar() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Ordering App");
-        setSize(1150, 650);
+        setSize(1150, 700);
         setLocationRelativeTo(null);
        
         JMenu thucDon = new JMenu("Thực đơn");

@@ -55,7 +55,7 @@ public class Frm_DanhSachHoaDon extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("E:\\huongdoituong\\DangNhap_QuanLyMonAn_ThongKe\\img\\bill.png"));
+		lblNewLabel_1.setIcon(new ImageIcon(getClass().getResource("/img/bill.png")));
 		lblNewLabel_1.setBounds(35, 11, 189, 133);
 		contentPane.add(lblNewLabel_1);
 		
@@ -93,7 +93,7 @@ public class Frm_DanhSachHoaDon extends JFrame {
 		JLabel lblNewLabel_2 = new JLabel("Ngày xuất hóa đơn: ");
 		lblNewLabel_2.setText("Ngày giờ hiện tại: " + java.time.LocalDateTime.now());
 		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblNewLabel_2.setBounds(326, 93, 344, 38);
+		lblNewLabel_2.setBounds(270, 93, 344, 38);
 		contentPane.add(lblNewLabel_2);
 	}
 }
