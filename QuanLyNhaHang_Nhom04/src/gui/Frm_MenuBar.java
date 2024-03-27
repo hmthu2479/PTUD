@@ -1,3 +1,5 @@
+
+
 package gui;
 
 import java.awt.BorderLayout;
@@ -15,6 +17,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.*;
+
+
+
 
 public class Frm_MenuBar extends JFrame implements MouseListener {
 	private Frm_DatMon datMon; 
