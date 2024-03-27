@@ -122,7 +122,6 @@ public class Frm_Ban extends JDialog {
         pnlButton.add(pnlButton1);
         pnlButton.add(pnlButton2);
         
- 
         JPanel pnlContainer = new JPanel();
         pnlContainer.setBackground(new Color(255, 255, 255));
         pnlContainer.setLayout(new BoxLayout(pnlContainer, BoxLayout.Y_AXIS));
