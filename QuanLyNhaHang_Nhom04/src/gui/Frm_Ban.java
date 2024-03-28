@@ -48,7 +48,7 @@ public class Frm_Ban extends JDialog {
         titlePanel.add(titleLabel);
         
 
-        String[] columnNames = {"Bàn", "Sức chứa", "Thuộc"};
+        String[] columnNames = {"Mã bàn", "Bàn", "Sức chứa", "Thuộc"};
 
         modelKV = new DefaultTableModel(columnNames, 0);
 		table = new JTable(modelKV);

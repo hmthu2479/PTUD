@@ -190,15 +190,7 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
         ban.setModal(true);  
         ban.setVisible(true);
     }
-    public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				Frm_MenuBar frm = new Frm_MenuBar();
-				frm.setVisible(true);
-			}
-		});
-	}
+
 
 	@Override
 	public void mouseClicked(MouseEvent e) {

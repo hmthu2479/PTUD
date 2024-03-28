@@ -45,7 +45,7 @@ public class Frm_KhuVuc extends JDialog {
 	        titlePanel.add(titleLabel);
 	        
 
-	        String[] columnNames = {"Tên khu vực", "Số lượng bàn", "Số lượng phòng"};
+	        String[] columnNames = {"Mã khu vực", "Tên khu vực", "Số lượng bàn", "Số lượng phòng"};
 
 	        modelKV = new DefaultTableModel(columnNames, 0);
 			table = new JTable(modelKV);
