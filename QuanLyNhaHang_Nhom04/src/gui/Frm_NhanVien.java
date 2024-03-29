@@ -68,11 +68,11 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 	private JRadioButton nam;
 
 	public Frm_NhanVien() {
-		setBorder(BorderFactory.createEmptyBorder(25, 0, 0, 0));
+		setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 		setBackground(Color.white);
 		jpN = new JPanel();
 		jpN.setLayout(new BoxLayout(jpN, BoxLayout.Y_AXIS));
-		jpN.setPreferredSize(new Dimension(470, 472));
+		jpN.setPreferredSize(new Dimension(520, 602));
 		jpN.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
         Color lightBlue = new Color(173, 216, 230); // Light blue colorS
@@ -122,7 +122,7 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 		ijpTuoi.setPreferredSize(textFieldSize);
 		ijpsdt.setPreferredSize(textFieldSize);
 		
-		Font textFieldFont = new Font("Arial", Font.BOLD, 16); 
+		Font textFieldFont = new Font("Arial", Font.BOLD, 18); 
 		ijpMaNV.setFont(textFieldFont);
 		ijpho.setFont(textFieldFont);
 		ijpTuoi.setFont(textFieldFont);
@@ -146,20 +146,20 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 
 		add(jpN, BorderLayout.WEST);
 		JPanel emptyPanel = new JPanel();
-		emptyPanel.setPreferredSize(new Dimension(10, 390));
+		emptyPanel.setPreferredSize(new Dimension(15, 390));
 		emptyPanel.setBackground(Color.white);
 		add(emptyPanel,BorderLayout.CENTER);
 
         // Set font size and boldness for labels
-        lb_title.setFont(lb_title.getFont().deriveFont(Font.BOLD, 25));
-        lb_MaNV.setFont(lb_MaNV.getFont().deriveFont(Font.BOLD, 18));
-        lb_ho.setFont(lb_ho.getFont().deriveFont(Font.BOLD, 18));
-        lb_tuoi.setFont(lb_tuoi.getFont().deriveFont(Font.BOLD, 18));
-        lb_sdt.setFont(lb_sdt.getFont().deriveFont(Font.BOLD, 18));
+       // lb_title.setFont(lb_title.getFont().deriveFont(Font.BOLD, 25));
+        lb_MaNV.setFont(lb_MaNV.getFont().deriveFont(Font.BOLD, 20));
+        lb_ho.setFont(lb_ho.getFont().deriveFont(Font.BOLD, 20));
+        lb_tuoi.setFont(lb_tuoi.getFont().deriveFont(Font.BOLD, 20));
+        lb_sdt.setFont(lb_sdt.getFont().deriveFont(Font.BOLD, 20));
 
-		nam.setFont(lb_sdt.getFont().deriveFont(Font.BOLD, 18));
-		nu.setFont(lb_sdt.getFont().deriveFont(Font.BOLD, 18));
-		phai.setFont(lb_sdt.getFont().deriveFont(Font.BOLD, 18));
+		nam.setFont(lb_sdt.getFont().deriveFont(Font.BOLD, 20));
+		nu.setFont(lb_sdt.getFont().deriveFont(Font.BOLD, 20));
+		phai.setFont(lb_sdt.getFont().deriveFont(Font.BOLD, 20));
 
 		
 		String[] columns = {
@@ -167,7 +167,7 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 		};
 		modelNV = new DefaultTableModel(columns, 0);
 		tableNhanVien = new JTable(modelNV);
-		tableNhanVien.setPreferredScrollableViewportSize(new Dimension(600, 440));
+		tableNhanVien.setPreferredScrollableViewportSize(new Dimension(940, 570));
 		tableNhanVien.setRowHeight(30);
 		
 
@@ -175,7 +175,7 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
         header.setPreferredSize(new Dimension(header.getPreferredSize().width, 30));
 
         header.setBackground(lightBlue);
-        header.setFont(new Font("Arial", Font.BOLD, 16));
+        header.setFont(new Font("Arial", Font.BOLD, 20));
 		
 		String[] luaChon = {"Nam", "Nữ"};
         TableColumn phaiColumn = tableNhanVien.getColumnModel().getColumn(3);

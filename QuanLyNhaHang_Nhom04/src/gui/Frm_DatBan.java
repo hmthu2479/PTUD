@@ -255,11 +255,8 @@ public class Frm_DatBan extends JPanel implements ActionListener {
         btnLuu.setFont(btnFont);
         btnQuayLai.setFont(btnFont);
 
-        btnChonMon.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        btnLuu.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        btnQuayLai.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-
-        Dimension buttonSize = new Dimension(110, 30);
+       
+        Dimension buttonSize = new Dimension(130, 35);
         btnChonMon.setPreferredSize(buttonSize);
         btnLuu.setPreferredSize(buttonSize);
         btnQuayLai.setPreferredSize(buttonSize);

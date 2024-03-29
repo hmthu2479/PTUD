@@ -17,6 +17,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 public class Frm_MenuBar extends JFrame implements MouseListener {
 	private Frm_DatMon datMon; 
@@ -30,9 +31,9 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
 
     public Frm_MenuBar() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Ordering App");
-        setSize(1150, 700);
+        setTitle("Quản lý nhà hàng");
         setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
        
         JMenu thucDon = new JMenu("Thực đơn");
         JMenuItem mniMonAn = new JMenuItem("Món ăn");
@@ -111,24 +112,24 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
         mniCapNhatBan.addActionListener(menuActionListener);
         
         menuBar.setLayout(new FlowLayout(FlowLayout.CENTER)); 
-
+        menuBar.setBorder(new EmptyBorder(7, 0, 0, 0));
      for (Component c : menuBar.getComponents()) {
          if (c instanceof JMenu) {
              JMenu menu = (JMenu) c;
-             menu.setFont(new Font("Arial", Font.BOLD, 20));
+             menu.setFont(new Font("Arial", Font.BOLD, 24));
              menu.addMouseListener(this);
 
              for (Component menuItem : menu.getMenuComponents()) {
                  if (menuItem instanceof JMenuItem) {
                      JMenuItem item = (JMenuItem) menuItem;
-                     item.setFont(new Font("Arial", Font.BOLD, 17));
+                     item.setFont(new Font("Arial", Font.BOLD, 20));
                  }
              }
          }
      }
 
         Dimension preferredSize = menuBar.getPreferredSize();
-        preferredSize.height = 42;
+        preferredSize.height = 55;
         menuBar.setPreferredSize(preferredSize);
         menuBar.setBackground(Color.white);
         
