@@ -48,7 +48,7 @@ public class Frm_Phong extends JDialog {
         titlePanel.add(titleLabel);
         
 
-        String[] columnNames = {"Mã Phòng","Tên phòng", "Số lượng bàn", "Thuộc"};
+        String[] columnNames = {"Mã Phòng","Tên phòng", "Thuộc"};
 
         modelKV = new DefaultTableModel(columnNames, 0);
 		table = new JTable(modelKV);

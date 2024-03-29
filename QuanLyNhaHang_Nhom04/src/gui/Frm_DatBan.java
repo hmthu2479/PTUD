@@ -31,6 +31,7 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 	private JTable table;
 	private JTextField txt_Tim;
 	private JLabel lbl_Tim;
+	private JComboBox cmb_nhanVien;
 
     public Frm_DatBan() {
         setLayout(new BorderLayout());
@@ -40,9 +41,19 @@ public class Frm_DatBan extends JPanel implements ActionListener {
         mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
         mainPanel.setBackground(Color.WHITE);
 
-        JPanel pnl_W = new JPanel(new GridLayout(7, 1, 0, 0));
+        JPanel pnl_W = new JPanel(new GridLayout(8, 1, 0, 0));
         pnl_W.setBackground(Color.WHITE); 
 
+        // Nhân viên
+        
+        JPanel pnl_nhanVien = new JPanel(new BorderLayout());
+        pnl_nhanVien.setBackground(Color.WHITE); 
+        pnl_nhanVien.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Nhân viên", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        String[] nv = {"Nguyễn Văn A", "Trần Văn B"};
+        cmb_nhanVien = new JComboBox<>(nv);
+        cmb_nhanVien.setFont(new Font("Arial", Font.BOLD, 20));
+        pnl_nhanVien.add(cmb_nhanVien, BorderLayout.CENTER);
+        pnl_W.add(pnl_nhanVien);
         // Khu vực
         
         JPanel pnl_khuVuc = new JPanel(new BorderLayout());
@@ -156,7 +167,7 @@ public class Frm_DatBan extends JPanel implements ActionListener {
         JPanel rightPanel = new JPanel(new BorderLayout());
 
         // Table
-        String[] columnNames = {"Mã", "Khu vực", "Số bàn", "SL","Ngày đặt","Ngày lập","Giờ đặt","Họ Tên", "SDT", "Địa chỉ"};
+        String[] columnNames = {"Mã", "Khu vực", "Số bàn", "SL","Ngày đặt","Ngày lập","Giờ đặt","Họ Tên", "SDT", "Địa chỉ", "Nhân viên"};
 
         modelPhieu = new DefaultTableModel(columnNames, 0);
 		table = new JTable(modelPhieu);
@@ -186,7 +197,8 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 	     table.getColumnModel().getColumn(6).setPreferredWidth(90);
 	     table.getColumnModel().getColumn(7).setPreferredWidth(160);
 	     table.getColumnModel().getColumn(8).setPreferredWidth(120);
-	     table.getColumnModel().getColumn(9).setPreferredWidth(350);
+	     table.getColumnModel().getColumn(9).setPreferredWidth(320);
+	     table.getColumnModel().getColumn(9).setPreferredWidth(120);
         JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
       
