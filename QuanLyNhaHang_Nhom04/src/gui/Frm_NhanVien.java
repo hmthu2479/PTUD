@@ -28,7 +28,9 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
@@ -122,17 +124,15 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 		    }
 		}
 		
-		Dimension textFieldSize = new Dimension(200, 30); 
-		txtMaNV.setPreferredSize(textFieldSize);
-		txtho.setPreferredSize(textFieldSize);
-		txtTuoi.setPreferredSize(textFieldSize);
-		txtsdt.setPreferredSize(textFieldSize);
-		
+		Dimension textFieldSize = new Dimension(200, 30);
 		Font textFieldFont = new Font("Arial", Font.BOLD, 18); 
-		txtMaNV.setFont(textFieldFont);
-		txtho.setFont(textFieldFont);
-		txtTuoi.setFont(textFieldFont);
-		txtsdt.setFont(textFieldFont);
+		JTextField[] textFields = {txtMaNV, txtho, txtTuoi, txtsdt};
+
+		for (JTextField textField : textFields) {
+		    textField.setPreferredSize(textFieldSize);
+		    textField.setHorizontalAlignment(SwingConstants.CENTER);
+		    textField.setFont(textFieldFont);
+		}
 		
 		lb_MaNV.setHorizontalAlignment(JLabel.CENTER);
 		lb_ho.setHorizontalAlignment(JLabel.CENTER);
@@ -156,8 +156,6 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 		emptyPanel.setBackground(Color.white);
 		add(emptyPanel,BorderLayout.CENTER);
 
-        // Set font size and boldness for labels
-       // lb_title.setFont(lb_title.getFont().deriveFont(Font.BOLD, 25));
         lb_MaNV.setFont(lb_MaNV.getFont().deriveFont(Font.BOLD, 20));
         lb_ho.setFont(lb_ho.getFont().deriveFont(Font.BOLD, 20));
         lb_tuoi.setFont(lb_tuoi.getFont().deriveFont(Font.BOLD, 20));
@@ -175,6 +173,14 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 		tableNhanVien = new JTable(modelNV);
 		tableNhanVien.setPreferredScrollableViewportSize(new Dimension(940, 570));
 		tableNhanVien.setRowHeight(30);
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+		for (int i = 0; i < tableNhanVien.getColumnCount(); i++) {
+		    tableNhanVien.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+		}
+
+		tableNhanVien.setFont(new Font("Arial", Font.BOLD, 18));
 		
 
         JTableHeader header = tableNhanVien.getTableHeader();
@@ -282,13 +288,13 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 		}
 		
 		if (o.equals(tim)) {
-		    String maNV = Integer.parseInt(txtNhap.getText());
+		    String maNV = txtNhap.getText();
 		    for (int i = 0; i < modelNV.getRowCount(); i++) {
-		        int maNVRow = (int) modelNV.getValueAt(i, 0);
-		        if (maNV == maNVRow) {
+		        Object maNVRow = modelNV.getValueAt(i, 0); // Change the data type to Object
+		        if (maNV.equals(maNVRow)) { // Use equals() for string comparison
 		            tableNhanVien.setRowSelectionInterval(i, i);
 		            tableNhanVien.scrollRectToVisible(tableNhanVien.getCellRect(i, 0, true));
-		            return; 
+		            return;
 		        }
 		    }
 		    JOptionPane.showMessageDialog(this, "Không tìm thấy mã");
