@@ -1,32 +1,29 @@
 package entity;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class NhanVien {
-    private String maNV, hoNV, Phai;
+    private String maNV, hoTenNV, Phai;
     private int tuoi;
     private String sdt;
-    private ArrayList<NhanVien> dsNV;
 
-    public NhanVien() {
-        dsNV = new ArrayList<NhanVien>();
-    }
-
-    public NhanVien(String maNV, String hoNV, String phai, int tuoi, String sdt) {
+    public NhanVien(String maNV, String hoTenNV, String phai, int tuoi, String sdt) {
         this.maNV = maNV;
-        this.hoNV = hoNV;
+        this.hoTenNV = hoTenNV;
         Phai = phai;
         this.tuoi = tuoi;
         this.sdt = sdt;
-        dsNV = new ArrayList<NhanVien>();
     }
 
     public NhanVien(String ma) {
 		// TODO Auto-generated constructor stub
 	}
 
-    public String getMaNV() {
+    public NhanVien() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public String getMaNV() {
         return maNV;
     }
 
@@ -34,12 +31,12 @@ public class NhanVien {
         this.maNV = maNV;
     }
 
-    public String getHoNV() {
-        return hoNV;
+    public String getHoTenNV() {
+        return hoTenNV;
     }
 
-    public void setHoNV(String hoNV) {
-        this.hoNV = hoNV;
+    public void setHoTenNV(String hoNV) {
+        this.hoTenNV = hoTenNV;
     }
 
     public String getPhai() {
@@ -83,51 +80,7 @@ public class NhanVien {
 
     @Override
     public String toString() {
-        return "NhanVien [maNV=" + maNV + ", hoNV=" + hoNV + ", Phai=" + Phai + ", tuoi=" + tuoi + ", sdt=" + sdt + "]";
+        return "NhanVien [maNV=" + maNV + ", hoTenNV=" + hoTenNV + ", Phai=" + Phai + ", tuoi=" + tuoi + ", sdt=" + sdt + "]";
     }
 
-    public boolean themNV(NhanVien nv) {
-        if (dsNV.contains(nv))
-            return false;
-        dsNV.add(nv);
-        return true;
-    }
-
-    public boolean xoaNV(String ma) {
-        NhanVien nv = new NhanVien(ma);
-        if (dsNV.contains(nv)) {
-            dsNV.remove(nv);
-            return true;
-        }
-        return false;
-    }
-
-    public NhanVien tim(String ma) {
-        NhanVien nv = new NhanVien(ma);
-        if (dsNV.contains(nv))
-            return dsNV.get(dsNV.indexOf(nv));
-        return null;
-    }
-
-    public ArrayList<NhanVien> getDsNV() {
-        return dsNV;
-    }
-
-    public void setDsNV(ArrayList<NhanVien> dsNV) {
-        this.dsNV = dsNV;
-    }
-
-    public NhanVien getElement(int index) {
-        if (index < 0 || index >= dsNV.size())
-            return null;
-        return dsNV.get(index);
-    }
-
-    public int getSize() {
-        return dsNV.size();
-    }
-
-    public static void main(String[] args) {
-
-    }
 }

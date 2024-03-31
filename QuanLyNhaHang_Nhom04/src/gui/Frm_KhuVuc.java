@@ -10,30 +10,48 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.border.LineBorder;
 
+import connectDB.ConnectDB;
+import dao.KhuVucDAO;
+import entity.KhuVuc;
+
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.List;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.border.EmptyBorder;
 
-public class Frm_KhuVuc extends JDialog {
+public class Frm_KhuVuc extends JDialog implements ActionListener{
 
 	    private static final long serialVersionUID = 1L;
 	    private JTable table;
 		private DefaultTableModel modelKV;
 		private JButton btn_them;
 		private JButton btn_xoa;
-		private JButton btn_luu;
-		private JButton btn_thoat;
-		private JTextField txt_them;
-		private JLabel lbl_them;
+		private JLabel lbl_maKV;
+		private JTextField txt_maKV;
+		private JLabel lbl_tenKV;
+		private JTextField txt_tenKV;
+		private KhuVucDAO kv_dao;
 
 	    public Frm_KhuVuc() {
+	    	
+	    	try {
+				ConnectDB.getInstance().connect();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			kv_dao = new KhuVucDAO();
+			
 	        setTitle("Chi tiết khu vực");
 	        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	        JPanel titlePanel = new JPanel();
@@ -66,14 +84,21 @@ public class Frm_KhuVuc extends JDialog {
 	        pnlButton.setPreferredSize(new Dimension(100, 35));
 	        pnlButton.setLayout(new BoxLayout(pnlButton, BoxLayout.X_AXIS));
 
-	        lbl_them = new JLabel("Nhập tên khu vực cần thêm: ");
-	        lbl_them.setFont(new Font("Tahoma", Font.BOLD, 14));
-	        txt_them = new JTextField();
-	        txt_them.setFont(new Font("Tahoma", Font.BOLD, 15));
+	        lbl_maKV = new JLabel("Nhập mã khu vực: ");
+	        lbl_maKV.setFont(new Font("Tahoma", Font.BOLD, 15));
+	        txt_maKV = new JTextField();
+	        txt_maKV.setFont(new Font("Tahoma", Font.BOLD, 15));
+	        pnlButton.add(lbl_maKV);
+	        pnlButton.add(txt_maKV);
+	        pnlButton.add(Box.createHorizontalStrut(6));
+	        lbl_tenKV = new JLabel("Nhập tên khu vực: ");
+	        lbl_tenKV.setFont(new Font("Tahoma", Font.BOLD, 15));
+	        txt_tenKV = new JTextField();
+	        txt_tenKV.setFont(new Font("Tahoma", Font.BOLD, 15));
 	        btn_them = new JButton("Thêm KV");
 	        btn_them.setFont(new Font("Tahoma", Font.BOLD, 15));
-	        pnlButton.add(lbl_them);
-	        pnlButton.add(txt_them);
+	        pnlButton.add(lbl_tenKV);
+	        pnlButton.add(txt_tenKV);
 	        pnlButton.add(Box.createHorizontalStrut(6));
 	        pnlButton.add(btn_them);
 	        pnlButton.add(Box.createHorizontalStrut(15));
@@ -81,13 +106,7 @@ public class Frm_KhuVuc extends JDialog {
 	        btn_xoa.setFont(new Font("Tahoma", Font.BOLD, 15));
 	        pnlButton.add(btn_xoa);
 	        pnlButton.add(Box.createHorizontalStrut(6));
-	        btn_luu = new JButton("Lưu");
-	        btn_luu.setFont(new Font("Tahoma", Font.BOLD, 15));
-	        pnlButton.add(btn_luu);
-	        pnlButton.add(Box.createHorizontalStrut(6));
-	        btn_thoat = new JButton("Thoát");
-	        btn_thoat.setFont(new Font("Tahoma", Font.BOLD, 15));
-	        pnlButton.add(btn_thoat);
+
 
 	        
 	        JPanel pnlContainer = new JPanel();
@@ -101,6 +120,45 @@ public class Frm_KhuVuc extends JDialog {
 	        add(pnlContainer);
 	        pnlContainer.setBorder(new EmptyBorder(7, 15, 7, 15));
 	        setSize(730, 465);
+	        
+	        btn_them.addActionListener(this);
+	        btn_xoa.addActionListener(this);
+	        docDuLieuDBVaoTable();
 	    }
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			Object o = e.getSource();
+			if (o.equals(btn_them)){
+				String maKV = txt_maKV.getText();
+				String tenKV = txt_tenKV.getText();
+				KhuVuc kv = new KhuVuc(maKV, tenKV);
+				try {
+				    ;
+				    kv_dao.themKhuVuc(kv);
+				    modelKV.addRow(new Object[] { kv.getMaKhuVuc(), kv.getTenKhuVuc()
+				    });
+				} catch (Exception e2) {
+				    e2.printStackTrace(); 
+				    JOptionPane.showMessageDialog(this, "Trùng mã");
+				}
+			}
+			if (o.equals(btn_xoa)) {
+			    int r = table.getSelectedRow();
+			    if (r != -1) {
+			        String maKV = (String) modelKV.getValueAt(r, 0);
+			        modelKV.removeRow(r);
+			        kv_dao.xoaKhuVuc(maKV);
+			    }
+			}
+		}	
+		public void docDuLieuDBVaoTable() {
+			List<KhuVuc> listKV = kv_dao.layThongTin();
+			for (KhuVuc kv : listKV ) {
+				modelKV.addRow(new Object [] {kv.getMaKhuVuc(),kv.getTenKhuVuc()});
+			}
+		}
+	    
 	
 }

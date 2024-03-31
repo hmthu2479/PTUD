@@ -26,7 +26,6 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 	private JTextField txtMess;
 	private JButton btn_Them,btn_Tim, btn_Xoa, btn_xoaRong;
 	private JTextField txt_maPhieu;
-	private PhieuDatBan listPhieu;
 	private DefaultTableModel modelPhieu;
 	private JTable table;
 	private JTextField txt_Tim;
@@ -36,7 +35,6 @@ public class Frm_DatBan extends JPanel implements ActionListener {
     public Frm_DatBan() {
         setLayout(new BorderLayout());
 
-        listPhieu = new PhieuDatBan();
         JPanel mainPanel = new JPanel(new BorderLayout(15, 5));
         mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
         mainPanel.setBackground(Color.WHITE);
@@ -314,14 +312,14 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 				});
 			}
 		}
-			if (o.equals(btn_Xoa)) {
-		    int r = table.getSelectedRow();
-		    modelPhieu.removeRow(r);
-		    PhieuDatBan p = listPhieu.getElement(r);
-		    if (p != null) {
-		        listPhieu.xoaPhieu(p.getMaPhieu());
-		    	}
-		    }
+		if (o.equals(btn_Xoa)) {
+            int r = table.getSelectedRow();
+            if (r != -1) {
+                String maPhieu = (String) modelPhieu.getValueAt(r, 0);
+                modelPhieu.removeRow(r);
+                p_dao.xoaPhong(maPhong);
+            }
+        }
 
 			if (o.equals(btn_xoaRong)) {
 			    txt_maPhieu.setText("");

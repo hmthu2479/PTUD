@@ -8,11 +8,7 @@ public class PhieuDatBan {
     private String maPhieu, khuVuc, soBan, ngayThang, gioDat, hoTen, sdt, diaChi;
     private int soLuongNguoi;
     private LocalDate ngayLap;
-    private ArrayList<PhieuDatBan> dsPhieu;
 
-    public PhieuDatBan() {
-        dsPhieu = new ArrayList<PhieuDatBan>();
-    }
 
     public PhieuDatBan(String maPhieu, String khuVuc, String soBan, int soLuongNguoi, String ngayThang, LocalDate ngayLap, String gioDat, String hoTen,
             String sdt, String diaChi) {
@@ -27,7 +23,6 @@ public class PhieuDatBan {
         this.sdt = sdt;
         this.diaChi = diaChi;
         this.soLuongNguoi = soLuongNguoi;
-        dsPhieu = new ArrayList<PhieuDatBan>();
     }
 
     public PhieuDatBan(String ma) {
@@ -138,41 +133,5 @@ public class PhieuDatBan {
                 + diaChi + ", soLuongNguoi=" + soLuongNguoi + "]";
     }
 
-    public boolean themPhieu(PhieuDatBan phieu) {
-        if (dsPhieu.contains(phieu))
-            return false;
-        dsPhieu.add(phieu);
-        return true;
-    }
 
-    public boolean xoaPhieu(String ma) {
-        return dsPhieu.removeIf(phieu -> phieu.getMaPhieu().equals(ma));
-    }
-
-    public PhieuDatBan timPhieu(String ma) {
-        for (PhieuDatBan phieu : dsPhieu) {
-            if (phieu.getMaPhieu().equals(ma)) {
-                return phieu;
-            }
-        }
-        return null;
-    }
-
-    public ArrayList<PhieuDatBan> getDsPhieu() {
-        return dsPhieu;
-    }
-
-    public void setDsPhieu(ArrayList<PhieuDatBan> dsPhieu) {
-        this.dsPhieu = dsPhieu;
-    }
-
-    public PhieuDatBan getElement(int index) {
-        if (index < 0 || index >= dsPhieu.size())
-            return null;
-        return dsPhieu.get(index);
-    }
-
-    public int getSize() {
-        return dsPhieu.size();
-    }
 }

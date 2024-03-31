@@ -7,9 +7,10 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -18,7 +19,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JComponent;
 
@@ -28,33 +28,31 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
+import connectDB.ConnectDB;
+import dao.NhanVienDAO;
 import entity.NhanVien;
-
 
 public class Frm_NhanVien extends JPanel implements ActionListener {
 	private JLabel lb_title;
 	private JLabel lb_MaNV;
-	private JTextField ijpMaNV;
+	private JTextField txtMaNV;
 	private JLabel lb_ho;
-	private JTextField ijpho;
+	private JTextField txtho;
 	private JLabel lb_tuoi;
-	private JTextField ijpTuoi;
+	private JTextField txtTuoi;
 	private JLabel lb_sdt;
-	private JTextField ijpsdt;
+	private JTextField txtsdt;
 	private JRadioButton nu;
 	private JPanel jpS;
 	private JPanel bTrai;
 	private JPanel bPhai;
 	private JLabel lb_Nhap;
-	private JTextField ijpNhap;
+	private JTextField txtNhap;
 	private JButton tim;
 	private JButton them;
 	private JButton xoaTrang;
@@ -64,10 +62,18 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 	private JLabel phai;
 	private DefaultTableModel modelNV;
 	private JTable tableNhanVien;
-	private NhanVien listNV;
 	private JRadioButton nam;
+	private NhanVienDAO nv_dao;
 
 	public Frm_NhanVien() {
+		try {
+			ConnectDB.getInstance().connect();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		nv_dao = new NhanVienDAO();
+		
 		setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 		setBackground(Color.white);
 		jpN = new JPanel();
@@ -81,13 +87,13 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 		lb_title.setForeground(Color.black);
 
 		lb_MaNV = new JLabel("Mã nhân viên: ");
-		ijpMaNV = new JTextField();
+		txtMaNV = new JTextField();
 		lb_ho = new JLabel("Họ: ");
-		ijpho = new JTextField();
+		txtho = new JTextField();
 		lb_tuoi = new JLabel("Tuổi: ");
-		ijpTuoi = new JTextField();
+		txtTuoi = new JTextField();
 		lb_sdt = new JLabel("Số điện thoại: ");
-		ijpsdt = new JTextField();
+		txtsdt = new JTextField();
 		phai = new JLabel("Phái: ");
 		nu = new JRadioButton("Nữ");
 		nam = new JRadioButton("Nam");
@@ -97,13 +103,13 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 
 		JPanel jpFields = new JPanel(new GridLayout(0, 1));
 		jpFields.add(lb_MaNV);
-		jpFields.add(ijpMaNV);
+		jpFields.add(txtMaNV);
 		jpFields.add(lb_ho);
-		jpFields.add(ijpho);
+		jpFields.add(txtho);
 		jpFields.add(lb_tuoi);
-		jpFields.add(ijpTuoi);
+		jpFields.add(txtTuoi);
 		jpFields.add(lb_sdt);
-		jpFields.add(ijpsdt);
+		jpFields.add(txtsdt);
 
 		JPanel jpPhai = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		jpPhai.add(phai);
@@ -117,16 +123,16 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 		}
 		
 		Dimension textFieldSize = new Dimension(200, 30); 
-		ijpMaNV.setPreferredSize(textFieldSize);
-		ijpho.setPreferredSize(textFieldSize);
-		ijpTuoi.setPreferredSize(textFieldSize);
-		ijpsdt.setPreferredSize(textFieldSize);
+		txtMaNV.setPreferredSize(textFieldSize);
+		txtho.setPreferredSize(textFieldSize);
+		txtTuoi.setPreferredSize(textFieldSize);
+		txtsdt.setPreferredSize(textFieldSize);
 		
 		Font textFieldFont = new Font("Arial", Font.BOLD, 18); 
-		ijpMaNV.setFont(textFieldFont);
-		ijpho.setFont(textFieldFont);
-		ijpTuoi.setFont(textFieldFont);
-		ijpsdt.setFont(textFieldFont);
+		txtMaNV.setFont(textFieldFont);
+		txtho.setFont(textFieldFont);
+		txtTuoi.setFont(textFieldFont);
+		txtsdt.setFont(textFieldFont);
 		
 		lb_MaNV.setHorizontalAlignment(JLabel.CENTER);
 		lb_ho.setHorizontalAlignment(JLabel.CENTER);
@@ -185,7 +191,6 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         add(scrollPane, BorderLayout.EAST);
 		
-		listNV = new NhanVien();
 				
 				
 		jpS = new JPanel();
@@ -195,10 +200,10 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 		bTrai.setLayout(new BoxLayout(bTrai, BoxLayout.X_AXIS));
 		bTrai.setBackground(Color.white);
 			bTrai.add(lb_Nhap = new JLabel("Nhập mã số cần tìm: "));
-			bTrai.add(ijpNhap = new JTextField(15));
+			bTrai.add(txtNhap = new JTextField(15));
 			bTrai.add(tim = new JButton("Tìm"));
 			lb_Nhap.setFont(textFieldFont);
-			ijpho.setFont(textFieldFont);
+			txtho.setFont(textFieldFont);
 			tim.setFont(textFieldFont);
 			
 				
@@ -214,14 +219,11 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 		bPhai.add(xoaTrang = new JButton("Xóa trắng"));
 		bPhai.add(Box.createHorizontalStrut(10));
 		bPhai.add(xoa = new JButton("Xóa"));
-		bPhai.add(Box.createHorizontalStrut(10));
-		bPhai.add(luu = new JButton("Lưu"));
 
 		bPhai.add(Box.createHorizontalGlue());
 			them.setFont(textFieldFont);
 			xoaTrang.setFont(textFieldFont);
 			xoa.setFont(textFieldFont);
-			luu.setFont(textFieldFont);
 		add(jpS,BorderLayout.SOUTH);
 	
 	
@@ -229,7 +231,7 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 		them.addActionListener(this);
 		xoa.addActionListener(this);
 		tim.addActionListener(this);
-		
+		docDuLieuDBVaoTable();
 		setVisible(true);
 		
 	}
@@ -237,65 +239,66 @@ public class Frm_NhanVien extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
-		if(o.equals(them)) {
-			String ma = ijpMaNV.getText();
-			String ho = ijpho.getText();
-			int tuoi = Integer.parseInt(ijpTuoi.getText());
-			String phai_Nam_Nu = nam.isSelected()?"Nam" : nu.isSelected()?"Nữ":"";
-			String sdt = ijpsdt.getText();
-			
-			NhanVien nv = new NhanVien(ma, ho, phai_Nam_Nu, tuoi, sdt);
-			
-			if(!listNV.themNV(nv)) {
-				JOptionPane.showMessageDialog(this, "Trùng mã");
-			}
-			else {
-				modelNV.addRow(new Object[] {nv.getMaNV(), nv.getHoNV(),
-						 phai_Nam_Nu,nv.getTuoi(), nv.getSdt()
-				});
+		if (o.equals(them)) {
+			String maNV = txtMaNV.getText();
+			String tenNV = txtho.getText();
+			String phai = nam.isSelected()?"Nam" : nu.isSelected()?"Nữ":"";
+			int tuoi = Integer.parseInt(txtTuoi.getText());
+			String soDienThoai = txtsdt.getText();
+			NhanVien nv = new NhanVien(maNV,tenNV,phai,tuoi,soDienThoai);
+
+			try {
+			    nv_dao.themNhanVien(nv);
+
+			    modelNV.addRow(new Object[] { nv.getMaNV(), nv.getHoTenNV(),nv.getPhai(),
+			        nv.getTuoi(), nv.getSdt()
+			    });
+			} catch (Exception e2) {
+			    e2.printStackTrace(); 
+			    JOptionPane.showMessageDialog(this, "Trùng mã");
 			}
 		}
-		if(o.equals(xoa)) {
-			int r = tableNhanVien.getSelectedRow();
-			modelNV.removeRow(r);
-			
-			NhanVien nv = listNV.getElement(r);
-			listNV.xoaNV(nv.getMaNV());
+		
+		if (o.equals(xoa)) {
+		    int r = tableNhanVien.getSelectedRow();
+		    if (r != -1) {
+		        String maNV = (String) modelNV.getValueAt(r, 0);
+		        modelNV.removeRow(r);
+		        nv_dao.xoaNhanVien(maNV);
+		    }
 		}
 		if(o.equals(xoaTrang)) {
-			ijpMaNV.setText("");
-			ijpho.setText("");
+			txtMaNV.setText("");
+			txtho.setText("");
 			nam.setSelected(false);
 			nu.setSelected(false);
-			ijpTuoi.setText("");
-			ijpsdt.setText("");
+			txtTuoi.setText("");
+			txtsdt.setText("");
 			//đặt lại phương thức xóa trắng
     		ButtonGroup gr = new ButtonGroup();
 			gr.add(nam);
 			gr.add(nu);
 			gr.clearSelection();
 		}
+		
 		if (o.equals(tim)) {
-            String maTim = ijpNhap.getText();
-            if(maTim != null && maTim.trim().length() > 0) {
-            	try {
-            		NhanVien nvTim = listNV.tim(maTim);
-            		if (nvTim != null) {
-                        JOptionPane.showMessageDialog(this,
-                                "Thông tin nhân viên:\nMã: " + nvTim.getMaNV() +
-                                        "\nHọ: " + nvTim.getHoNV() +
-                                        "\nTuổi: " + nvTim.getTuoi() +
-                                        "\nPhái: " + nvTim.getPhai() +
-                                        "\nTiền lương: " + nvTim.getSdt(),
-                                "Tìm kiếm thành công", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên có mã " + maTim, "Thông báo",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-            	}catch (Exception ex) {
-					JOptionPane.showMessageDialog(null, "Dữ liệu không hợp lệ");
-				}
-            }
-        }
+		    String maNV = Integer.parseInt(txtNhap.getText());
+		    for (int i = 0; i < modelNV.getRowCount(); i++) {
+		        int maNVRow = (int) modelNV.getValueAt(i, 0);
+		        if (maNV == maNVRow) {
+		            tableNhanVien.setRowSelectionInterval(i, i);
+		            tableNhanVien.scrollRectToVisible(tableNhanVien.getCellRect(i, 0, true));
+		            return; 
+		        }
+		    }
+		    JOptionPane.showMessageDialog(this, "Không tìm thấy mã");
+		}
+	}
+	public void docDuLieuDBVaoTable() {
+		List<NhanVien> listNV = nv_dao.layThongTin();
+		for (NhanVien nv : listNV ) {
+			modelNV.addRow(new Object [] {nv.getMaNV(), nv.getHoTenNV(),nv.getPhai(),
+			        nv.getTuoi(), nv.getSdt()});
+		}
 	}
 }
