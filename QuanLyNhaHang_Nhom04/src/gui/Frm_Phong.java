@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -32,6 +33,7 @@ import connectDB.ConnectDB;
 import dao.KhuVucDAO;
 import dao.PhongDAO;
 import entity.KhuVuc;
+
 import entity.Phong;
 
 public class Frm_Phong extends JDialog implements ActionListener {
@@ -98,11 +100,11 @@ public class Frm_Phong extends JDialog implements ActionListener {
         lbl_maPhong = new JLabel("Nhập mã phòng: ");
         lbl_maPhong.setFont(new Font("Tahoma", Font.BOLD, 14));
         cmb_khuVuc = new JComboBox<String>();
-        cmb_khuVuc.setEditable(true);	
+        cmb_khuVuc.setEditable(false);	
 		
 		ArrayList<KhuVuc> listKV = kv_dao.layThongTin() ;
 		for (KhuVuc kv : listKV) {
-			cmb_khuVuc.addItem(kv.getMaKhuVuc());
+			cmb_khuVuc.addItem(kv.getTenKhuVuc());
 		}
 		cmb_khuVuc.setFont(new Font("Tahoma", Font.BOLD, 15));
         txt_maPhong = new JTextField();
@@ -123,6 +125,7 @@ public class Frm_Phong extends JDialog implements ActionListener {
         pnlButton1.add(txt_tenPhong);
         pnlButton1.add(Box.createHorizontalStrut(6));
         pnlButton1.add(cmb_khuVuc);
+        pnlButton1.add(Box.createHorizontalStrut(12));
         pnlButton1.add(btn_them);
         
         JPanel pnlButton2 = new JPanel();
@@ -177,20 +180,30 @@ public class Frm_Phong extends JDialog implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object o = e.getSource();
-        if (o.equals(btn_them)) {
-        	String maPhong = txt_maPhong.getText();
-        	String tenPhong = txt_tenPhong.getText();
-        	String khuVuc = String.valueOf(cmb_khuVuc.getSelectedItem());
-        	Phong p = new Phong(maPhong, tenPhong, new KhuVuc(khuVuc));
-            try {
-                phong_dao.themPhong(p);
-                modelPhong.addRow(new Object[]{p.getMaPhong(), p.getTenPhong(), p.getKhuVuc().getMaKhuVuc()});
-            } catch (Exception e2) {
-                e2.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Trùng mã");
-            }
-        }
+    	Object o = e.getSource();
+    	  	
+    	if (o.equals(btn_them)) {
+    	    String maPhong = txt_maPhong.getText();
+    	    String tenPhong = txt_tenPhong.getText();
+    	    String khuVuc = String.valueOf(cmb_khuVuc.getSelectedItem());
+
+    	    KhuVucDAO khuVucDAO = new KhuVucDAO();
+    	    ArrayList<KhuVuc> dsKV = khuVucDAO.layThongTin();
+
+    	    for (KhuVuc kv : dsKV) {
+    	        if (khuVuc.equalsIgnoreCase(kv.getTenKhuVuc())) {
+    	            Phong p = new Phong(maPhong, tenPhong, kv);
+    	                if (phong_dao.themPhong(p)) {
+    	                    modelPhong.addRow(new Object[]{p.getMaPhong(), p.getTenPhong(), kv.getTenKhuVuc()});
+    	                } else {
+    	                    JOptionPane.showMessageDialog(null, "Trùng mã", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    	                }
+    	                return;
+    	            } 
+    	        }
+    	   }
+
+
         if (o.equals(btn_xoa)) {
             int r = table.getSelectedRow();
             if (r != -1) {
@@ -215,12 +228,14 @@ public class Frm_Phong extends JDialog implements ActionListener {
     }
 	
 	public void docDuLieuDBVaoTable() {
+		
 		List<Phong> listPhong = phong_dao.layThongTin();
 		for (Phong p : listPhong ) {
 			modelPhong.addRow(new Object [] {p.getMaPhong(), p.getTenPhong(),p.getKhuVuc().getMaKhuVuc()});
 			
 		}
 	}
+	
     
 }
 

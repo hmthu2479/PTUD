@@ -9,8 +9,9 @@ public class KhuVuc {
 		this.tenKhuVuc = tenKhuVuc;
 	}
 	public KhuVuc(String maKhuVuc) {
-		// TODO Auto-generated constructor stub
-	}
+        this.maKhuVuc = maKhuVuc;
+       
+    }
 	public String getMaKhuVuc() {
 		return maKhuVuc;
 	}

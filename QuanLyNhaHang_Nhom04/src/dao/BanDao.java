@@ -7,7 +7,7 @@ import entity.Phong;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class PhongDAO {
+public class BanDao {
     //lấy danh sách khu vực
 	public ArrayList<Phong> layThongTin() {
 	    ArrayList<Phong> dsPhong = new ArrayList<Phong>();
@@ -111,5 +111,6 @@ public class PhongDAO {
     }
 
 }
+
 
 

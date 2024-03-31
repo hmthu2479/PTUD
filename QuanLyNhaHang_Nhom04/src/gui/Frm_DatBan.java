@@ -31,6 +31,7 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 	private JTextField txt_Tim;
 	private JLabel lbl_Tim;
 	private JComboBox cmb_nhanVien;
+	private JComboBox cmb_phong;
 
     public Frm_DatBan() {
         setLayout(new BorderLayout());
@@ -42,16 +43,7 @@ public class Frm_DatBan extends JPanel implements ActionListener {
         JPanel pnl_W = new JPanel(new GridLayout(8, 1, 0, 0));
         pnl_W.setBackground(Color.WHITE); 
 
-        // Nhân viên
-        
-        JPanel pnl_nhanVien = new JPanel(new BorderLayout());
-        pnl_nhanVien.setBackground(Color.WHITE); 
-        pnl_nhanVien.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Nhân viên", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
-        String[] nv = {"Nguyễn Văn A", "Trần Văn B"};
-        cmb_nhanVien = new JComboBox<>(nv);
-        cmb_nhanVien.setFont(new Font("Arial", Font.BOLD, 20));
-        pnl_nhanVien.add(cmb_nhanVien, BorderLayout.CENTER);
-        pnl_W.add(pnl_nhanVien);
+
         // Khu vực
         
         JPanel pnl_khuVuc = new JPanel(new BorderLayout());
@@ -62,6 +54,17 @@ public class Frm_DatBan extends JPanel implements ActionListener {
         cmb_khuVuc.setFont(new Font("Arial", Font.BOLD, 20));
         pnl_khuVuc.add(cmb_khuVuc, BorderLayout.CENTER);
         pnl_W.add(pnl_khuVuc);
+        
+        // Phòng
+        
+        JPanel pnl_phong = new JPanel(new BorderLayout());
+        pnl_phong.setBackground(Color.WHITE); 
+        pnl_phong.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Phòng", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        String[] phong = {" ","Phòng Vip 1"};
+        cmb_phong = new JComboBox<>(phong);
+        cmb_phong.setFont(new Font("Arial", Font.BOLD, 20));
+        pnl_phong.add(cmb_phong, BorderLayout.CENTER);
+        pnl_W.add(pnl_phong);
         
      // Bàn
         JPanel pnl_Ban = new JPanel(new BorderLayout());
@@ -165,7 +168,7 @@ public class Frm_DatBan extends JPanel implements ActionListener {
         JPanel rightPanel = new JPanel(new BorderLayout());
 
         // Table
-        String[] columnNames = {"Mã", "Khu vực", "Số bàn", "SL","Ngày đặt","Ngày lập","Giờ đặt","Họ Tên", "SDT", "Địa chỉ", "Nhân viên"};
+        String[] columnNames = {"Mã", "Khu vực","Phòng", "Số bàn", "SL","Ngày đặt","Ngày lập","Giờ đặt","Họ Tên", "SDT", "Địa chỉ", "Nhân viên"};
 
         modelPhieu = new DefaultTableModel(columnNames, 0);
 		table = new JTable(modelPhieu);
@@ -183,24 +186,13 @@ public class Frm_DatBan extends JPanel implements ActionListener {
         header.setBackground(lightBlue);
         header.setFont(new Font("Arial", Font.BOLD, 18));
 
-        
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
-	     table.getColumnModel().getColumn(0).setPreferredWidth(100);
-	     table.getColumnModel().getColumn(1).setPreferredWidth(130);
-	     table.getColumnModel().getColumn(2).setPreferredWidth(120);
-	     table.getColumnModel().getColumn(3).setPreferredWidth(50);
-	     table.getColumnModel().getColumn(4).setPreferredWidth(120);
-	     table.getColumnModel().getColumn(5).setPreferredWidth(120);
-	     table.getColumnModel().getColumn(6).setPreferredWidth(90);
-	     table.getColumnModel().getColumn(7).setPreferredWidth(160);
-	     table.getColumnModel().getColumn(8).setPreferredWidth(120);
-	     table.getColumnModel().getColumn(9).setPreferredWidth(320);
-	     table.getColumnModel().getColumn(9).setPreferredWidth(120);
         JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-      
+
         rightPanel.add(tableScrollPane, BorderLayout.CENTER);
+
         rightPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
         mainPanel.add(rightPanel, BorderLayout.CENTER);
@@ -240,7 +232,17 @@ public class Frm_DatBan extends JPanel implements ActionListener {
         cmb_soLuongNguoi.setFont(new Font("Arial", Font.BOLD, 20));
         pnl_soLuongNguoi.add(cmb_soLuongNguoi, BorderLayout.CENTER);
         pnl_N.add(pnl_soLuongNguoi);
-        pnl_W.add(pnl_N);
+        // Nhân viên
+        
+        JPanel pnl_nhanVien = new JPanel(new BorderLayout());
+        pnl_nhanVien.setBackground(Color.WHITE); 
+        pnl_nhanVien.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Nhân viên", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        String[] nv = {"Nguyễn Văn A", "Trần Văn B"};
+        cmb_nhanVien = new JComboBox<>(nv);
+        cmb_nhanVien.setFont(new Font("Arial", Font.BOLD, 20));
+        pnl_nhanVien.add(cmb_nhanVien, BorderLayout.CENTER);
+        pnl_N.add(pnl_nhanVien);
+
         mainPanel.add(pnl_N, BorderLayout.NORTH);
 
         add(mainPanel, BorderLayout.CENTER);
