@@ -39,12 +39,13 @@ public class NhanVienDAO {
         String SQL = "INSERT INTO NhanVien VALUES (?,?,?,?,?)";
         int n = 0;
         try{
-            statement = con.prepareStatement(SQL);
-            statement.setString(1,nhanVien.getMaNV());
-            statement.setString(2,nhanVien.getHoTenNV());
-            statement.setString(3,nhanVien.getPhai());
-            statement.setInt(4,nhanVien.getTuoi());
-            statement.setString(5,nhanVien.getSdt());
+        	statement = con.prepareStatement(SQL);
+        	statement.setString(1, nhanVien.getMaNV().trim());
+        	statement.setString(2, nhanVien.getHoTenNV().trim());
+        	statement.setString(3, nhanVien.getPhai());
+        	statement.setInt(4, nhanVien.getTuoi());
+        	statement.setString(5, nhanVien.getSdt().trim());
+
   
             n = statement.executeUpdate();
         }catch (SQLException e){
@@ -76,13 +77,16 @@ public class NhanVienDAO {
         PreparedStatement statement =null;
         int n = 0;
         try{
-            String SQL = "UPDATE NhanVien SET maNV = ?, hoTenNV = ?, phai = ?, tuoi = ?, sdt = ? WHERE maNV = ?";
+        	String SQL = "UPDATE NhanVien SET maNV = ?, tenNV = ?, phai = ?, tuoi = ?, sdt = ? WHERE maNV = ?";
             statement = con.prepareStatement(SQL);
-            statement.setString(1,nhanVien.getMaNV());
-            statement.setString(2,nhanVien.getHoTenNV());
-            statement.setString(3,nhanVien.getPhai());
-            statement.setInt(4,nhanVien.getTuoi());
-            statement.setString(5,nhanVien.getSdt());
+            statement.setString(1, nhanVien.getMaNV());
+            statement.setString(2, nhanVien.getHoTenNV());
+            statement.setString(3, nhanVien.getPhai());
+            statement.setInt(4, nhanVien.getTuoi());
+            statement.setString(5, nhanVien.getSdt());
+            statement.setString(6, nhanVien.getMaNV());
+
+
             n = statement.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();

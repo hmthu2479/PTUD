@@ -9,6 +9,10 @@ public class Phong {
 		this.tenPhong = tenPhong;
 		this.khuVuc = khuVuc;
 	}
+	public Phong(String tenPhong) {
+		// TODO Auto-generated constructor stub
+		this.maPhong = maPhong;
+	}
 	public String getMaPhong() {
 		return maPhong;
 	}

@@ -14,6 +14,7 @@ import javax.swing.table.JTableHeader;
 import connectDB.ConnectDB;
 import dao.KhuVucDAO;
 import entity.KhuVuc;
+import entity.NhanVien;
 
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.BorderLayout;
@@ -41,6 +42,7 @@ public class Frm_KhuVuc extends JDialog implements ActionListener{
 		private JLabel lbl_tenKV;
 		private JTextField txt_tenKV;
 		private KhuVucDAO kv_dao;
+		private JButton btn_luu;
 
 	    public Frm_KhuVuc() {
 	    	
@@ -106,6 +108,10 @@ public class Frm_KhuVuc extends JDialog implements ActionListener{
 	        btn_xoa.setFont(new Font("Tahoma", Font.BOLD, 15));
 	        pnlButton.add(btn_xoa);
 	        pnlButton.add(Box.createHorizontalStrut(6));
+	        btn_luu = new JButton("Lưu");
+	        btn_luu.setFont(new Font("Tahoma", Font.BOLD, 15));
+	        pnlButton.add(btn_luu);
+	        pnlButton.add(Box.createHorizontalStrut(6));
 
 
 	        
@@ -123,6 +129,7 @@ public class Frm_KhuVuc extends JDialog implements ActionListener{
 	        
 	        btn_them.addActionListener(this);
 	        btn_xoa.addActionListener(this);
+	        btn_luu.addActionListener(this);
 	        docDuLieuDBVaoTable();
 	    }
 
@@ -152,7 +159,27 @@ public class Frm_KhuVuc extends JDialog implements ActionListener{
 			        kv_dao.xoaKhuVuc(maKV);
 			    }
 			}
-		}	
+		
+			if (o.equals(btn_luu)) {
+		    int rowCount = modelKV.getRowCount();
+		    for (int i = 0; i < rowCount; i++) {
+		        String maKV = (String) modelKV.getValueAt(i, 0);
+		        String tenKV = (String) modelKV.getValueAt(i, 1);
+
+		        KhuVuc kv = new KhuVuc(maKV, tenKV);
+		        
+		        try {
+		            kv_dao.capNhatKhuVuc(kv);
+		        } catch (Exception e2) {
+		            e2.printStackTrace(); 
+		            JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu vào cơ sở dữ liệu");
+		            return; 
+		        }
+		    }
+		    JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
+		}
+	}
+
 		public void docDuLieuDBVaoTable() {
 			List<KhuVuc> listKV = kv_dao.layThongTin();
 			for (KhuVuc kv : listKV ) {

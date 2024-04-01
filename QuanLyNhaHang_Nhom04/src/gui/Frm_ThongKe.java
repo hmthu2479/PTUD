@@ -11,8 +11,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.SwingConstants;
+
 
 public class Frm_ThongKe extends JPanel implements ActionListener {
 
@@ -22,31 +23,20 @@ public class Frm_ThongKe extends JPanel implements ActionListener {
     private JTable table;
     private JButton btnNewButton;
     private Frm_DanhSachHoaDon inhoadon;
-    private JLabel lblNewLabel;
+    private JTable table_1;
     private JTextField textField;
+
 
     /**
      * Create the panel.
      */
     public Frm_ThongKe() {
-        setBounds(100, 100, 805, 365);
+    	setSize(2050,1050);
+    	setBackground(new Color(255, 128, 192));
+        setBounds(100, 100, 1304, 750);
         setLayout(null);
-
-        btnNewButton = new JButton("In hóa đơn");
-        btnNewButton.setBackground(new Color(135, 149, 248));
-        btnNewButton.setForeground(new Color(0, 0, 0));
-        btnNewButton.setFont(new Font("Times New Roman", Font.BOLD, 20));
-        btnNewButton.setBounds(565, 224, 138, 43);
-        add(btnNewButton);
-        btnNewButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new Frm_DanhSachHoaDon().setVisible(true);
-            }
-        });
-
         JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(10, 11, 769, 179);
+        scrollPane.setBounds(0, 192, 1950, 179);
         add(scrollPane);
 
         table = new JTable();
@@ -64,7 +54,7 @@ public class Frm_ThongKe extends JPanel implements ActionListener {
                         {null, null, null, null, null, null, null},
                 },
                 new String[]{
-                        "Mã hóa đơn", "Tên món", "Tổng tiền", "Bàn ăn", "Khách hàng", "Ngày lập", "Ngày đặt"
+                        "Mã hóa đơn", "Bàn ăn", "Tổng tiền", "Khách hàng", "Ngày lập", "Ngày đặt"
                 }
         ) {
             /**
@@ -87,23 +77,93 @@ public class Frm_ThongKe extends JPanel implements ActionListener {
         table.getColumnModel().getColumn(5).setResizable(false);
         table.getColumnModel().getColumn(6).setResizable(false);
         scrollPane.setViewportView(table);
-
-        lblNewLabel = new JLabel("Tìm kiếm:");
-        lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
-        lblNewLabel.setBounds(199, 230, 100, 30);
+        
+        JLabel lblNewLabel = new JLabel("Danh sách hóa đơn");
+        lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 32));
+        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel.setBounds(590, 11, 353, 38);
         add(lblNewLabel);
-
+        
+        JLabel lblChiTitHa = new JLabel("Chi tiết hóa đơn");
+        lblChiTitHa.setHorizontalAlignment(SwingConstants.CENTER);
+        lblChiTitHa.setFont(new Font("Times New Roman", Font.BOLD, 32));
+        lblChiTitHa.setBounds(585, 382, 353, 38);
+        add(lblChiTitHa);
+        
+        JScrollPane scrollPane_1 = new JScrollPane();
+        scrollPane_1.setBounds(0, 431, 1950, 237);
+        add(scrollPane_1);
+        
+        table_1 = new JTable();
+        table_1.setModel(new DefaultTableModel(
+        	new Object[][] {
+        	},
+        	new String[] {
+        		"M\u00E3 h\u00F3a \u0111\u01A1n", "T\u00EAn m\u00F3n", "T\u1ED5ng ti\u1EC1n", "B\u00E0n \u0103n", "Kh\u00E1ch h\u00E0ng", "Nh\u00E2n vi\u00EAn", "Ng\u00E0y \u0111\u1EB7t"
+        	}
+        ));
+        scrollPane_1.setViewportView(table_1);
+        
+        JPanel panel = new JPanel();
+        panel.setBounds(0, 49, 2050, 125);
+        add(panel);
+        panel.setLayout(null);
+        
+        JPanel panel_1 = new JPanel();
+        panel_1.setBackground(new Color(192, 192, 192));
+        panel_1.setBounds(0, 0, 181, 49);
+        panel.add(panel_1);
+        panel_1.setLayout(null);
+        
+        JLabel lblNewLabel_1 = new JLabel("Tìm hóa đơn");
+        lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel_1.setFont(new Font("Times New Roman", Font.BOLD, 20));
+        lblNewLabel_1.setBounds(10, 11, 161, 27);
+        panel_1.add(lblNewLabel_1);
+        
+        JLabel lblNewLabel_2 = new JLabel("Mã hóa đơn:");
+        lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 24));
+        lblNewLabel_2.setBounds(332, 45, 157, 43);
+        panel.add(lblNewLabel_2);
+        
         textField = new JTextField();
-        textField.setFont(new Font("Times New Roman", Font.BOLD, 17));
-        textField.setBounds(293, 231, 236, 30);
-        add(textField);
+        textField.setFont(new Font("Times New Roman", Font.PLAIN, 17));
+        textField.setBounds(499, 50, 247, 35);
+        panel.add(textField);
         textField.setColumns(10);
-
-        btnNewButton.addActionListener(this);
+        
+        JButton btnNewButton_1 = new JButton("Tìm");
+        btnNewButton_1.setFont(new Font("Times New Roman", Font.BOLD, 23));
+        btnNewButton_1.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        	}
+        });
+        btnNewButton_1.setBounds(1116, 47, 106, 38);
+        panel.add(btnNewButton_1);
+        
+        JLabel lblNewLabel_2_1 = new JLabel("Ngày đặt:");
+        lblNewLabel_2_1.setFont(new Font("Times New Roman", Font.BOLD, 24));
+        lblNewLabel_2_1.setBounds(792, 45, 106, 43);
+        panel.add(lblNewLabel_2_1);
+        
+                        
+        btnNewButton = new JButton("In hóa đơn");
+        btnNewButton.setBounds(1166, 685, 138, 43);
+        add(btnNewButton);
+        btnNewButton.setBackground(new Color(135, 149, 248));
+        btnNewButton.setForeground(new Color(0, 0, 0));
+        btnNewButton.setFont(new Font("Times New Roman", Font.BOLD, 20));
+        btnNewButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+                     new Frm_DanhSachHoaDon().setVisible(true);
+         }
+             });
+                                
+         btnNewButton.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
-    }
+}
 }

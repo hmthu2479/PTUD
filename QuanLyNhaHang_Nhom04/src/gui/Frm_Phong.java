@@ -53,6 +53,7 @@ public class Frm_Phong extends JDialog implements ActionListener {
 	private KhuVucDAO kv_dao;
 	private PhongDAO phong_dao;
 	private JComboBox<String> cmb_khuVuc;
+	private JButton btn_luu;
 
     public Frm_Phong() {
     	try {
@@ -75,7 +76,7 @@ public class Frm_Phong extends JDialog implements ActionListener {
         titlePanel.add(titleLabel);
         
 
-        String[] columnNames = {"Mã Phòng","Tên phòng", "Thuộc"};
+        String[] columnNames = {"Mã Phòng","Tên Phòng", "Thuộc"};
 
         modelPhong = new DefaultTableModel(columnNames, 0);
 		table = new JTable(modelPhong);
@@ -131,7 +132,7 @@ public class Frm_Phong extends JDialog implements ActionListener {
         JPanel pnlButton2 = new JPanel();
         pnlButton2.setBorder(BorderFactory.createEmptyBorder(8, 0, 0, 0));
         pnlButton2.add(Box.createHorizontalStrut(30));
-        lbl_tim = new JLabel("Nhập tên phòng cần tìm: ");
+        lbl_tim = new JLabel("Nhập mã phòng cần tìm: ");
         lbl_tim.setFont(new Font("Tahoma", Font.BOLD, 14));
         txt_tim = new JTextField();
         txt_tim.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -151,6 +152,10 @@ public class Frm_Phong extends JDialog implements ActionListener {
         btn_xoa = new JButton("Xóa phòng");
         btn_xoa.setFont(new Font("Tahoma", Font.BOLD, 15));
         pnlButton2.add(btn_xoa);
+        pnlButton2.add(Box.createHorizontalStrut(8));
+        btn_luu = new JButton("Lưu");
+        btn_luu.setFont(new Font("Tahoma", Font.BOLD, 15));
+        pnlButton2.add(btn_luu);
         pnlButton2.add(Box.createHorizontalStrut(30));
 
         JPanel pnlButton = new JPanel();
@@ -175,6 +180,7 @@ public class Frm_Phong extends JDialog implements ActionListener {
         btn_them.addActionListener(this);
         btn_xoa.addActionListener(this);
         btn_tim.addActionListener(this);
+        btn_luu.addActionListener(this);
         docDuLieuDBVaoTable();
     }
 
@@ -212,11 +218,12 @@ public class Frm_Phong extends JDialog implements ActionListener {
                 phong_dao.xoaPhong(maPhong);
             }
         }
+        
         if (o.equals(btn_tim)) {
-            String maPhong = txt_maPhong.getText();
+            String maPhong = txt_tim.getText();
             for (int i = 0; i < modelPhong.getRowCount(); i++) {
-                String maPhongRow = (String) modelPhong.getValueAt(i, 0);
-                if (maPhong.equals(maPhongRow)) {
+                Object maPhongRow = modelPhong.getValueAt(i, 0);
+                if (maPhong.equals(maPhongRow.toString())) {
                     table.setRowSelectionInterval(i, i);
                     table.scrollRectToVisible(table.getCellRect(i, 0, true));
                     return;
@@ -224,6 +231,26 @@ public class Frm_Phong extends JDialog implements ActionListener {
             }
             JOptionPane.showMessageDialog(this, "Không tìm thấy mã");
         }
+        if (o.equals(btn_luu)) {
+            int rowCount = modelPhong.getRowCount();
+            for (int i = 0; i < rowCount; i++) {
+                String maPhong = (String) modelPhong.getValueAt(i, 0);
+                String tenPhong = (String) modelPhong.getValueAt(i, 1);
+                String kv = (String) modelPhong.getValueAt(i, 2); 
+                KhuVuc khuVuc = new KhuVuc(kv); 
+                Phong p = new Phong(maPhong, tenPhong, khuVuc);
+                
+                try {
+                    phong_dao.capNhatPhong(p);
+                } catch (Exception e2) {
+                    e2.printStackTrace(); 
+                    JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu vào cơ sở dữ liệu");
+                    return; 
+                }
+            }
+            JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
+        }
+
         
     }
 	
