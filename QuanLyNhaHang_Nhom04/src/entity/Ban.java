@@ -14,6 +14,10 @@ public class Ban {
 		this.khuVuc = khuVuc;
 		this.phong = phong;
 	}
+	public Ban(String maBan) {
+		// TODO Auto-generated constructor stub
+		this.maBan = maBan;
+	}
 	public String getMaBan() {
 		return maBan;
 	}

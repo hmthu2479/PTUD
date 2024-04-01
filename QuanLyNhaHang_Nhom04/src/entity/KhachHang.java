@@ -14,6 +14,10 @@ public class KhachHang {
 		this.diaChi = diaChi;
 		this.phai = phai;
 	}
+	public KhachHang(String maKH) {
+		// TODO Auto-generated constructor stub
+		this.maKH = maKH;
+	}
 	public String getMaKH() {
 		return maKH;
 	}

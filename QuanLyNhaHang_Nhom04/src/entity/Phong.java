@@ -9,7 +9,7 @@ public class Phong {
 		this.tenPhong = tenPhong;
 		this.khuVuc = khuVuc;
 	}
-	public Phong(String tenPhong) {
+	public Phong( String maPhong) {
 		// TODO Auto-generated constructor stub
 		this.maPhong = maPhong;
 	}

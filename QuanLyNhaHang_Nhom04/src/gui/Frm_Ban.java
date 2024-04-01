@@ -38,7 +38,7 @@ import entity.KhuVuc;
 import entity.Ban;
 import entity.Phong;
 
-public class Frm_Ban extends JDialog implements ActionListener {
+public class Frm_Ban extends JDialog implements ActionListener{
 
     private static final long serialVersionUID = 1L;
     private JTable table;
@@ -58,6 +58,10 @@ public class Frm_Ban extends JDialog implements ActionListener {
 	private BanDAO ban_dao;
 	private JLabel lbl_soGhe;
 	private JTextField txt_soGhe;
+	private JButton btn_luu;
+	private JComboBox<String> cmb_Phong;
+	private JLabel lbl_khuVuc;
+	private JLabel lbl_phong;
 
     public Frm_Ban() {
     	try {
@@ -98,13 +102,27 @@ public class Frm_Ban extends JDialog implements ActionListener {
         header.setFont(new Font("Arial", Font.BOLD, 18));
 
         JPanel pnlButton1 = new JPanel();
-        pnlButton1.setLayout(new BoxLayout(pnlButton1, BoxLayout.Y_AXIS));
+        pnlButton1.setLayout(new BoxLayout(pnlButton1, BoxLayout.X_AXIS));
         pnlButton1.setBackground(new Color(255, 255, 255));
         pnlButton1.setPreferredSize(new Dimension(800, 35));
 
         
         lbl_maBan = new JLabel("Nhập mã bàn: ");
         lbl_maBan.setFont(new Font("Tahoma", Font.BOLD, 14));
+        
+        /*        DefaultComboBoxModel<String> thuoc = new DefaultComboBoxModel<>();
+        cmb_khuVuc = new JComboBox<>(thuoc);
+        cmb_khuVuc.setEditable(false);
+
+        ArrayList<KhuVuc> listKV = kv_dao.layThongTin();
+        for (KhuVuc kv : listKV) {
+        	thuoc.addElement(kv.getTenKhuVuc());
+        }
+
+        ArrayList<Phong> listPhong = phong_dao.layThongTin();
+        for (Phong p : listPhong) {
+        	thuoc.addElement(p.getTenPhong());
+        }*/
         cmb_khuVuc = new JComboBox<String>();
         cmb_khuVuc.setEditable(false);	
 		
@@ -112,20 +130,30 @@ public class Frm_Ban extends JDialog implements ActionListener {
 		for (KhuVuc kv : listKV) {
 			cmb_khuVuc.addItem(kv.getTenKhuVuc());
 		}
+        cmb_Phong = new JComboBox<String>();
+		ArrayList<Phong> listPhong = phong_dao.layThongTin() ;
+		for (Phong p : listPhong) {
+			cmb_Phong.addItem(p.getTenPhong());
+		}
 		cmb_khuVuc.setFont(new Font("Tahoma", Font.BOLD, 15));
-        txt_maBan = new JTextField();
+		cmb_Phong.setFont(new Font("Tahoma", Font.BOLD, 15));
+        txt_maBan = new JTextField(10);
         txt_maBan.setFont(new Font("Tahoma", Font.BOLD, 15));
         pnlButton1.add(lbl_maBan);
         pnlButton1.add(Box.createHorizontalStrut(3));
         pnlButton1.add(txt_maBan);
         pnlButton1.add(Box.createHorizontalStrut(6));
+        lbl_khuVuc = new JLabel("Chọn khu vực: ");
+        lbl_khuVuc.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lbl_phong = new JLabel("Chọn phòng: ");
+        lbl_phong.setFont(new Font("Tahoma", Font.BOLD, 14));
         lbl_tenBan = new JLabel("Nhập tên bàn: ");
         lbl_tenBan.setFont(new Font("Tahoma", Font.BOLD, 14));
-        txt_tenBan = new JTextField();
+        txt_tenBan = new JTextField(10);
         txt_tenBan.setFont(new Font("Tahoma", Font.BOLD, 15));
         lbl_soGhe = new JLabel("Nhập số ghế: ");
         lbl_soGhe.setFont(new Font("Tahoma", Font.BOLD, 14));
-        txt_soGhe = new JTextField();
+        txt_soGhe = new JTextField(10);
         txt_soGhe.setFont(new Font("Tahoma", Font.BOLD, 15));
         btn_them = new JButton("Thêm");
         btn_them.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -139,45 +167,54 @@ public class Frm_Ban extends JDialog implements ActionListener {
         pnlButton1.add(Box.createHorizontalStrut(3));
         pnlButton1.add(txt_soGhe);
         pnlButton1.add(Box.createHorizontalStrut(6));
+        pnlButton1.add(lbl_khuVuc);
         pnlButton1.add(cmb_khuVuc);
+        pnlButton1.add(Box.createHorizontalStrut(6));
+        pnlButton1.add(lbl_phong);
+        pnlButton1.add(cmb_Phong);
         pnlButton1.add(Box.createHorizontalStrut(12));
         JPanel pnlBtnThemXoa = new JPanel();
         pnlBtnThemXoa.setLayout(new BoxLayout(pnlBtnThemXoa, BoxLayout.X_AXIS));
 
         pnlBtnThemXoa.add(btn_them);
-        pnlBtnThemXoa.add(Box.createHorizontalStrut(6));
+        pnlBtnThemXoa.add(Box.createHorizontalStrut(10));
         pnlBtnThemXoa.add(btn_xoa);
-        pnlBtnThemXoa.setPreferredSize(new Dimension(150, 45));
-        pnlBtnThemXoa.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        pnlBtnThemXoa.setPreferredSize(new Dimension(155, 55));
+        pnlBtnThemXoa.setBackground(Color.white);
         pnlButton1.add(pnlBtnThemXoa);
+        pnlButton1.setPreferredSize(new Dimension(150, 23));
         
         JPanel pnlButton2 = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        pnlButton2.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+        pnlButton2.setBorder(BorderFactory.createEmptyBorder(7, 0, 7, 0));
 
         lbl_tim = new JLabel("Nhập tên bàn cần tìm: ");
         lbl_tim.setFont(new Font("Tahoma", Font.BOLD, 14));
 
         txt_tim = new JTextField();
         txt_tim.setFont(new Font("Tahoma", Font.BOLD, 15));
-        txt_tim.setPreferredSize(new Dimension(150, 30)); 
+        txt_tim.setPreferredSize(new Dimension(150, 25)); 
         btn_tim = new JButton("Tìm");
         btn_tim.setFont(new Font("Tahoma", Font.BOLD, 15));
+        btn_luu = new JButton("Lưu");
+        btn_luu.setFont(new Font("Tahoma", Font.BOLD, 16));
 
         pnlButton2.add(lbl_tim);
         pnlButton2.add(txt_tim);
         pnlButton2.add(btn_tim);
+        pnlButton2.add(Box.createHorizontalStrut(10));
+        pnlButton2.add(btn_luu);
 
         pnlButton2.setBackground(new Color(255, 255, 255));
-        pnlButton2.setPreferredSize(new Dimension(200, 65));
+        pnlButton2.setPreferredSize(new Dimension(120, 55));
         
         pnlButton2.add(Box.createHorizontalStrut(30));
 
         JPanel pnlButton = new JPanel();
         pnlButton.setBackground(new Color(255, 255, 255));
-        pnlButton.setLayout(new BoxLayout(pnlButton, BoxLayout.X_AXIS));
+        pnlButton.setLayout(new BoxLayout(pnlButton, BoxLayout.Y_AXIS));
         pnlButton.add(pnlButton1);
         pnlButton.add(pnlButton2);
-        pnlButton.setPreferredSize(new Dimension(200, 235));
+        pnlButton.setPreferredSize(new Dimension(200, 75));
         
  
         JPanel pnlContainer = new JPanel();
@@ -190,53 +227,74 @@ public class Frm_Ban extends JDialog implements ActionListener {
         pnlContainer.add(pnlButton, BorderLayout.SOUTH);
         add(pnlContainer);
         pnlContainer.setBorder(new EmptyBorder(7, 15, 7, 15));
-        setSize(890, 665);
+        setSize(1290, 635);
         
         btn_them.addActionListener(this);
         btn_xoa.addActionListener(this);
         btn_tim.addActionListener(this);
-        //docDuLieuDBVaoTable();
+        btn_luu.addActionListener(this);
+        docDuLieuDBVaoTable();
     }
+    
+    	  		
+	public void docDuLieuDBVaoTable() {
+		
+		List<Ban> listBan = ban_dao.layThongTin();
+		for (Ban b : listBan ) {
+			modelBan.addRow(new Object [] {b.getMaBan(), b.getSoBan(),b.getSoGhe(),b.getKhuVuc().getMaKhuVuc(),b.getPhong().getMaPhong()});
+			
+		}
+	}
 
-    /* @Override
-    public void actionPerformed(ActionEvent e) {
-    	Object o = e.getSource();
-    	if (o.equals(btn_them)) {
-    	    String maBan = txt_maBan.getText();
-    	    String tenBan = txt_tenBan.getText();
-    	    	soGhe =
-    	    String khuVuc = String.valueOf(cmb_khuVuc.getSelectedItem());
 
-    	    KhuVucDAO khuVucDAO = new KhuVucDAO();
-    	    ArrayList<KhuVuc> dsKV = khuVucDAO.layThongTin();
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		Object o = e.getSource();
+	  	
+		if (o.equals(btn_them)) {
+		    String maBan = txt_maBan.getText();
+		    String soBan = txt_tenBan.getText();
+		    int soGhe = Integer.parseInt(txt_soGhe.getText().trim());
+		    String khuVuc = String.valueOf(cmb_khuVuc.getSelectedItem());
+		    String phong = String.valueOf(cmb_Phong.getSelectedItem());
 
-    	    for (KhuVuc kv : dsKV) {
-    	        if (khuVuc.equalsIgnoreCase(kv.getTenKhuVuc())) {
-    	            Phong p = new Phong(maPhong, tenPhong, kv);
-    	                if (phong_dao.themPhong(p)) {
-    	                    modelPhong.addRow(new Object[]{p.getMaPhong(), p.getTenPhong(), kv.getTenKhuVuc()});
-    	                } else {
-    	                    JOptionPane.showMessageDialog(null, "Trùng mã", "Lỗi", JOptionPane.ERROR_MESSAGE);
-    	                }
-    	                return;
-    	            } 
-    	        }
-    	   }
+		    KhuVucDAO khuVucDAO = new KhuVucDAO();
+		    ArrayList<KhuVuc> dsKV = khuVucDAO.layThongTin();
+		    PhongDAO phongDao = new PhongDAO();
+		    ArrayList<Phong> dsPhong = phongDao.layThongTin();
+
+		    for (KhuVuc kv : dsKV) {
+		        if (khuVuc.equalsIgnoreCase(kv.getTenKhuVuc())) {
+		            for (Phong p : dsPhong) {
+		                if (phong.equalsIgnoreCase(p.getTenPhong())) {
+		                    Ban b = new Ban(maBan, soBan, soGhe, kv, p);
+		                    if (ban_dao.themBan(b)) {
+		                        modelBan.addRow(new Object[]{b.getMaBan(), b.getSoBan(), b.getSoGhe(), kv.getTenKhuVuc(), p.getTenPhong()});
+		                    } else {
+		                        JOptionPane.showMessageDialog(null, "Trùng mã", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		                    }
+		                    return;
+		                }
+		            }
+		        }
+		    }
+		}
 
 
         if (o.equals(btn_xoa)) {
             int r = table.getSelectedRow();
             if (r != -1) {
-                String maPhong = (String) modelPhong.getValueAt(r, 0);
-                modelPhong.removeRow(r);
-                phong_dao.xoaPhong(maPhong);
+                String maBan = (String) modelBan.getValueAt(r, 0);
+                modelBan.removeRow(r);
+                ban_dao.xoaBan(maBan);
             }
         }
         
         if (o.equals(btn_tim)) {
             String maPhong = txt_tim.getText();
-            for (int i = 0; i < modelPhong.getRowCount(); i++) {
-                Object maPhongRow = modelPhong.getValueAt(i, 0);
+            for (int i = 0; i < modelBan.getRowCount(); i++) {
+                Object maPhongRow = modelBan.getValueAt(i, 0);
                 if (maPhong.equals(maPhongRow.toString())) {
                     table.setRowSelectionInterval(i, i);
                     table.scrollRectToVisible(table.getCellRect(i, 0, true));
@@ -245,13 +303,14 @@ public class Frm_Ban extends JDialog implements ActionListener {
             }
             JOptionPane.showMessageDialog(this, "Không tìm thấy mã");
         }
-        if (o.equals(btn_luu)) {
-            int rowCount = modelPhong.getRowCount();
+        /*if (o.equals(btn_luu)) {
+            int rowCount = modelBan.getRowCount();
             for (int i = 0; i < rowCount; i++) {
-                String maPhong = (String) modelPhong.getValueAt(i, 0);
-                String tenPhong = (String) modelPhong.getValueAt(i, 1);
-                String kv = (String) modelPhong.getValueAt(i, 2); 
-                KhuVuc khuVuc = new KhuVuc(kv); 
+                String maBan = (String) modelBan.getValueAt(i, 0);
+                String tenBan = (String) modelBan.getValueAt(i, 1);
+                String kv = (String) modelBan.getValueAt(i, 2); 
+                KhuVuc khuVuc = new KhuVuc(kv);
+                
                 Phong p = new Phong(maPhong, tenPhong, khuVuc);
                 
                 try {
@@ -263,18 +322,9 @@ public class Frm_Ban extends JDialog implements ActionListener {
                 }
             }
             JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
-        }	
-    }
-    	  	
-    	
-	public void docDuLieuDBVaoTable() {
-		
-		List<Ban> listBan = ban_dao.layThongTin();
-		for (Ban b : listBan ) {
-			modelBan.addRow(new Object [] {b.getMaBan(), b.getSoBan(),b.getClass(),b.getKhuVuc().getMaKhuVuc(),b.getPhong().getMaPhong()});
-			
-		}
-	}*/
+        }*/
+
+	}
 	
     
 }

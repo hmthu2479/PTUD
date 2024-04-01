@@ -156,7 +156,7 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
         
         // Image on screen
         JLabel imageLabel = new JLabel();
-        ImageIcon icon = new ImageIcon(getClass().getResource("/img/cute-aesthetic-cafe-art.jpg"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/img/images.jpg"));
         Image originalImage = icon.getImage();
 
         imageLabel.addComponentListener(new ComponentAdapter() {

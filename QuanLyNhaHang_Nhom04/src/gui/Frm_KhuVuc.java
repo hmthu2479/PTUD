@@ -125,7 +125,7 @@ public class Frm_KhuVuc extends JDialog implements ActionListener{
 	        pnlContainer.add(pnlButton, BorderLayout.SOUTH);
 	        add(pnlContainer);
 	        pnlContainer.setBorder(new EmptyBorder(7, 15, 7, 15));
-	        setSize(730, 465);
+	        setSize(820, 465);
 	        
 	        btn_them.addActionListener(this);
 	        btn_xoa.addActionListener(this);

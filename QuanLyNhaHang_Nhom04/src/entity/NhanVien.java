@@ -17,6 +17,10 @@ public class NhanVien {
 		this.sdt = sdt;
 	}
 
+	public NhanVien(String maNV) {
+		this.maNV = maNV;
+	}
+
 	public String getMaNV() {
 		return maNV;
 	}

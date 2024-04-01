@@ -11,14 +11,15 @@ import java.util.List;
 
 public class BanDAO {
     //lấy danh sách Bàn
-	public List<Ban> layThongTin() {
+	public ArrayList<Ban> layThongTin() {
 	    ArrayList<Ban> dsBan = new ArrayList<Ban>();
 	    try {
 	        ConnectDB.getInstance().connect();
 	        Connection con = ConnectDB.getConnection();
-	        String SQL = "SELECT b.maBan, b.soBan,b.soGhe, k.tenKhuVuc,p.tenPhong " +
-	                     "FROM Ban b " +
-	                     "INNER JOIN KhuVuc k ON p.maKhuVuc = k.maKhuVuc";
+	        String SQL = "SELECT b.maBan, b.soBan, b.soGhe, k.tenKhuVuc, p.tenPhong " +
+		                "FROM Ban b " +
+		                "INNER JOIN KhuVuc k ON b.maKhuVuc = k.maKhuVuc " +
+		                "INNER JOIN Phong p ON b.maPhong = p.maPhong";		
 	        Statement statement = con.createStatement();
 	        ResultSet rs = statement.executeQuery(SQL);
 	        while (rs.next()) {
