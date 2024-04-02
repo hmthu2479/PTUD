@@ -17,6 +17,7 @@ import entity.KhachHang;
 import entity.KhuVuc;
 import entity.NhanVien;
 import entity.PhieuDatBan;
+import entity.Phong;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -42,8 +43,7 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 	private JTable table;
 	private JTextField txt_Tim;
 	private JLabel lbl_Tim;
-	private JComboBox cmb_nhanVien;
-	private JComboBox cmb_phong;
+	private JComboBox <String> cmb_nhanVien;
 	private KhuVucDAO kv_dao;
 	private PhongDAO phong_dao;
 	private BanDAO ban_dao;
@@ -165,8 +165,11 @@ public class Frm_DatBan extends JPanel implements ActionListener {
         cmb_ban.setEditable(false);	
 		
 		ArrayList<Ban> listBan = ban_dao.layThongTin() ;
+		ArrayList<Phong> listP = phong_dao.layThongTin();
 		for (Ban b : listBan) {
-			cmb_ban.addItem(b.getSoBan());
+			Phong phong = b.getPhong();
+			String tenPhong = phong.getMaPhong();
+			cmb_ban.addItem(b.getSoBan() + " " + tenPhong );
 		}
         cmb_ban.setFont(new Font("Arial", Font.BOLD, 20));
         cmb_ban.setForeground(Color.BLACK);
@@ -310,19 +313,20 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 			String gio = String.valueOf(cmb_gioDat.getSelectedItem());
 			Integer soLuong = (Integer) cmb_soLuongNguoi.getSelectedItem();
 			String khuVuc = String.valueOf(cmb_khuVuc.getSelectedItem());
-			String khachHang = String.valueOf(cmb_kha.getSelectedItem());
+			String khachHang = String.valueOf(cmb_khachHang.getSelectedItem());
 			String ma = txt_maPhieu.getText();
 			String soBan = String.valueOf(cmb_ban.getSelectedItem());
+			String nhanVien = String.valueOf(cmb_nhanVien.getSelectedItem());
 			LocalDate ngayLap = LocalDate.now();
 			
-			PhieuDatBan p = new PhieuDatBan(ma, khuVuc, soBan, soLuong, ngayThang,ngayLap,gio,hoTen,sdt,diaChi);
+			PhieuDatBan p = new PhieuDatBan(ma, khuVuc, soBan, soLuong, ngayDat,ngayLap,gio,khachHang,nhanVien);
 			
 			if(!listPhieu.themPhieu(p)) {
 				JOptionPane.showMessageDialog(this, "Trùng mã");
 			}
 			else {
 				modelPhieu.addRow(new Object[] {p.getMaPhieu(), p.getKhuVuc(),p.getSoBan(),p.getSoLuongNguoi(),
-				 p.getNgayThang(),p.getNgayLap(),p.getGioDat(),p.getHoTen(),p.getHoTen(),p.getDiaChi()
+				 p.getNgayThang(),p.getNgayLap(),p.getGioDat()
 				});
 			}
 		}
@@ -331,7 +335,7 @@ public class Frm_DatBan extends JPanel implements ActionListener {
             if (r != -1) {
                 String maPhieu = (String) modelPhieu.getValueAt(r, 0);
                 modelPhieu.removeRow(r);
-                _dao.xoaPhong(maPhong);
+                phieu_dao.xoaPhong(maPhieu);
             }
         }
 

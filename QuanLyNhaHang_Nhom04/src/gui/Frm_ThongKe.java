@@ -75,7 +75,6 @@ public class Frm_ThongKe extends JPanel implements ActionListener {
         table.getColumnModel().getColumn(3).setResizable(false);
         table.getColumnModel().getColumn(4).setResizable(false);
         table.getColumnModel().getColumn(5).setResizable(false);
-        table.getColumnModel().getColumn(6).setResizable(false);
         scrollPane.setViewportView(table);
         
         JLabel lblNewLabel = new JLabel("Danh sách hóa đơn");

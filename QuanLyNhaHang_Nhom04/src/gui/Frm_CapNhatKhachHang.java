@@ -43,20 +43,20 @@ import entity.KhachHang;
 import entity.NhanVien;
 
 public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
-	private JLabel lb_title;
-	private JLabel lb_MaKH;
+	private JLabel lbtitle;
+	private JLabel lbMaKH;
 	private JTextField txtMaKH;
-	private JLabel lb_hoTen;
+	private JLabel lbhoTen;
 	private JTextField txthoTen;
-	private JLabel lb_diaChi;
+	private JLabel lbdiaChi;
 	private JTextField txtdiaChi;
-	private JLabel lb_sdt;
+	private JLabel lbsdt;
 	private JTextField txtsdt;
 	private JRadioButton nu;
 	private JPanel jpS;
 	private JPanel bTrai;
 	private JPanel bPhai;
-	private JLabel lb_Nhap;
+	private JLabel lbNhap;
 	private JTextField txtNhap;
 	private JButton tim;
 	private JButton them;
@@ -87,13 +87,13 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
 		jpN.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
         Color lightBlue = new Color(173, 216, 230); // Light blue colorS
-		lb_title = new JLabel("THÔNG TIN KHÁCH HÀNG");
-		lb_title.setFont(new Font("Arial", Font.BOLD, 35));
-		lb_title.setForeground(Color.black);
+		lbtitle = new JLabel("THÔNG TIN KHÁCH HÀNG");
+		lbtitle.setFont(new Font("Arial", Font.BOLD, 35));
+		lbtitle.setForeground(Color.black);
 
-		lb_MaKH = new JLabel("Mã khách hàng: ");
+		lbMaKH = new JLabel("Mã khách hàng: ");
 		txtMaKH = new JTextField();
-		lb_hoTen = new JLabel("Họ tên: ");
+		lbhoTen = new JLabel("Họ tên: ");
 		txthoTen = new JTextField();
 		phai = new JLabel("Phái: ");
 		nu = new JRadioButton("Nữ");
@@ -101,20 +101,20 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
 		ButtonGroup gr = new ButtonGroup();
 		gr.add(nam);
 		gr.add(nu);
-		lb_sdt = new JLabel("Số điện thoại: ");
+		lbsdt = new JLabel("Số điện thoại: ");
 		txtsdt = new JTextField();
-		lb_diaChi = new JLabel("Địa chỉ: ");
+		lbdiaChi = new JLabel("Địa chỉ: ");
 		txtdiaChi = new JTextField();
 		
 
 		JPanel jpFields = new JPanel(new GridLayout(0, 1));
-		jpFields.add(lb_MaKH);
+		jpFields.add(lbMaKH);
 		jpFields.add(txtMaKH);
-		jpFields.add(lb_hoTen);
+		jpFields.add(lbhoTen);
 		jpFields.add(txthoTen);
-		jpFields.add(lb_sdt);
+		jpFields.add(lbsdt);
 		jpFields.add(txtsdt);
-		jpFields.add(lb_diaChi);
+		jpFields.add(lbdiaChi);
 		jpFields.add(txtdiaChi);
 
 		JPanel jpPhai = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -138,16 +138,16 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
 		    textField.setFont(textFieldFont);
 		}
 		
-		lb_MaKH.setHorizontalAlignment(JLabel.CENTER);
-		lb_hoTen.setHorizontalAlignment(JLabel.CENTER);
-		lb_diaChi.setHorizontalAlignment(JLabel.CENTER);
-		lb_sdt.setHorizontalAlignment(JLabel.CENTER);
+		lbMaKH.setHorizontalAlignment(JLabel.CENTER);
+		lbhoTen.setHorizontalAlignment(JLabel.CENTER);
+		lbdiaChi.setHorizontalAlignment(JLabel.CENTER);
+		lbsdt.setHorizontalAlignment(JLabel.CENTER);
 		jpPhai.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		lb_title.setAlignmentX(Component.CENTER_ALIGNMENT);
+		lbtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		jpN.add(Box.createVerticalGlue()); 
-		jpN.add(lb_title);
+		jpN.add(lbtitle);
 		jpN.add(Box.createVerticalStrut(10)); 
 		jpN.add(jpFields);
 		jpN.add(Box.createVerticalStrut(10)); 
@@ -160,14 +160,14 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
 		emptyPanel.setBackground(new Color(204, 235, 150)); 
 		add(emptyPanel,BorderLayout.CENTER);
 
-        lb_MaKH.setFont(lb_MaKH.getFont().deriveFont(Font.BOLD, 20));
-        lb_hoTen.setFont(lb_hoTen.getFont().deriveFont(Font.BOLD, 20));
-        lb_diaChi.setFont(lb_diaChi.getFont().deriveFont(Font.BOLD, 20));
-        lb_sdt.setFont(lb_sdt.getFont().deriveFont(Font.BOLD, 20));
+        lbMaKH.setFont(lbMaKH.getFont().deriveFont(Font.BOLD, 20));
+        lbhoTen.setFont(lbhoTen.getFont().deriveFont(Font.BOLD, 20));
+        lbdiaChi.setFont(lbdiaChi.getFont().deriveFont(Font.BOLD, 20));
+        lbsdt.setFont(lbsdt.getFont().deriveFont(Font.BOLD, 20));
 
-		nam.setFont(lb_sdt.getFont().deriveFont(Font.BOLD, 20));
-		nu.setFont(lb_sdt.getFont().deriveFont(Font.BOLD, 20));
-		phai.setFont(lb_sdt.getFont().deriveFont(Font.BOLD, 20));
+		nam.setFont(lbsdt.getFont().deriveFont(Font.BOLD, 20));
+		nu.setFont(lbsdt.getFont().deriveFont(Font.BOLD, 20));
+		phai.setFont(lbsdt.getFont().deriveFont(Font.BOLD, 20));
 
 		
 		String[] columns = {
@@ -209,10 +209,10 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
                 
 		bTrai.setLayout(new BoxLayout(bTrai, BoxLayout.X_AXIS));
 		bTrai.setBackground(new Color(204, 235, 150));
-			bTrai.add(lb_Nhap = new JLabel("Nhập mã số cần tìm: "));
+			bTrai.add(lbNhap = new JLabel("Nhập mã số cần tìm: "));
 			bTrai.add(txtNhap = new JTextField(15));
 			bTrai.add(tim = new JButton("Tìm"));
-			lb_Nhap.setFont(textFieldFont);
+			lbNhap.setFont(textFieldFont);
 			txthoTen.setFont(textFieldFont);
 			tim.setFont(textFieldFont);
 			

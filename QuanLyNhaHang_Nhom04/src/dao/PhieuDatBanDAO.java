@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class PhieuDatBanDAO {
-    //lấy danh sách nhân viên
+    //lấy danh sách phiếu
     public ArrayList<PhieuDatBan> layThongTin(){
         ArrayList<PhieuDatBan> dsPhieuDB = new ArrayList<PhieuDatBan>();
         try{
@@ -51,7 +51,7 @@ public class PhieuDatBanDAO {
         }
         return dsPhieuDB;
     }
-    //thêm nhân viên
+    //thêm phiếu
     public boolean themPhieu(PhieuDatBan phieu){
         ConnectDB.getInstance();
         Connection con = ConnectDB.getConnection();
@@ -96,7 +96,7 @@ public class PhieuDatBanDAO {
         }
         return n > 0;
     }
-    //sửa nhân viên
+    //sửa phiếu
     public boolean capNhatPhieu(PhieuDatBan phieu){
         ConnectDB.getInstance();
         Connection con = ConnectDB.getConnection();

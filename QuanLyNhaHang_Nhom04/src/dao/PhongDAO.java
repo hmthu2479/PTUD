@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class PhongDAO {
-    //lấy danh sách khu vực
+    //lấy danh sách phòng
 	public ArrayList<Phong> layThongTin() {
 	    ArrayList<Phong> dsPhong = new ArrayList<Phong>();
 	    try {
@@ -20,9 +20,9 @@ public class PhongDAO {
 	        Statement statement = con.createStatement();
 	        ResultSet rs = statement.executeQuery(SQL);
 	        while (rs.next()) {
-	            String maPhong = rs.getString(1);
-	            String tenPhong = rs.getString(2);
-	            String tenKhuVuc = rs.getString(3);
+	            String maPhong = rs.getString(1).trim();
+	            String tenPhong = rs.getString(2).trim();
+	            String tenKhuVuc = rs.getString(3).trim();
 	            KhuVuc khuVuc = new KhuVuc(tenKhuVuc);
 	            Phong p = new Phong(maPhong, tenPhong, khuVuc);
 	            dsPhong.add(p);
@@ -42,8 +42,8 @@ public class PhongDAO {
 	        int n = 0;
 	        try {
 	            statement = con.prepareStatement(SQL);
-	            statement.setString(1, phong.getMaPhong());
-	            statement.setString(2, phong.getTenPhong());
+	            statement.setString(1, phong.getMaPhong().trim());
+	            statement.setString(2, phong.getTenPhong().trim());
 	            statement.setString(3, phong.getKhuVuc().getMaKhuVuc());
 	            
 	            n = statement.executeUpdate();
@@ -53,7 +53,7 @@ public class PhongDAO {
 	        return n > 0;
     }
 	
-    // Xóa khu vực
+    // Xóa phiếu
     public boolean xoaPhong(String maPhong){
         ConnectDB.getInstance();
         Connection con = ConnectDB.getConnection();
@@ -70,7 +70,7 @@ public class PhongDAO {
         }
         return n > 0;
     }
-    //sửa khu vực
+    //sửa phiếu
     public boolean capNhatPhong(Phong phong){
         ConnectDB.getInstance();
         Connection con = ConnectDB.getConnection();
@@ -90,25 +90,6 @@ public class PhongDAO {
         return n > 0;
     }
 
-    //kiểm tra mã khu vực
-    public boolean kiemTraPhong(String maPhong){
-        ConnectDB.getInstance();
-        Connection con = ConnectDB.getConnection();
-        PreparedStatement statement =null;
-        ResultSet rs = null;
-        try{
-            String SQL = "SELECT * FROM Phong WHERE maPhong = ?";
-            statement = con.prepareStatement(SQL);
-            statement.setString(1,maPhong);
-            rs = statement.executeQuery();
-            if (rs.next()){
-                return true;
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return false;
-    }
 
 }
 

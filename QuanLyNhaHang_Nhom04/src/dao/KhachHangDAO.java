@@ -51,7 +51,7 @@ public class KhachHangDAO {
         }
         return n>0;
     }
-    // Xóa nhân viên
+    // Xóa khach hàng
     public boolean xoaKhachHang(String maKH){
         ConnectDB.getInstance();
         Connection con = ConnectDB.getConnection();

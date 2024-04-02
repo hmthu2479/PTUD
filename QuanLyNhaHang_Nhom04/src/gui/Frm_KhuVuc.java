@@ -35,14 +35,14 @@ public class Frm_KhuVuc extends JDialog implements ActionListener{
 	    private static final long serialVersionUID = 1L;
 	    private JTable table;
 		private DefaultTableModel modelKV;
-		private JButton btn_them;
-		private JButton btn_xoa;
-		private JLabel lbl_maKV;
-		private JTextField txt_maKV;
-		private JLabel lbl_tenKV;
-		private JTextField txt_tenKV;
+		private JButton btnthem;
+		private JButton btnxoa;
+		private JLabel lblmaKV;
+		private JTextField txtmaKV;
+		private JLabel lbltenKV;
+		private JTextField txttenKV;
 		private KhuVucDAO kv_dao;
-		private JButton btn_luu;
+		private JButton btnluu;
 
 	    public Frm_KhuVuc() {
 	    	
@@ -86,31 +86,31 @@ public class Frm_KhuVuc extends JDialog implements ActionListener{
 	        pnlButton.setPreferredSize(new Dimension(100, 35));
 	        pnlButton.setLayout(new BoxLayout(pnlButton, BoxLayout.X_AXIS));
 
-	        lbl_maKV = new JLabel("Nhập mã khu vực: ");
-	        lbl_maKV.setFont(new Font("Tahoma", Font.BOLD, 15));
-	        txt_maKV = new JTextField();
-	        txt_maKV.setFont(new Font("Tahoma", Font.BOLD, 15));
-	        pnlButton.add(lbl_maKV);
-	        pnlButton.add(txt_maKV);
+	        lblmaKV = new JLabel("Nhập mã khu vực: ");
+	        lblmaKV.setFont(new Font("Tahoma", Font.BOLD, 15));
+	        txtmaKV = new JTextField();
+	        txtmaKV.setFont(new Font("Tahoma", Font.BOLD, 15));
+	        pnlButton.add(lblmaKV);
+	        pnlButton.add(txtmaKV);
 	        pnlButton.add(Box.createHorizontalStrut(6));
-	        lbl_tenKV = new JLabel("Nhập tên khu vực: ");
-	        lbl_tenKV.setFont(new Font("Tahoma", Font.BOLD, 15));
-	        txt_tenKV = new JTextField();
-	        txt_tenKV.setFont(new Font("Tahoma", Font.BOLD, 15));
-	        btn_them = new JButton("Thêm KV");
-	        btn_them.setFont(new Font("Tahoma", Font.BOLD, 15));
-	        pnlButton.add(lbl_tenKV);
-	        pnlButton.add(txt_tenKV);
+	        lbltenKV = new JLabel("Nhập tên khu vực: ");
+	        lbltenKV.setFont(new Font("Tahoma", Font.BOLD, 15));
+	        txttenKV = new JTextField();
+	        txttenKV.setFont(new Font("Tahoma", Font.BOLD, 15));
+	        btnthem = new JButton("Thêm KV");
+	        btnthem.setFont(new Font("Tahoma", Font.BOLD, 15));
+	        pnlButton.add(lbltenKV);
+	        pnlButton.add(txttenKV);
 	        pnlButton.add(Box.createHorizontalStrut(6));
-	        pnlButton.add(btn_them);
+	        pnlButton.add(btnthem);
 	        pnlButton.add(Box.createHorizontalStrut(15));
-	        btn_xoa = new JButton("Xóa KV");
-	        btn_xoa.setFont(new Font("Tahoma", Font.BOLD, 15));
-	        pnlButton.add(btn_xoa);
+	        btnxoa = new JButton("Xóa KV");
+	        btnxoa.setFont(new Font("Tahoma", Font.BOLD, 15));
+	        pnlButton.add(btnxoa);
 	        pnlButton.add(Box.createHorizontalStrut(6));
-	        btn_luu = new JButton("Lưu");
-	        btn_luu.setFont(new Font("Tahoma", Font.BOLD, 15));
-	        pnlButton.add(btn_luu);
+	        btnluu = new JButton("Lưu");
+	        btnluu.setFont(new Font("Tahoma", Font.BOLD, 15));
+	        pnlButton.add(btnluu);
 	        pnlButton.add(Box.createHorizontalStrut(6));
 
 
@@ -127,9 +127,9 @@ public class Frm_KhuVuc extends JDialog implements ActionListener{
 	        pnlContainer.setBorder(new EmptyBorder(7, 15, 7, 15));
 	        setSize(820, 465);
 	        
-	        btn_them.addActionListener(this);
-	        btn_xoa.addActionListener(this);
-	        btn_luu.addActionListener(this);
+	        btnthem.addActionListener(this);
+	        btnxoa.addActionListener(this);
+	        btnluu.addActionListener(this);
 	        docDuLieuDBVaoTable();
 	    }
 
@@ -137,9 +137,9 @@ public class Frm_KhuVuc extends JDialog implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 			Object o = e.getSource();
-			if (o.equals(btn_them)){
-				String maKV = txt_maKV.getText();
-				String tenKV = txt_tenKV.getText();
+			if (o.equals(btnthem)){
+				String maKV = txtmaKV.getText();
+				String tenKV = txttenKV.getText();
 				KhuVuc kv = new KhuVuc(maKV, tenKV);
 				try {
 				    ;
@@ -151,7 +151,7 @@ public class Frm_KhuVuc extends JDialog implements ActionListener{
 				    JOptionPane.showMessageDialog(this, "Trùng mã");
 				}
 			}
-			if (o.equals(btn_xoa)) {
+			if (o.equals(btnxoa)) {
 			    int r = table.getSelectedRow();
 			    if (r != -1) {
 			        String maKV = (String) modelKV.getValueAt(r, 0);
@@ -160,7 +160,7 @@ public class Frm_KhuVuc extends JDialog implements ActionListener{
 			    }
 			}
 		
-			if (o.equals(btn_luu)) {
+			if (o.equals(btnluu)) {
 		    int rowCount = modelKV.getRowCount();
 		    for (int i = 0; i < rowCount; i++) {
 		        String maKV = (String) modelKV.getValueAt(i, 0);

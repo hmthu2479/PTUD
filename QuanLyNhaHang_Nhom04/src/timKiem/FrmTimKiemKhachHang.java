@@ -1,4 +1,4 @@
-package gui;
+package timKiem;
 
 
 import java.awt.Color;
@@ -37,8 +37,8 @@ public class FrmTimKiemKhachHang extends JPanel implements ActionListener {
     private JButton tim;
     private DefaultTableModel modelKH;
     private JTable tableKhachHang;
-    private JLabel lb_Nhap;
-    private JLabel lb_Title;
+    private JLabel lbNhap;
+    private JLabel lbTitle;
 	private KhachHangDAO kh_dao;
 
     public FrmTimKiemKhachHang() {
@@ -53,13 +53,13 @@ public class FrmTimKiemKhachHang extends JPanel implements ActionListener {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(new Color(204, 235, 150));
 
-        lb_Title = new JLabel("Tìm kiếm khách hàng");
-        lb_Title.setFont(new Font("Arial", Font.BOLD, 40));
-        lb_Title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        lb_Title.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        lb_Title.setForeground(Color.darkGray);
-        lb_Title.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
-        add(lb_Title);
+        lbTitle = new JLabel("Tìm kiếm khách hàng");
+        lbTitle.setFont(new Font("Arial", Font.BOLD, 40));
+        lbTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lbTitle.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        lbTitle.setForeground(Color.darkGray);
+        lbTitle.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        add(lbTitle);
 
         String[] columns = {
                 "Mã KH", "Họ tên", "Phái", "SĐT", "Địa chỉ"
@@ -87,14 +87,14 @@ public class FrmTimKiemKhachHang extends JPanel implements ActionListener {
         jpS.setLayout(new BoxLayout(jpS, BoxLayout.X_AXIS));
         jpS.setBackground(new Color(204, 235, 150));
 
-        lb_Nhap = new JLabel("Nhập mã số cần tìm: ");
-        lb_Nhap.setFont(new Font("Arial", Font.BOLD, 20)); 
+        lbNhap = new JLabel("Nhập mã số cần tìm: ");
+        lbNhap.setFont(new Font("Arial", Font.BOLD, 20)); 
         txtNhap = new JTextField(10);
         txtNhap.setFont(new Font("Arial", Font.PLAIN, 20)); 
         tim = new JButton("Tìm");
         tim.setFont(new Font("Arial", Font.BOLD, 20)); 
 
-        jpS.add(lb_Nhap);
+        jpS.add(lbNhap);
         jpS.add(txtNhap);
         jpS.add(tim);
 
