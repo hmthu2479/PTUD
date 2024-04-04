@@ -17,11 +17,11 @@ public class NhanVienDAO {
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(SQL);
             while (rs.next()){
-                String maNV = rs.getString(1);
-                String tenNV = rs.getString(2);
-                String phai = rs.getString(3);
+                String maNV = rs.getString(1).trim();
+                String tenNV = rs.getString(2).trim();
+                String phai = rs.getString(3).trim();
                 int tuoi = rs.getInt(4);
-                String soDienThoai = rs.getString(5);
+                String soDienThoai = rs.getString(5).trim();
                 NhanVien nv = new NhanVien(maNV,tenNV,phai,tuoi,soDienThoai);
                 dsNhanVien.add(nv);
             }
@@ -42,7 +42,7 @@ public class NhanVienDAO {
         	statement = con.prepareStatement(SQL);
         	statement.setString(1, nhanVien.getMaNV().trim());
         	statement.setString(2, nhanVien.getHoTenNV().trim());
-        	statement.setString(3, nhanVien.getPhai());
+        	statement.setString(3, nhanVien.getPhai().trim());
         	statement.setInt(4, nhanVien.getTuoi());
         	statement.setString(5, nhanVien.getSdt().trim());
 
@@ -79,12 +79,12 @@ public class NhanVienDAO {
         try{
         	String SQL = "UPDATE NhanVien SET maNV = ?, tenNV = ?, phai = ?, tuoi = ?, sdt = ? WHERE maNV = ?";
             statement = con.prepareStatement(SQL);
-            statement.setString(1, nhanVien.getMaNV());
-            statement.setString(2, nhanVien.getHoTenNV());
-            statement.setString(3, nhanVien.getPhai());
+            statement.setString(1, nhanVien.getMaNV().trim());
+            statement.setString(2, nhanVien.getHoTenNV().trim());
+            statement.setString(3, nhanVien.getPhai().trim());
             statement.setInt(4, nhanVien.getTuoi());
-            statement.setString(5, nhanVien.getSdt());
-            statement.setString(6, nhanVien.getMaNV());
+            statement.setString(5, nhanVien.getSdt().trim());
+            statement.setString(6, nhanVien.getMaNV().trim());
 
 
             n = statement.executeUpdate();

@@ -269,7 +269,8 @@ public class Frm_CapNhatNhanVien extends JPanel implements ActionListener {
 		        String maNV = (String) modelNV.getValueAt(i, 0);
 		        String tenNV = (String) modelNV.getValueAt(i, 1);
 		        String phai = (String) modelNV.getValueAt(i, 2);
-		        String chuoiTuoi = (String) modelNV.getValueAt(i, 3);
+		        String chuoiTuoi = String.valueOf(modelNV.getValueAt(i, 3));
+
 		        int tuoi = 0;
 		        try {
 		            tuoi = Integer.parseInt(chuoiTuoi);

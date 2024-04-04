@@ -109,20 +109,7 @@ public class Frm_Ban extends JDialog implements ActionListener{
         
         lblmaBan = new JLabel("Nhập mã bàn: ");
         lblmaBan.setFont(new Font("Tahoma", Font.BOLD, 14));
-        
-        /*        DefaultComboBoxModel<String> thuoc = new DefaultComboBoxModel<>();
-        cmbkhuVuc = new JComboBox<>(thuoc);
-        cmbkhuVuc.setEditable(false);
 
-        ArrayList<KhuVuc> listKV = kvdao.layThongTin();
-        for (KhuVuc kv : listKV) {
-        	thuoc.addElement(kv.getTenKhuVuc());
-        }
-
-        ArrayList<Phong> listPhong = phongdao.layThongTin();
-        for (Phong p : listPhong) {
-        	thuoc.addElement(p.getTenPhong());
-        }*/
         cmbkhuVuc = new JComboBox<String>();
         cmbkhuVuc.setEditable(false);	
 		

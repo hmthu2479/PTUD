@@ -18,6 +18,10 @@ public class KhachHang {
 		// TODO Auto-generated constructor stub
 		this.maKH = maKH;
 	}
+	public KhachHang() {
+		// TODO Auto-generated constructor stub
+		this.maKH = maKH;
+	}
 	public String getMaKH() {
 		return maKH;
 	}

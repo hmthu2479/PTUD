@@ -21,11 +21,12 @@ public class PhieuDatBanDAO {
         try{
             ConnectDB.getInstance().connect();
             Connection con = ConnectDB.getConnection();
-            String SQL = "SELECT phieu.maPhieu, phieu.maKhuVuc, phieu.soBan, phieu.soNguoi, phieu.ngayDat, phieu.ngayLap, phieu.gioDat, phieu.maKH, phieu.maNV" +
-	                "FROM PhieuDatBan phieu " +
-	                "INNER JOIN KhuVuc k ON phieu.maKhuVuc = k.maKhuVuc " +
-	                "INNER JOIN KhachHang kh ON phieu.maKH = kh.maKH"+
-	                "INNER JOIN NhanVien nv ON phieu.maNV = nv.maNV";	
+            String SQL = "SELECT phieu.maPhieu, phieu.maKhuVuc, phieu.soBan, phieu.soNguoi, phieu.ngayDat, phieu.ngayLap, phieu.gioDat, phieu.maKH, phieu.maNV " +
+                    "FROM PhieuDatBan phieu " +
+                    "INNER JOIN KhuVuc k ON phieu.maKhuVuc = k.maKhuVuc " +
+                    "INNER JOIN KhachHang kh ON phieu.maKH = kh.maKH " +
+                    "INNER JOIN NhanVien nv ON phieu.maNV = nv.maNV";
+	
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(SQL);
             while (rs.next()){
@@ -37,13 +38,12 @@ public class PhieuDatBanDAO {
                 Date ngayLap = rs.getDate(6);
                 String gioDat = rs.getString(7);
                 String tenKH = rs.getString(8);
-                String tenNV = rs.getString(9);
-                
+                String tenNV = rs.getString(9);    
                 KhuVuc khuVuc = new KhuVuc(tenKhuVuc);
                 Ban ban = new Ban(soBan);
                 NhanVien nv = new NhanVien(tenNV);
                 KhachHang kh = new KhachHang(tenKH);
-                PhieuDatBan p = new PhieuDatBan(maPhieu, tenKhuVuc, soBan, soLuongNguoi, ngayDat, null, gioDat, kh, nv);
+                PhieuDatBan p = new PhieuDatBan(maPhieu, khuVuc, ban, soLuongNguoi, ngayDat, null, gioDat, kh, nv);
                 dsPhieuDB.add(p);
             }
         }catch (SQLException e){
@@ -51,34 +51,44 @@ public class PhieuDatBanDAO {
         }
         return dsPhieuDB;
     }
-    //thêm phiếu
-    public boolean themPhieu(PhieuDatBan phieu){
+  //thêm phiếu
+    public boolean themPhieu(PhieuDatBan phieu) {
         ConnectDB.getInstance();
         Connection con = ConnectDB.getConnection();
-        PreparedStatement statement =null;
+        PreparedStatement statement = null;
 
         String SQL = "INSERT INTO PhieuDatBan VALUES (?,?,?,?,?,?,?,?,?)";
         int n = 0;
-        try{
+        try {
             statement = con.prepareStatement(SQL);
-            statement.setString(1,phieu.getMaPhieu());
-            statement.setString(2,phieu.getKhuVuc());
-            statement.setString(3,phieu.getSoBan());
-            statement.setInt(4,phieu.getSoLuongNguoi());
-            statement.setString(5,phieu.getNgayDat());
+            statement.setString(1, phieu.getMaPhieu());
+            statement.setString(2, phieu.getKhuVuc().getMaKhuVuc());
+            statement.setString(3, phieu.getSoBan().getMaBan().trim());
+            statement.setInt(4, phieu.getSoLuongNguoi());
+            statement.setString(5, phieu.getNgayDat());
             LocalDate ngayLap = phieu.getNgayLap();
-            Date sqlNgayLap = Date.valueOf(ngayLap.toString());
+            Date sqlNgayLap = java.sql.Date.valueOf(ngayLap);
             statement.setDate(6, (java.sql.Date) sqlNgayLap);
-            statement.setString(7,phieu.getGioDat());
-            statement.setString(8,phieu.getKhachHang().getMaKH());
-            statement.setString(9,phieu.getNhanVien().getMaNV());
-            
+            statement.setString(7, phieu.getGioDat());
+            statement.setString(8, phieu.getKhachHang().getMaKH().trim());
+            statement.setString(9, phieu.getNhanVien().getMaNV().trim());
+
             n = statement.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        return n>0;
+        return n > 0;
     }
+
+
     
     public boolean xoaPhieu(String maPhieu){
         ConnectDB.getInstance();
@@ -106,16 +116,16 @@ public class PhieuDatBanDAO {
             String SQL = "UPDATE PhieuDatBan SET maKhuVuc = ?, maBan = ?, soNguoi = ?, ngayDat = ?, ngayLap = ?, gioDat = ?, maKH =?, maNV = ? WHERE maPhieu = ?";
             statement = con.prepareStatement(SQL);
             statement.setString(1,phieu.getMaPhieu());
-            statement.setString(2,phieu.getKhuVuc());
-            statement.setString(3,phieu.getSoBan());
+            statement.setString(2,phieu.getKhuVuc().getMaKhuVuc());
+            statement.setString(3,phieu.getSoBan().getMaBan().trim());
             statement.setInt(4,phieu.getSoLuongNguoi());
             statement.setString(5,phieu.getNgayDat());
             LocalDate ngayLap = phieu.getNgayLap();
-            Date sqlNgayLap = Date.valueOf(ngayLap.toString());
+            Date sqlNgayLap = java.sql.Date.valueOf(ngayLap);
             statement.setDate(6, (java.sql.Date) sqlNgayLap);
             statement.setString(7,phieu.getGioDat());
-            statement.setString(8,phieu.getKhachHang().getMaKH());
-            statement.setString(9,phieu.getNhanVien().getMaNV());
+            statement.setString(8,phieu.getKhachHang().getMaKH().trim());
+            statement.setString(9,phieu.getNhanVien().getMaNV().trim());
             n = statement.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();

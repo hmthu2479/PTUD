@@ -2,16 +2,18 @@ package entity;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class PhieuDatBan {
-    private String maPhieu, khuVuc, soBan, ngayDat, gioDat;
+    private String maPhieu, ngayDat, gioDat;
     private int soLuongNguoi;
     private LocalDate ngayLap;
     private KhachHang khachHang;
     private NhanVien nhanVien;
-	public PhieuDatBan(String maPhieu, String khuVuc, String soBan, int soLuongNguoi, String ngayDat, LocalDate ngayLap,
-			String gioDat, KhachHang khachHang, NhanVien nhanVien) {
+    private KhuVuc khuVuc;
+    private Ban soBan;
+    public PhieuDatBan(String maPhieu, KhuVuc khuVuc, Ban soBan, int soLuongNguoi, String ngayDat, LocalDate ngayLap,
+            String gioDat, KhachHang khachHang, NhanVien nhanVien)
+{
 		super();
 		this.maPhieu = maPhieu;
 		this.khuVuc = khuVuc;
@@ -29,16 +31,17 @@ public class PhieuDatBan {
 	public void setMaPhieu(String maPhieu) {
 		this.maPhieu = maPhieu;
 	}
-	public String getKhuVuc() {
+
+	public KhuVuc getKhuVuc() {
 		return khuVuc;
 	}
-	public void setKhuVuc(String khuVuc) {
+	public void setKhuVuc(KhuVuc khuVuc) {
 		this.khuVuc = khuVuc;
 	}
-	public String getSoBan() {
+	public Ban getSoBan() {
 		return soBan;
 	}
-	public void setSoBan(String soBan) {
+	public void setSoBan(Ban soBan) {
 		this.soBan = soBan;
 	}
 	public String getNgayDat() {

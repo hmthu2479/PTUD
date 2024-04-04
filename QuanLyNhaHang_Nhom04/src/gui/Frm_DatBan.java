@@ -11,6 +11,7 @@ import dao.BanDAO;
 import dao.KhachHangDAO;
 import dao.KhuVucDAO;
 import dao.NhanVienDAO;
+import dao.PhieuDatBanDAO;
 import dao.PhongDAO;
 import entity.Ban;
 import entity.KhachHang;
@@ -26,6 +27,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 public class Frm_DatBan extends JPanel implements ActionListener {
     private JSpinner spn_ngayThang;
@@ -48,7 +51,7 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 	private PhongDAO phong_dao;
 	private BanDAO ban_dao;
 	private NhanVienDAO nv_dao;
-	private PhongDAO phieu_dao;
+	private PhieuDatBanDAO phieu_dao;
 	private JComboBox<String> cmb_khachHang;
 	private KhachHangDAO kh_dao;
 
@@ -63,7 +66,7 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 		phong_dao = new PhongDAO();
 		ban_dao = new BanDAO();
 		nv_dao = new NhanVienDAO();
-		phieu_dao = new PhongDAO();
+		phieu_dao = new PhieuDatBanDAO();
 		kh_dao = new KhachHangDAO();
 		
         setLayout(new BorderLayout());
@@ -163,14 +166,16 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 
         cmb_ban = new JComboBox<String>();
         cmb_ban.setEditable(false);	
-		
-		ArrayList<Ban> listBan = ban_dao.layThongTin() ;
-		ArrayList<Phong> listP = phong_dao.layThongTin();
-		for (Ban b : listBan) {
-			Phong phong = b.getPhong();
-			String tenPhong = phong.getMaPhong();
-			cmb_ban.addItem(b.getSoBan() + " " + tenPhong );
-		}
+
+        ArrayList<Ban> listBan = ban_dao.layThongTin();
+        for (Ban b : listBan) {
+            Phong phong = b.getPhong();
+            String tenPhong = phong.getMaPhong();
+            String soBan = b.getSoBan(); 
+            String tenBan = soBan + " " + tenPhong; 
+            cmb_ban.addItem(tenBan);
+        }
+
         cmb_ban.setFont(new Font("Arial", Font.BOLD, 20));
         cmb_ban.setForeground(Color.BLACK);
         pnl_Ban.add(cmb_ban, BorderLayout.CENTER);
@@ -300,6 +305,8 @@ public class Frm_DatBan extends JPanel implements ActionListener {
         btn_Xoa.addActionListener(this);
         btn_xoaRong.addActionListener(this);
         btn_Tim.addActionListener(this);
+        
+        
     }
 
 	@Override
@@ -307,53 +314,66 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
 		if(o.equals(btn_Them)) {
-			Date selectedDate = (Date) spn_ngayThang.getValue();
+		    Date selectedDate = (Date) spn_ngayThang.getValue();
 		    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		    String ngayDat = formatter.format(selectedDate);
-			String gio = String.valueOf(cmb_gioDat.getSelectedItem());
-			Integer soLuong = (Integer) cmb_soLuongNguoi.getSelectedItem();
-			String khuVuc = String.valueOf(cmb_khuVuc.getSelectedItem());
-			String khachHang = String.valueOf(cmb_khachHang.getSelectedItem());
-			String ma = txt_maPhieu.getText();
-			String soBan = String.valueOf(cmb_ban.getSelectedItem());
-			String nhanVien = String.valueOf(cmb_nhanVien.getSelectedItem());
-			LocalDate ngayLap = LocalDate.now();
-			
-			PhieuDatBan p = new PhieuDatBan(ma, khuVuc, soBan, soLuong, ngayDat,ngayLap,gio,khachHang,nhanVien);
-			
-			if(!listPhieu.themPhieu(p)) {
-				JOptionPane.showMessageDialog(this, "Trùng mã");
-			}
-			else {
-				modelPhieu.addRow(new Object[] {p.getMaPhieu(), p.getKhuVuc(),p.getSoBan(),p.getSoLuongNguoi(),
-				 p.getNgayThang(),p.getNgayLap(),p.getGioDat()
-				});
-			}
+		    String gio = String.valueOf(cmb_gioDat.getSelectedItem());
+		    int soLuong = (int) cmb_soLuongNguoi.getSelectedItem();
+		    String khuVuc = String.valueOf(cmb_khuVuc.getSelectedItem());
+		    String khachHang = String.valueOf(cmb_khachHang.getSelectedItem());
+		    String ma = txt_maPhieu.getText();
+		    String tenBan = String.valueOf(cmb_ban.getSelectedItem());
+		    String nhanVien = String.valueOf(cmb_nhanVien.getSelectedItem());
+		    LocalDate ngayLap = LocalDate.now();
+		    
+		    KhuVuc kv =new KhuVuc(khuVuc);
+		    NhanVien nv = new NhanVien(nhanVien);
+		    KhachHang kh = new KhachHang(khachHang);
+		    Ban b = new Ban(tenBan);
+		    
+		    PhieuDatBan p = new PhieuDatBan(ma, kv, b, soLuong, ngayDat, ngayLap, gio,kh, nv);
+		    
+		    if(phieu_dao.themPhieu(p)) {
+		        JOptionPane.showMessageDialog(this, "Trùng mã");
+		    }
+		    else {
+		        modelPhieu.addRow(new Object[] {p.getMaPhieu(), p.getKhuVuc().getMaKhuVuc(), p.getSoBan().getMaBan(), p.getSoLuongNguoi(),
+		         p.getNgayDat(), p.getNgayLap(), p.getGioDat(), p.getKhachHang().getMaKH(), p.getNhanVien().getMaNV()
+		        });
+		    }
 		}
+
 		if (o.equals(btn_Xoa)) {
             int r = table.getSelectedRow();
             if (r != -1) {
                 String maPhieu = (String) modelPhieu.getValueAt(r, 0);
                 modelPhieu.removeRow(r);
-                phieu_dao.xoaPhong(maPhieu);
+                phieu_dao.xoaPhieu(maPhieu);
             }
         }
 
-			if (o.equals(btn_xoaRong)) {
-			    txt_maPhieu.setText("");
-			    txt_hoTen.setText("");
-			    txt_diaChi.setText("");
-			    txt_sdt.setText("");
+		if (o.equals(btn_xoaRong)) {
+		    txt_maPhieu.setText("");
+		    txt_hoTen.setText("");
+		    txt_diaChi.setText("");
+		    txt_sdt.setText("");
 
-			    spn_ngayThang.setValue(new Date());
+		    // Assuming spn_ngayThang is a JSpinner, set its value properly
+		    spn_ngayThang.setValue(new Date());
 
-			    cmb_gioDat.setSelectedIndex(0);
-			    cmb_soLuongNguoi.setSelectedIndex(0);
-			    cmb_khuVuc.setSelectedIndex(0);
-			    cmb_ban.setSelectedIndex(0);
-			}
-		
+		    cmb_gioDat.setSelectedIndex(0);
+		    cmb_soLuongNguoi.setSelectedIndex(0);
+		    cmb_khuVuc.setSelectedIndex(0);
+		    cmb_ban.setSelectedIndex(0);
+		}
 	}
-    
- 	
+
+		public void docDuLieuDBVaoTable() {
+		    List<PhieuDatBan> listPhieu = phieu_dao.layThongTin();
+		    for (PhieuDatBan p : listPhieu ) {
+		        modelPhieu.addRow(new Object[] {p.getMaPhieu(), p.getKhuVuc(), p.getSoBan(), p.getSoLuongNguoi(),
+		             p.getNgayDat(), p.getNgayLap(), p.getGioDat(), p.getKhachHang().getMaKH(), p.getNhanVien().getMaNV()});
+		    }
+		}
+
 }
