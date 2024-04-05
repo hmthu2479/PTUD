@@ -7,17 +7,18 @@ public class PhieuDatBan {
     private String maPhieu, ngayDat, gioDat;
     private int soLuongNguoi;
     private LocalDate ngayLap;
+    private KhuVuc khuVuc;
+    private Phong phong;
+    private Ban tenBan;
     private KhachHang khachHang;
     private NhanVien nhanVien;
-    private KhuVuc khuVuc;
-    private Ban soBan;
-    public PhieuDatBan(String maPhieu, KhuVuc khuVuc, Ban soBan, int soLuongNguoi, String ngayDat, LocalDate ngayLap,
-            String gioDat, KhachHang khachHang, NhanVien nhanVien)
-{
+	public PhieuDatBan(String maPhieu, KhuVuc khuVuc, Phong phong, Ban tenBan, int soLuongNguoi, String ngayDat,
+			LocalDate ngayLap, String gioDat, KhachHang khachHang, NhanVien nhanVien) {
 		super();
 		this.maPhieu = maPhieu;
 		this.khuVuc = khuVuc;
-		this.soBan = soBan;
+		this.phong = phong;
+		this.tenBan = tenBan;
 		this.soLuongNguoi = soLuongNguoi;
 		this.ngayDat = ngayDat;
 		this.ngayLap = ngayLap;
@@ -30,19 +31,6 @@ public class PhieuDatBan {
 	}
 	public void setMaPhieu(String maPhieu) {
 		this.maPhieu = maPhieu;
-	}
-
-	public KhuVuc getKhuVuc() {
-		return khuVuc;
-	}
-	public void setKhuVuc(KhuVuc khuVuc) {
-		this.khuVuc = khuVuc;
-	}
-	public Ban getSoBan() {
-		return soBan;
-	}
-	public void setSoBan(Ban soBan) {
-		this.soBan = soBan;
 	}
 	public String getNgayDat() {
 		return ngayDat;
@@ -68,6 +56,24 @@ public class PhieuDatBan {
 	public void setNgayLap(LocalDate ngayLap) {
 		this.ngayLap = ngayLap;
 	}
+	public KhuVuc getKhuVuc() {
+		return khuVuc;
+	}
+	public void setKhuVuc(KhuVuc khuVuc) {
+		this.khuVuc = khuVuc;
+	}
+	public Phong getPhong() {
+		return phong;
+	}
+	public void setPhong(Phong phong) {
+		this.phong = phong;
+	}
+	public Ban getTenBan() {
+		return tenBan;
+	}
+	public void setTenBan(Ban tenBan) {
+		this.tenBan = tenBan;
+	}
 	public KhachHang getKhachHang() {
 		return khachHang;
 	}
@@ -82,13 +88,9 @@ public class PhieuDatBan {
 	}
 	@Override
 	public String toString() {
-		return "PhieuDatBan [maPhieu=" + maPhieu + ", khuVuc=" + khuVuc + ", soBan=" + soBan + ", ngayDat=" + ngayDat
-				+ ", gioDat=" + gioDat + ", soLuongNguoi=" + soLuongNguoi + ", ngayLap=" + ngayLap + ", khachHang="
-				+ khachHang + ", nhanVien=" + nhanVien + "]";
+		return "PhieuDatBan [maPhieu=" + maPhieu + ", ngayDat=" + ngayDat + ", gioDat=" + gioDat + ", soLuongNguoi="
+				+ soLuongNguoi + ", ngayLap=" + ngayLap + ", khuVuc=" + khuVuc + ", phong=" + phong + ", tenBan="
+				+ tenBan + ", khachHang=" + khachHang + ", nhanVien=" + nhanVien + "]";
 	}
     
-    
-    }
-
-
-    
+}

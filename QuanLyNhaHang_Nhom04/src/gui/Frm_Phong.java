@@ -30,8 +30,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import connectDB.ConnectDB;
+import dao.BanDAO;
 import dao.KhuVucDAO;
 import dao.PhongDAO;
+import entity.Ban;
 import entity.KhuVuc;
 
 import entity.Phong;
@@ -76,7 +78,7 @@ public class Frm_Phong extends JDialog implements ActionListener {
         titlePanel.add(titleLabel);
         
 
-        String[] columnNames = {"Mã Phòng","Tên Phòng", "Thuộc"};
+        String[] columnNames = {"Mã Phòng","Tên Phòng", "Thuộc","Số ghế"};
 
         modelPhong = new DefaultTableModel(columnNames, 0);
 		table = new JTable(modelPhong);
@@ -183,7 +185,6 @@ public class Frm_Phong extends JDialog implements ActionListener {
         btnluu.addActionListener(this);
         docDuLieuDBVaoTable();
     }
-
     @Override
     public void actionPerformed(ActionEvent e) {
     	Object o = e.getSource();
@@ -192,15 +193,15 @@ public class Frm_Phong extends JDialog implements ActionListener {
     	    String maPhong = txtmaPhong.getText().trim();
     	    String tenPhong = txttenPhong.getText().trim();
     	    String khuVuc = String.valueOf(cmbkhuVuc.getSelectedItem());
-
+    	    int soGhe = 0;
     	    KhuVucDAO khuVucDAO = new KhuVucDAO();
     	    ArrayList<KhuVuc> dsKV = khuVucDAO.layThongTin();
 
     	    for (KhuVuc kv : dsKV) {
     	        if (khuVuc.equalsIgnoreCase(kv.getTenKhuVuc())) {
-    	            Phong p = new Phong(maPhong, tenPhong, kv);
+    	            Phong p = new Phong(maPhong, tenPhong, kv,soGhe);
     	                if (phong_dao.themPhong(p)) {
-    	                    modelPhong.addRow(new Object[]{p.getMaPhong(), p.getTenPhong(), kv.getTenKhuVuc()});
+    	                    modelPhong.addRow(new Object[]{p.getMaPhong(), p.getTenPhong(), kv.getTenKhuVuc(),p.getSoGhe()});
     	                } else {
     	                    JOptionPane.showMessageDialog(null, "Trùng mã", "Lỗi", JOptionPane.ERROR_MESSAGE);
     	                }
@@ -237,8 +238,9 @@ public class Frm_Phong extends JDialog implements ActionListener {
                 String maPhong = (String) modelPhong.getValueAt(i, 0);
                 String tenPhong = (String) modelPhong.getValueAt(i, 1);
                 String kv = (String) modelPhong.getValueAt(i, 2); 
+                int soGhe = (int) modelPhong.getValueAt(i, 3);
                 KhuVuc khuVuc = new KhuVuc(kv); 
-                Phong p = new Phong(maPhong, tenPhong, khuVuc);
+                Phong p = new Phong(maPhong, tenPhong, khuVuc,soGhe);
                 
                 try {
                     phong_dao.capNhatPhong(p);
@@ -258,7 +260,7 @@ public class Frm_Phong extends JDialog implements ActionListener {
 		
 		List<Phong> listPhong = phong_dao.layThongTin();
 		for (Phong p : listPhong ) {
-			modelPhong.addRow(new Object [] {p.getMaPhong(), p.getTenPhong(),p.getKhuVuc().getMaKhuVuc()});
+			modelPhong.addRow(new Object [] {p.getMaPhong(), p.getTenPhong(),p.getKhuVuc().getMaKhuVuc(),p.getSoGhe()});
 			
 		}
 	}

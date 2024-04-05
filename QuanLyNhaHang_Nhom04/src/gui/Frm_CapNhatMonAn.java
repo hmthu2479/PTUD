@@ -17,7 +17,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
-public class Frm_QuanLyMonAn extends JPanel {
+public class Frm_CapNhatMonAn extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField textField;
@@ -27,7 +27,7 @@ public class Frm_QuanLyMonAn extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public Frm_QuanLyMonAn() {
+	public Frm_CapNhatMonAn() {
 		setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Thông tin món ăn");
