@@ -264,12 +264,14 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
 			try {
 			    kh_dao.themKhachHang(kh);
 
-			    modelKH.addRow(new Object[] { kh.getMaKH(), kh.getTenKH(),kh.getPhai(),
+			    modelKH.addRow(new Object[] { kh.getMaKH(), kh.getTenKH(),kh.getPhai().trim(),
 			    		 kh.getSdt(),kh.getDiaChi()
 			    });
+			    JOptionPane.showMessageDialog(this, "Thêm thành công");
 			} catch (Exception e2) {
 			    e2.printStackTrace(); 
 			    JOptionPane.showMessageDialog(this, "Trùng mã");
+			    return;
 			}
 		}if (o.equals(luu)) {
 		    int rowCount = modelKH.getRowCount();
@@ -335,7 +337,7 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
 
 	    List<KhachHang> listKH = kh_dao.layThongTin();
 	    for (KhachHang kh : listKH) {
-	        modelKH.addRow(new Object[] { kh.getMaKH(), kh.getTenKH(), kh.getPhai(),
+	        modelKH.addRow(new Object[] { kh.getMaKH(), kh.getTenKH(), kh.getPhai().trim(),
 	        		kh.getSdt(), kh.getDiaChi() });
 	    }
 	}

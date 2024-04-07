@@ -8,6 +8,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +37,11 @@ import dao.KhuVucDAO;
 import dao.PhongDAO;
 import dao.BanDAO;
 import entity.KhuVuc;
+import entity.PhieuDatBan;
 import entity.Ban;
 import entity.Phong;
 
-public class Frm_Ban extends JDialog implements ActionListener{
+public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 
     private static final long serialVersionUID = 1L;
     private JTable table;
@@ -122,6 +125,17 @@ public class Frm_Ban extends JDialog implements ActionListener{
 		for (Phong p : listPhong) {
 			cmbPhong.addItem(p.getTenPhong());
 		}
+		cmbkhuVuc.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        String chonKhuVuc = (String) cmbkhuVuc.getSelectedItem();
+		        cmbPhong.removeAllItems();
+		        ArrayList<Phong> chonPhongTuKV = phongdao.layThongTinTheoKhuVuc(chonKhuVuc);
+		        for (Phong p : chonPhongTuKV) {
+		            cmbPhong.addItem(p.getTenPhong());
+		        }
+		    }
+		});
+
 		cmbkhuVuc.setFont(new Font("Tahoma", Font.BOLD, 15));
 		cmbPhong.setFont(new Font("Tahoma", Font.BOLD, 15));
         txtmaBan = new JTextField(10);
@@ -220,6 +234,7 @@ public class Frm_Ban extends JDialog implements ActionListener{
         btnxoa.addActionListener(this);
         btntim.addActionListener(this);
         btnluu.addActionListener(this);
+        table.addMouseListener(this);
         docDuLieuDBVaoTable();
     }
     
@@ -250,23 +265,19 @@ public class Frm_Ban extends JDialog implements ActionListener{
 		    ArrayList<KhuVuc> dsKV = khuVucDAO.layThongTin();
 		    PhongDAO phongDao = new PhongDAO();
 		    ArrayList<Phong> dsPhong = phongDao.layThongTin();
-
-		    for (KhuVuc kv : dsKV) {
-		        if (khuVuc.equalsIgnoreCase(kv.getTenKhuVuc())) {
-		            for (Phong p : dsPhong) {
-		                if (phong.equalsIgnoreCase(p.getTenPhong())) {
-		                    Ban b = new Ban(maBan, soBan, soGhe, kv, p);
-		                    if (bandao.themBan(b)) {
-		                        modelBan.addRow(new Object[]{b.getMaBan(), b.getSoBan(), b.getSoGhe(), kv.getTenKhuVuc(), p.getTenPhong()});
-		                    } else {
-		                        JOptionPane.showMessageDialog(null, "Trùng mã", "Lỗi", JOptionPane.ERROR_MESSAGE);
-		                    }
-		                    return;
-		                }
-		            }
-		        }
-		    }
-		}
+		    
+	        KhuVuc kv = timTenKhuVuc(dsKV, khuVuc);
+	        Phong ph = timTenPhong(dsPhong, phong);
+	        if (kv != null && ph != null ) {
+		    	 Ban b = new Ban(maBan, soBan, soGhe, kv, ph);
+                if (bandao.themBan(b)) {
+                    modelBan.addRow(new Object[]{b.getMaBan(), b.getSoBan(), b.getSoGhe(), kv.getTenKhuVuc(), ph.getTenPhong()});
+                } else {
+                    JOptionPane.showMessageDialog(null, "Trùng mã", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+	        }
+	    }
+		   
 
 
         if (o.equals(btnxoa)) {
@@ -290,27 +301,94 @@ public class Frm_Ban extends JDialog implements ActionListener{
             }
             JOptionPane.showMessageDialog(this, "Không tìm thấy mã");
         }
-        /*if (o.equals(btnluu)) {
-            int rowCount = modelBan.getRowCount();
-            for (int i = 0; i < rowCount; i++) {
-                String maBan = (String) modelBan.getValueAt(i, 0);
-                String tenBan = (String) modelBan.getValueAt(i, 1);
-                String kv = (String) modelBan.getValueAt(i, 2); 
-                KhuVuc khuVuc = new KhuVuc(kv);
-                
-                Phong p = new Phong(maPhong, tenPhong, khuVuc);
-                
-                try {
-                    phongdao.capNhatPhong(p);
-                } catch (Exception e2) {
-                    e2.printStackTrace(); 
-                    JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu vào cơ sở dữ liệu");
-                    return; 
-                }
-            }
-            JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
-        }*/
+        if (e.getSource() == btnluu) {
+            String maBan = txtmaBan.getText().trim();
+            String tenBan = txttenBan.getText().trim();
+            int soGhe = Integer.parseInt(txtsoGhe.getText().trim());
+            String khuVuc = String.valueOf(cmbkhuVuc.getSelectedItem());
+            String phong = String.valueOf(cmbPhong.getSelectedItem());
+            try {
+                bandao.capNhatThongTinBan(maBan, tenBan,soGhe, khuVuc,phong);
 
+                int rowCount = modelBan.getRowCount();
+                for (int i = 0; i < rowCount; i++) {
+                    if (modelBan.getValueAt(i, 0).equals(maBan)) {
+                    	modelBan.setValueAt(tenBan, i, 1);
+                    	modelBan.setValueAt(soGhe, i, 2);
+                    	modelBan.setValueAt(khuVuc, i, 3);
+                    	modelBan.setValueAt(phong, i, 4);
+                        break;
+                    }
+                }
+                txtmaBan.setText("");
+                txttenBan.setText("");
+                txtsoGhe.setText("");
+                cmbkhuVuc.setSelectedIndex(0);
+                cmbPhong.setSelectedIndex(0);
+                
+                JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
+            } catch (Exception e2) {
+                e2.printStackTrace(); 
+                JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu vào cơ sở dữ liệu");
+            }
+        }    
+    }
+	private KhuVuc timTenKhuVuc(ArrayList<KhuVuc> dsKV, String tenKhuVuc) {
+	    for (KhuVuc kv : dsKV) {
+	        if (tenKhuVuc.equalsIgnoreCase(kv.getTenKhuVuc())) {
+	            return kv;
+	        }
+	    }
+	    return null;
+	}
+
+	private Phong timTenPhong(ArrayList<Phong> dsPhong, String tenPhong) {
+	    for (Phong ph : dsPhong) {
+	        if (tenPhong.equalsIgnoreCase(ph.getTenPhong())) {
+	            return ph;
+	        }
+	    }
+	    return null;
+	}
+
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		 int row = table.getSelectedRow();
+		    txtmaBan.setText(modelBan.getValueAt(row, 0).toString());
+		    txttenBan.setText(modelBan.getValueAt(row, 1).toString());
+		    txtsoGhe.setText(modelBan.getValueAt(row, 2).toString());
+		    cmbkhuVuc.setSelectedItem(modelBan.getValueAt(row, 3).toString());
+		    cmbPhong.setSelectedItem(modelBan.getValueAt(row, 4).toString());
+	}
+
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
     

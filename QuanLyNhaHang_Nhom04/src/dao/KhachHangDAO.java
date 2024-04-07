@@ -42,7 +42,7 @@ public class KhachHangDAO {
             statement = con.prepareStatement(SQL);
             statement.setString(1,khachHang.getMaKH());
             statement.setString(2,khachHang.getTenKH());
-            statement.setString(3,khachHang.getPhai());
+            statement.setString(3,khachHang.getPhai().trim());
             statement.setString(4,khachHang.getSdt());
             statement.setString(5,khachHang.getDiaChi());
             n = statement.executeUpdate();
@@ -79,7 +79,7 @@ public class KhachHangDAO {
             statement = con.prepareStatement(SQL);
             statement.setString(1,khachHang.getMaKH());
             statement.setString(2,khachHang.getTenKH());
-            statement.setString(3,khachHang.getPhai());
+            statement.setString(3,khachHang.getPhai().trim());
             statement.setString(4,khachHang.getSdt());
             statement.setString(5,khachHang.getDiaChi());
             n = statement.executeUpdate();

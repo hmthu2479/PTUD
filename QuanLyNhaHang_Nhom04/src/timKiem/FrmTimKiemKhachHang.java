@@ -22,7 +22,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
@@ -77,7 +79,12 @@ public class FrmTimKiemKhachHang extends JPanel implements ActionListener {
         String[] luaChon = {"Nam", "Nữ"};
         TableColumn phaiColumn = tableKhachHang.getColumnModel().getColumn(2); // Changed column index from 3 to 2
         phaiColumn.setCellEditor(new DefaultCellEditor(new JComboBox<>(luaChon)));
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 
+		for (int i = 0; i < tableKhachHang.getColumnCount(); i++) {
+			tableKhachHang.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+		}
         JScrollPane scrollPane = new JScrollPane(tableKhachHang);
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         add(scrollPane);
@@ -125,7 +132,7 @@ public class FrmTimKiemKhachHang extends JPanel implements ActionListener {
 	public void docDuLieuDBVaoTable() {
 		List<KhachHang> listKH = kh_dao.layThongTin();
 		for (KhachHang kh : listKH ) {
-			modelKH.addRow(new Object [] {kh.getMaKH(), kh.getTenKH(),kh.getPhai(),
+			modelKH.addRow(new Object [] {kh.getMaKH(), kh.getTenKH(),kh.getPhai().trim(),
 			         kh.getSdt(),kh.getDiaChi()});
 		}
 	}

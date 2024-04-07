@@ -173,6 +173,12 @@ public class Frm_CapNhatNhanVien extends JPanel implements ActionListener {
 		tableNhanVien = new JTable(modelNV);
 		tableNhanVien.setPreferredScrollableViewportSize(new Dimension(940, 570));
 		tableNhanVien.setRowHeight(30);
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+		for (int i = 0; i < tableNhanVien.getColumnCount(); i++) {
+			tableNhanVien.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+		}
 
 		tableNhanVien.setFont(new Font("Arial", Font.BOLD, 18));
 		
@@ -247,7 +253,7 @@ public class Frm_CapNhatNhanVien extends JPanel implements ActionListener {
 		if (o.equals(them)) {
 			String maNV = txtMaNV.getText().trim();
 			String tenNV = txtho.getText().trim();
-			String phai = nam.isSelected() ? "Nam" : nu.isSelected() ? "Nu" : "";
+			String phai = nam.isSelected() ? "Nam" : nu.isSelected() ? "Nữ" : "";
 			int tuoi = Integer.parseInt(txtTuoi.getText().trim());
 			String soDienThoai = txtsdt.getText().trim();
 			NhanVien nv = new NhanVien(maNV, tenNV, phai, tuoi, soDienThoai);

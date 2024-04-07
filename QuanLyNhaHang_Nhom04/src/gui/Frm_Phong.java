@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +40,7 @@ import entity.KhuVuc;
 
 import entity.Phong;
 
-public class Frm_Phong extends JDialog implements ActionListener {
+public class Frm_Phong extends JDialog implements ActionListener, MouseListener {
 
     private static final long serialVersionUID = 1L;
     private JTable table;
@@ -183,6 +185,7 @@ public class Frm_Phong extends JDialog implements ActionListener {
         btnxoa.addActionListener(this);
         btntim.addActionListener(this);
         btnluu.addActionListener(this);
+        table.addMouseListener(this);
         docDuLieuDBVaoTable();
     }
     @Override
@@ -232,29 +235,33 @@ public class Frm_Phong extends JDialog implements ActionListener {
             }
             JOptionPane.showMessageDialog(this, "Không tìm thấy mã");
         }
-        if (o.equals(btnluu)) {
-            int rowCount = modelPhong.getRowCount();
-            for (int i = 0; i < rowCount; i++) {
-                String maPhong = (String) modelPhong.getValueAt(i, 0);
-                String tenPhong = (String) modelPhong.getValueAt(i, 1);
-                String kv = (String) modelPhong.getValueAt(i, 2); 
-                int soGhe = (int) modelPhong.getValueAt(i, 3);
-                KhuVuc khuVuc = new KhuVuc(kv); 
-                Phong p = new Phong(maPhong, tenPhong, khuVuc,soGhe);
-                
-                try {
-                    phong_dao.capNhatPhong(p);
-                } catch (Exception e2) {
-                    e2.printStackTrace(); 
-                    JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu vào cơ sở dữ liệu");
-                    return; 
+        if (e.getSource() == btnluu) {
+            String maPhong = txtmaPhong.getText().trim();
+            String tenPhong = txttenPhong.getText().trim();
+            String khuVuc = String.valueOf(cmbkhuVuc.getSelectedItem());
+            try {
+                phong_dao.capNhatThongTinPhong(maPhong, tenPhong, khuVuc);
+
+                int rowCount = modelPhong.getRowCount();
+                for (int i = 0; i < rowCount; i++) {
+                    if (modelPhong.getValueAt(i, 0).equals(maPhong)) {
+                        modelPhong.setValueAt(tenPhong, i, 1);
+                        modelPhong.setValueAt(khuVuc, i, 2);
+                        break;
+                    }
                 }
+                txtmaPhong.setText("");
+                txttenPhong.setText("");
+                cmbkhuVuc.setSelectedIndex(0);
+                
+                JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
+            } catch (Exception e2) {
+                e2.printStackTrace(); 
+                JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu vào cơ sở dữ liệu");
             }
-            JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
         }
 
-        
-    }
+}
 	
 	public void docDuLieuDBVaoTable() {
 		
@@ -263,6 +270,34 @@ public class Frm_Phong extends JDialog implements ActionListener {
 			modelPhong.addRow(new Object [] {p.getMaPhong(), p.getTenPhong(),p.getKhuVuc().getMaKhuVuc(),p.getSoGhe()});
 			
 		}
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		int row = table.getSelectedRow();
+		txtmaPhong.setText(modelPhong.getValueAt(row, 0).toString());
+		txttenPhong.setText(modelPhong.getValueAt(row, 1).toString());
+		cmbkhuVuc.setSelectedItem(modelPhong.getValueAt(row, 2).toString());
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
     

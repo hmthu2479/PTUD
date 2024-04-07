@@ -23,34 +23,36 @@ import entity.Phong;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Frm_DatBan extends JPanel implements ActionListener {
-    private JSpinner spn_ngayThang;
-    private JComboBox<String> cmb_gioDat;
-    private JComboBox<Integer> cmb_soLuongNguoi;
-    private JComboBox<String> cmb_khuVuc;
-    private JComboBox<String> cmb_ban;
-	private JTextField txtMess;
-	private JButton btn_Them,btn_Tim, btn_Xoa, btn_xoaRong;
-	private JTextField txt_maPhieu;
+public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
+    private JSpinner spnngayThang;
+    private JComboBox<String> cmbgioDat;
+    private JComboBox<Integer> cmbsoLuongNguoi;
+    private JComboBox<String> cmbkhuVuc;
+    private JComboBox<String> cmbban;
+	private JButton btnThem,btnTim, btnXoa, btnxoaRong;
+	private JTextField txtmaPhieu;
 	private DefaultTableModel modelPhieu;
 	private JTable table;
-	private JTextField txt_Tim;
-	private JLabel lbl_Tim;
-	private JComboBox <String> cmb_nhanVien;
+	private JTextField txtTim;
+	private JLabel lblTim;
+	private JComboBox <String> cmbnhanVien;
 	private KhuVucDAO kv_dao;
 	private PhongDAO phong_dao;
 	private BanDAO ban_dao;
 	private NhanVienDAO nv_dao;
 	private PhieuDatBanDAO phieu_dao;
-	private JComboBox<String> cmb_khachHang;
+	private JComboBox<String> cmbkhachHang;
 	private KhachHangDAO kh_dao;
 	private JComboBox<String> cmbPhong;
+	private JButton btnChonMon;
+	private JButton btnLuu;
 
     public Frm_DatBan() {
     	try {
@@ -73,92 +75,111 @@ public class Frm_DatBan extends JPanel implements ActionListener {
         mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
         mainPanel.setBackground(new Color(160, 210, 180));
 
-        JPanel pnl_N = new JPanel(new GridLayout(3, 4, 0, 10));
-        pnl_N.setBackground(new Color(160, 210, 180)); 
-        pnl_N.setBorder(new EmptyBorder(5, 0, 10, 0));
+        JPanel pnlN = new JPanel(new GridLayout(3, 4, 0, 10));
+        pnlN.setBackground(new Color(160, 210, 180)); 
+        pnlN.setBorder(new EmptyBorder(5, 0, 10, 0));
 
         // Ngày tháng năm
-        JPanel pnl_ngayThang = new JPanel(new BorderLayout());
-        pnl_ngayThang.setBackground(new Color(160, 210, 180));
-        pnl_ngayThang.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.black, 2), "Ngày đặt", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        JPanel pnlngayThang = new JPanel(new BorderLayout());
+        pnlngayThang.setBackground(new Color(160, 210, 180));
+        pnlngayThang.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.black, 2), "Ngày đặt", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
         SpinnerDateModel dateModel = new SpinnerDateModel();
-        spn_ngayThang = new JSpinner(dateModel);
-        spn_ngayThang.setEditor(new JSpinner.DateEditor(spn_ngayThang, "dd/MM/yyyy"));
-        spn_ngayThang.setFont(new Font("Arial", Font.BOLD, 20));
-        pnl_ngayThang.add(spn_ngayThang, BorderLayout.CENTER);
-        pnl_N.add(pnl_ngayThang);
+        spnngayThang = new JSpinner(dateModel);
+        spnngayThang.setEditor(new JSpinner.DateEditor(spnngayThang, "dd/MM/yyyy"));
+        spnngayThang.setFont(new Font("Arial", Font.BOLD, 20));
+        pnlngayThang.add(spnngayThang, BorderLayout.CENTER);
+        pnlN.add(pnlngayThang);
 
         // Giờ đặt
-        JPanel pnl_gioDat = new JPanel(new BorderLayout());
-        pnl_gioDat.setBackground(new Color(160, 210, 180)); 
-        pnl_gioDat.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Giờ đặt", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
-        String[] timeOptions = {"10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"};
-        cmb_gioDat = new JComboBox<>(timeOptions);
-        cmb_gioDat.setFont(new Font("Arial", Font.BOLD, 20));
-        pnl_gioDat.add(cmb_gioDat, BorderLayout.CENTER);
-        pnl_N.add(pnl_gioDat);
+        JPanel pnlgioDat = new JPanel(new BorderLayout());
+        pnlgioDat.setBackground(new Color(160, 210, 180)); 
+        pnlgioDat.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Giờ đặt", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        List<String> dsGio = new ArrayList<>();
+        for (int hour = 8; hour <= 20; hour++) {
+            for (int minutes = 0; minutes < 60; minutes += 30) {
+                String time = String.format("%02d:%02d", hour, minutes);
+                dsGio.add(time);
+            }
+        }
+        String[] gioDat = dsGio.toArray(new String[0]);
+
+        cmbgioDat = new JComboBox<>(gioDat);
+        cmbgioDat.setFont(new Font("Arial", Font.BOLD, 20));
+        pnlgioDat.add(cmbgioDat, BorderLayout.CENTER);
+        pnlN.add(pnlgioDat);
 
         // Số lượng người
-        JPanel pnl_soLuongNguoi = new JPanel(new BorderLayout());
-        pnl_soLuongNguoi.setBackground(new Color(160, 210, 180)); 
-        pnl_soLuongNguoi.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Số lượng người", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
-        Integer[] peopleOptions = {1, 2, 3, 4, 5};
-        cmb_soLuongNguoi = new JComboBox<>(peopleOptions);
-        cmb_soLuongNguoi.setFont(new Font("Arial", Font.BOLD, 20));
-        pnl_soLuongNguoi.add(cmb_soLuongNguoi, BorderLayout.CENTER);
-        pnl_N.add(pnl_soLuongNguoi);
+        JPanel pnlsoLuongNguoi = new JPanel(new BorderLayout());
+        pnlsoLuongNguoi.setBackground(new Color(160, 210, 180)); 
+        pnlsoLuongNguoi.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Số lượng người", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        List<Integer> dsSoNguoi = new ArrayList<>();
+        for (int i = 1; i <= 40; i++) {
+        	dsSoNguoi.add(i);
+        }
+        Integer[] peopleOptions = dsSoNguoi.toArray(new Integer[0]);
+
+        cmbsoLuongNguoi = new JComboBox<>(peopleOptions);
+        cmbsoLuongNguoi.setFont(new Font("Arial", Font.BOLD, 20));
+        pnlsoLuongNguoi.add(cmbsoLuongNguoi, BorderLayout.CENTER);
+        pnlN.add(pnlsoLuongNguoi);
         // Nhân viên
         
-        JPanel pnl_nhanVien = new JPanel(new BorderLayout());
-        pnl_nhanVien.setBackground(new Color(160, 210, 180)); 
-        pnl_nhanVien.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Nhân viên", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
-        cmb_nhanVien = new JComboBox<String>();
-        cmb_nhanVien.setEditable(false);	
+        JPanel pnlnhanVien = new JPanel(new BorderLayout());
+        pnlnhanVien.setBackground(new Color(160, 210, 180)); 
+        pnlnhanVien.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Nhân viên", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        cmbnhanVien = new JComboBox<String>();
+        cmbnhanVien.setEditable(false);	
 		
 		ArrayList<NhanVien> listNV = nv_dao.layThongTin() ;
 		for (NhanVien nv : listNV) {
-			cmb_nhanVien.addItem(nv.getHoTenNV());
+			cmbnhanVien.addItem(nv.getHoTenNV());
 		}
-        cmb_nhanVien.setFont(new Font("Arial", Font.BOLD, 20));
-        pnl_nhanVien.add(cmb_nhanVien, BorderLayout.CENTER);
-        pnl_N.add(pnl_nhanVien);
+        cmbnhanVien.setFont(new Font("Arial", Font.BOLD, 20));
+        pnlnhanVien.add(cmbnhanVien, BorderLayout.CENTER);
+        pnlN.add(pnlnhanVien);
  
         // Khách hàng
         
-        JPanel pnl_khachHang = new JPanel(new BorderLayout());
-        pnl_khachHang.setBackground(new Color(160, 210, 180)); 
-        pnl_khachHang.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Khách hàng", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
-        cmb_khachHang = new JComboBox<String>();
-        cmb_khachHang.setEditable(false);	
+        JPanel pnlkhachHang = new JPanel(new BorderLayout());
+        pnlkhachHang.setBackground(new Color(160, 210, 180)); 
+        pnlkhachHang.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Khách hàng", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        cmbkhachHang = new JComboBox<String>();
+        cmbkhachHang.setEditable(false);	
 		
 		ArrayList<KhachHang> listKH = kh_dao.layThongTin() ;
 		for (KhachHang kh : listKH) {
-			cmb_khachHang.addItem(kh.getTenKH());
+			cmbkhachHang.addItem(kh.getTenKH());
 		}
-		cmb_khachHang.setFont(new Font("Arial", Font.BOLD, 20));
-		pnl_khachHang.add(cmb_khachHang, BorderLayout.CENTER);
-        pnl_N.add(pnl_khachHang);
+		cmbkhachHang.setFont(new Font("Arial", Font.BOLD, 20));
+		pnlkhachHang.add(cmbkhachHang, BorderLayout.CENTER);
+        pnlN.add(pnlkhachHang);
 
         // Khu vực
         
-        JPanel pnl_khuVuc = new JPanel(new BorderLayout());
-        pnl_khuVuc.setBackground(new Color(160, 210, 180)); 
-        pnl_khuVuc.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Khu vực", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
-        cmb_khuVuc = new JComboBox<String>();
-        cmb_khuVuc.setEditable(false);	
+        JPanel pnlkhuVuc = new JPanel(new BorderLayout());
+        pnlkhuVuc.setBackground(new Color(160, 210, 180)); 
+        pnlkhuVuc.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Khu vực", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        cmbkhuVuc = new JComboBox<String>();
+        cmbkhuVuc.setEditable(false);	
 		
 		ArrayList<KhuVuc> listKV = kv_dao.layThongTin() ;
 		for (KhuVuc kv : listKV) {
-			cmb_khuVuc.addItem(kv.getTenKhuVuc());
+			cmbkhuVuc.addItem(kv.getTenKhuVuc());
 		}
-        cmb_khuVuc.setFont(new Font("Arial", Font.BOLD, 20));
-        pnl_khuVuc.add(cmb_khuVuc, BorderLayout.CENTER);
-        pnl_N.add(pnl_khuVuc);
-        
+        cmbkhuVuc.setFont(new Font("Arial", Font.BOLD, 20));
+        pnlkhuVuc.add(cmbkhuVuc, BorderLayout.CENTER);
+        pnlN.add(pnlkhuVuc);
+        cmbkhuVuc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String chonKV = (String) cmbkhuVuc.getSelectedItem();
+                capNhatCmbTheoKhuVuc(chonKV);
+            }
+        });
         //Phòng
-        JPanel pnl_Phong = new JPanel(new BorderLayout());
-        pnl_Phong.setBackground(new Color(160, 210, 180));
-        pnl_Phong.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Phòng", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        JPanel pnlPhong = new JPanel(new BorderLayout());
+        pnlPhong.setBackground(new Color(160, 210, 180));
+        pnlPhong.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Phòng", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
 
         cmbPhong = new JComboBox<String>();
         cmbPhong.setEditable(false);	
@@ -170,78 +191,86 @@ public class Frm_DatBan extends JPanel implements ActionListener {
         
         cmbPhong.setFont(new Font("Arial", Font.BOLD, 20));
         cmbPhong.setForeground(Color.BLACK);
-        pnl_Phong.add(cmbPhong, BorderLayout.CENTER);
-        pnl_N.add(pnl_Phong);
+        pnlPhong.add(cmbPhong, BorderLayout.CENTER);
+        pnlN.add(pnlPhong);
+        
+        cmbPhong.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	String chonPhong = (String) cmbPhong.getSelectedItem();
+                capNhatCmbBanTheoPhong(chonPhong);
+            }
+        });
         
     // Bàn
-        JPanel pnl_Ban = new JPanel(new BorderLayout());
-        pnl_Ban.setBackground(new Color(160, 210, 180));
-        pnl_Ban.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Bàn", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        JPanel pnlBan = new JPanel(new BorderLayout());
+        pnlBan.setBackground(new Color(160, 210, 180));
+        pnlBan.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Bàn", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
 
-        cmb_ban = new JComboBox<String>();
-        cmb_ban.setEditable(false);	
+        cmbban = new JComboBox<String>();
+        cmbban.setEditable(false);	
 
         ArrayList<Ban> listBan = ban_dao.layThongTin();
         for (Ban b : listBan) { 
-            cmb_ban.addItem(b.getSoBan());
+            cmbban.addItem(b.getSoBan());
         }
         
-        cmb_ban.setFont(new Font("Arial", Font.BOLD, 20));
-        cmb_ban.setForeground(Color.BLACK);
-        pnl_Ban.add(cmb_ban, BorderLayout.CENTER);
-        pnl_N.add(pnl_Ban);
+        cmbban.setFont(new Font("Arial", Font.BOLD, 20));
+        cmbban.setForeground(Color.BLACK);
+        pnlBan.add(cmbban, BorderLayout.CENTER);
+        pnlN.add(pnlBan);
        
         
       //Mã phiếu
-        JPanel pnl_maPhieu = new JPanel(new BorderLayout());
-        pnl_maPhieu.setBackground(new Color(160, 210, 180)); // White
-        pnl_maPhieu.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Mã Phiếu", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
-        txt_maPhieu = new JTextField(30);
-        txt_maPhieu.setFont(new Font("Roboto", Font.BOLD, 16));
-        pnl_maPhieu.add(txt_maPhieu, BorderLayout.CENTER);
-        pnl_N.add(pnl_maPhieu);
+        JPanel pnlmaPhieu = new JPanel(new BorderLayout());
+        pnlmaPhieu.setBackground(new Color(160, 210, 180)); // White
+        pnlmaPhieu.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK, 2), "Mã Phiếu", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.BOLD, 16), Color.BLACK));
+        txtmaPhieu = new JTextField(30);
+        txtmaPhieu.setFont(new Font("Roboto", Font.BOLD, 16));
+        pnlmaPhieu.add(txtmaPhieu, BorderLayout.CENTER);
+        pnlN.add(pnlmaPhieu);
         
         
         //Buttons
-        JPanel pnl_btn = new JPanel(new GridLayout(2, 3));
-        pnl_btn.setBackground(new Color(160, 210, 180));
-        pnl_btn.setBorder(new EmptyBorder(5, 2, 0, 2));
+        JPanel pnlbtn = new JPanel(new GridLayout(2, 3));
+        pnlbtn.setBackground(new Color(160, 210, 180));
+        pnlbtn.setBorder(new EmptyBorder(5, 2, 0, 2));
 
         int horizontalGap = 5; 
         int verticalGap = 5; 
 
-        GridLayout gridLayout = (GridLayout) pnl_btn.getLayout();
+        GridLayout gridLayout = (GridLayout) pnlbtn.getLayout();
         gridLayout.setHgap(horizontalGap);
         gridLayout.setVgap(verticalGap);
 
-        btn_Them = new JButton("Thêm");
-        btn_Xoa = new JButton("Xóa");
-        btn_xoaRong = new JButton("Xóa rỗng");
-        lbl_Tim = new JLabel("Nhập mã cần tìm:");
-        lbl_Tim.setFont(new Font("Arial", Font.BOLD, 16));
-        txt_Tim = new JTextField(12);
-        btn_Tim = new JButton("Tìm kiếm");
+        btnThem = new JButton("Thêm");
+        btnXoa = new JButton("Xóa");
+        btnxoaRong = new JButton("Xóa rỗng");
+        lblTim = new JLabel("Nhập mã cần tìm:");
+        lblTim.setFont(new Font("Arial", Font.BOLD, 16));
+        txtTim = new JTextField(12);
+        btnTim = new JButton("Tìm kiếm");
 
-        pnl_btn.add(btn_Them);
-        pnl_btn.add(btn_Xoa);
-        pnl_btn.add(btn_xoaRong);
-        JPanel pnl_tim = new JPanel();
-        pnl_tim.setBackground(new Color(160, 210, 180));
-        pnl_tim.setLayout(new FlowLayout(FlowLayout.CENTER, 7, 7));
-        pnl_tim.add(lbl_Tim);
-        txt_Tim.setPreferredSize(new Dimension(200, 23)); 
-        pnl_tim.add(txt_Tim);
-        pnl_tim.add(btn_Tim);
+        pnlbtn.add(btnThem);
+        pnlbtn.add(btnXoa);
+        pnlbtn.add(btnxoaRong);
+        JPanel pnltim = new JPanel();
+        pnltim.setBackground(new Color(160, 210, 180));
+        pnltim.setLayout(new FlowLayout(FlowLayout.CENTER, 7, 7));
+        pnltim.add(lblTim);
+        txtTim.setPreferredSize(new Dimension(200, 23)); 
+        pnltim.add(txtTim);
+        pnltim.add(btnTim);
 
         Font bFont = new Font("Arial", Font.BOLD, 16);
-        btn_Them.setFont(bFont);
-        btn_Xoa.setFont(bFont);
-        btn_xoaRong.setFont(bFont);
-        btn_Tim.setFont(bFont);
-        pnl_N.add(pnl_tim);
-        pnl_N.add(pnl_btn);
+        btnThem.setFont(bFont);
+        btnXoa.setFont(bFont);
+        btnxoaRong.setFont(bFont);
+        btnTim.setFont(bFont);
+        pnlN.add(pnltim);
+        pnlN.add(pnlbtn);
 
-        mainPanel.add(pnl_N, BorderLayout.NORTH);
+        mainPanel.add(pnlN, BorderLayout.NORTH);
 
         add(mainPanel);
 
@@ -284,14 +313,8 @@ public class Frm_DatBan extends JPanel implements ActionListener {
         btnPanel.setLayout(new FlowLayout(FlowLayout.RIGHT)); 
         btnPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
         
-        btnPanel.add(txtMess = new JTextField());
-		txtMess.setEditable(false);
-		txtMess.setBorder(null);
-		txtMess.setForeground(Color.red);
-		txtMess.setFont(new Font("Arial", Font.ITALIC, 15));
-        
-        JButton btnChonMon = new JButton("Chọn món");
-        JButton btnLuu = new JButton("Lưu");
+        btnChonMon = new JButton("Chọn món");
+        btnLuu = new JButton("Lưu");
 
         Font btnFont = new Font("Arial", Font.BOLD, 17); 
         btnChonMon.setFont(btnFont);
@@ -307,33 +330,39 @@ public class Frm_DatBan extends JPanel implements ActionListener {
 
         mainPanel.add(btnPanel, BorderLayout.SOUTH);
                 
-        btn_Them.addActionListener(this );
-        btn_Xoa.addActionListener(this);
-        btn_xoaRong.addActionListener(this);
-        btn_Tim.addActionListener(this);
+        btnThem.addActionListener(this );
+        btnXoa.addActionListener(this);
+        btnxoaRong.addActionListener(this);
+        btnTim.addActionListener(this);
+        btnLuu.addActionListener(this);
+        table.addMouseListener(this);
         docDuLieuDBVaoTable();
         
     }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		Object o = e.getSource();
-		if(o.equals(btn_Them)) {
-		    Date selectedDate = (Date) spn_ngayThang.getValue();
-		    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-		    String ngayDat = formatter.format(selectedDate);
-		    String gio = String.valueOf(cmb_gioDat.getSelectedItem());
-		    int soLuong = (int) cmb_soLuongNguoi.getSelectedItem();
-		    String khuVuc = String.valueOf(cmb_khuVuc.getSelectedItem());
-		    String khachHang = String.valueOf(cmb_khachHang.getSelectedItem());
-		    String ma = txt_maPhieu.getText();
-		    String nhanVien = String.valueOf(cmb_nhanVien.getSelectedItem());
-		    String tenBan = String.valueOf(cmb_ban.getSelectedItem());
-		    String tenPhong = String.valueOf(cmbPhong.getSelectedItem());
-		    LocalDate ngayLap = LocalDate.now();
-		    
-    	    KhuVucDAO khuVucDAO = new KhuVucDAO();
+	    Object o = e.getSource();
+	    if (o.equals(btnThem)) {
+	        Date selectedDate = (Date) spnngayThang.getValue();
+	        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+	        String ngayDat = formatter.format(selectedDate);
+	        String gio = String.valueOf(cmbgioDat.getSelectedItem());
+	        int soLuong = (int) cmbsoLuongNguoi.getSelectedItem();
+	        int soGhe = soLuongGheBanDaChon();
+	        if (soLuong > soGhe) {
+	            JOptionPane.showMessageDialog(null, "Vượt quá số lượng, vui lòng chọn bàn khác !!! ", "Error", JOptionPane.ERROR_MESSAGE);
+	            return;
+	        } 
+	        String khuVuc = String.valueOf(cmbkhuVuc.getSelectedItem());
+	        String khachHang = String.valueOf(cmbkhachHang.getSelectedItem());
+	        String ma = txtmaPhieu.getText();
+	        String nhanVien = String.valueOf(cmbnhanVien.getSelectedItem());
+	        String tenBan = String.valueOf(cmbban.getSelectedItem());
+	        String tenPhong = String.valueOf(cmbPhong.getSelectedItem());
+	        LocalDate ngayLap = LocalDate.now();
+
+	        KhuVucDAO khuVucDAO = new KhuVucDAO();
     	    ArrayList<KhuVuc> dsKV = khuVucDAO.layThongTin();
     	    PhongDAO phongDao = new PhongDAO();
     	    ArrayList<Phong> dsPhong = phongDao.layThongTin();
@@ -343,65 +372,228 @@ public class Frm_DatBan extends JPanel implements ActionListener {
     	    ArrayList<NhanVien> dsNV = nvDao.layThongTin();
     	    KhachHangDAO khDao = new KhachHangDAO();
     	    ArrayList<KhachHang> dsKH = khDao.layThongTin();
-    	    
-    	    for (KhuVuc kv : dsKV) {
-    	        if (khuVuc.equalsIgnoreCase(kv.getTenKhuVuc())) {
-    	            for (Phong ph : dsPhong) {
-    	                if (tenPhong.equalsIgnoreCase(ph.getTenPhong())) {
-    	                    for (Ban b : dsBan) {
-    	                        if (tenBan.equalsIgnoreCase(b.getSoBan())) {
-    	                            for (NhanVien nv : dsNV) {
-    	                                if (nhanVien.equalsIgnoreCase(nv.getHoTenNV())) {
-    	                                    for (KhachHang kh : dsKH) {
-    	                                        if (khachHang.equalsIgnoreCase(kh.getTenKH())) {
-    	                                            PhieuDatBan p = new PhieuDatBan(ma, kv,ph, b, soLuong, ngayDat, ngayLap, gio, kh, nv);
-    	                                            
-    	                                            if (phieu_dao.themPhieu(p)) {
-    	                                                modelPhieu.addRow(new Object[]{p.getMaPhieu(), kv.getTenKhuVuc(), ph.getTenPhong(), b.getSoBan(), p.getSoLuongNguoi(),
-    	                                                        p.getNgayDat(), p.getNgayLap(), p.getGioDat(), kh.getTenKH(), nv.getHoTenNV()});
-    	                                            } else {
-    	                                                JOptionPane.showMessageDialog(null, "Trùng mã", "Lỗi", JOptionPane.ERROR_MESSAGE);
-    	                                            }
-    	                                            return;
-    	                                        }
-    	                                    }
-    	                                }
-    	                            }
-    	                        }
-    	                    }
-    	                }
-    	            }
-    	        }
-    	    }
-		}
 
-		if (o.equals(btn_Xoa)) {
-            int r = table.getSelectedRow();
-            if (r != -1) {
-                String maPhieu = (String) modelPhieu.getValueAt(r, 0);
-                modelPhieu.removeRow(r);
-                phieu_dao.xoaPhieu(maPhieu);
-            }
-        }
+	        KhuVuc kv = timTenKhuVuc(dsKV, khuVuc);
+	        Phong ph = timTenPhong(dsPhong, tenPhong);
+	        Ban ban = timTenBan(dsBan, tenBan);
+	        NhanVien nv = timTenNhanVien(dsNV, nhanVien);
+	        KhachHang kh = timTenKhachHang(dsKH, khachHang);
 
-		if (o.equals(btn_xoaRong)) {
-		    spn_ngayThang.setValue(new Date());
-		    cmb_gioDat.setSelectedIndex(0);
-		    cmb_soLuongNguoi.setSelectedIndex(0);
-		    cmb_khuVuc.setSelectedIndex(0);
-		    cmb_ban.setSelectedIndex(0);
-		    cmb_khachHang.setSelectedIndex(0);
-		    cmb_nhanVien.setSelectedIndex(0);
-		    cmbPhong.setSelectedIndex(0);
-		}
+	        if (kv != null && ph != null && ban != null && nv != null && kh != null) {
+	            PhieuDatBan p = new PhieuDatBan(ma, kv, ph, ban, soLuong, ngayDat, ngayLap, gio, kh, nv);
+	            if (phieu_dao.themPhieu(p,ngayDat)) {
+	                modelPhieu.addRow(new Object[]{p.getMaPhieu(), kv.getTenKhuVuc(), ph.getTenPhong(), ban.getSoBan(), p.getSoLuongNguoi(),
+	                        p.getNgayDat(), p.getNgayLap(), p.getGioDat().trim(), kh.getTenKH(), nv.getHoTenNV()});
+	                JOptionPane.showMessageDialog(null, "Thêm thành công");
+	    
+	            } else {
+	                JOptionPane.showMessageDialog(null, "Trùng mã", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	            }
+	        }
+	    }
+
+	    if (o.equals(btnXoa)) {
+	        int r = table.getSelectedRow();
+	        if (r != -1) {
+	            String maPhieu = (String) modelPhieu.getValueAt(r, 0);
+	            modelPhieu.removeRow(r);
+	            phieu_dao.xoaPhieu(maPhieu);
+	        }
+	    }
+
+	    if (o.equals(btnxoaRong)) {
+	        spnngayThang.setValue(new Date());
+	        cmbgioDat.setSelectedIndex(0);
+	        cmbsoLuongNguoi.setSelectedIndex(0);
+	        cmbkhuVuc.setSelectedIndex(0);
+	        cmbban.setSelectedIndex(0);
+	        cmbkhachHang.setSelectedIndex(0);
+	        cmbnhanVien.setSelectedIndex(0);
+	        cmbPhong.setSelectedIndex(0);
+	    }
+	    if (o.equals(btnLuu)) {
+	        Date selectedDate = (Date) spnngayThang.getValue();
+	        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+	        String ngayDat = formatter.format(selectedDate);
+	        String gio = String.valueOf(cmbgioDat.getSelectedItem());
+	        int soLuong = (int) cmbsoLuongNguoi.getSelectedItem();
+	        String khuVuc = String.valueOf(cmbkhuVuc.getSelectedItem());
+	        String khachHang = String.valueOf(cmbkhachHang.getSelectedItem());
+	        String ma = txtmaPhieu.getText();
+	        String nhanVien = String.valueOf(cmbnhanVien.getSelectedItem());
+	        String tenBan = String.valueOf(cmbban.getSelectedItem());
+	        String tenPhong = String.valueOf(cmbPhong.getSelectedItem());
+
+	        try {
+	            phieu_dao.capNhatPhieu(ma,khuVuc,tenPhong,tenBan,soLuong,ngayDat,gio,khachHang,nhanVien);
+
+	            int rowCount = modelPhieu.getRowCount();
+	            for (int i = 0; i < rowCount; i++) {
+	                if (modelPhieu.getValueAt(i, 0).equals(ma)) {
+	                    modelPhieu.setValueAt(khuVuc, i, 1);
+	                    modelPhieu.setValueAt(tenPhong, i, 2);
+	                    modelPhieu.setValueAt(tenBan, i, 3);
+	                    modelPhieu.setValueAt(soLuong, i, 4);
+	                    modelPhieu.setValueAt(ngayDat, i, 5);
+	                    modelPhieu.setValueAt(gio, i, 7);
+	                    modelPhieu.setValueAt(khachHang, i, 8);
+	                    modelPhieu.setValueAt(nhanVien, i, 9);
+	                    break;
+	                }
+	            }
+
+	            spnngayThang.setValue(new Date());
+	            cmbgioDat.setSelectedIndex(0);
+	            cmbsoLuongNguoi.setSelectedIndex(0);
+	            cmbkhuVuc.setSelectedIndex(0);
+	            cmbban.setSelectedIndex(0);
+	            cmbkhachHang.setSelectedIndex(0);
+	            cmbnhanVien.setSelectedIndex(0);
+	            cmbPhong.setSelectedIndex(0);
+
+	            JOptionPane.showMessageDialog(null, "Dữ liệu đã được lưu thành công");
+	        } catch (Exception e2) {
+	            e2.printStackTrace();
+	            JOptionPane.showMessageDialog(null, "Lỗi khi lưu dữ liệu vào cơ sở dữ liệu");
+	        }
+	    }
+
 	}
 
-		public void docDuLieuDBVaoTable() {
-		    List<PhieuDatBan> listPhieu = phieu_dao.layThongTin();
-		    for (PhieuDatBan p : listPhieu ) {
-		        modelPhieu.addRow(new Object[] {p.getMaPhieu(), p.getKhuVuc().getMaKhuVuc(), p.getPhong().getMaPhong(), p.getTenBan().getMaBan(), p.getSoLuongNguoi(),
-                        p.getNgayDat(), p.getNgayLap(), p.getGioDat(), p.getKhachHang().getTenKH(), p.getNhanVien().getHoTenNV()});
+	private KhuVuc timTenKhuVuc(ArrayList<KhuVuc> dsKV, String tenKhuVuc) {
+	    for (KhuVuc kv : dsKV) {
+	        if (tenKhuVuc.equalsIgnoreCase(kv.getTenKhuVuc())) {
+	            return kv;
+	        }
+	    }
+	    return null;
+	}
+
+	private Phong timTenPhong(ArrayList<Phong> dsPhong, String tenPhong) {
+	    for (Phong ph : dsPhong) {
+	        if (tenPhong.equalsIgnoreCase(ph.getTenPhong())) {
+	            return ph;
+	        }
+	    }
+	    return null;
+	}
+
+	private Ban timTenBan(ArrayList<Ban> dsBan, String soBan) {
+	    for (Ban ban : dsBan) {
+	        if (soBan.equalsIgnoreCase(ban.getSoBan())) {
+	            return ban;
+	        }
+	    }
+	    return null;
+	}
+
+	private NhanVien timTenNhanVien(ArrayList<NhanVien> dsNV, String tenNV) {
+	    for (NhanVien nv : dsNV) {
+	        if (tenNV.equalsIgnoreCase(nv.getHoTenNV())) {
+	            return nv;
+	        }
+	    }
+	    return null;
+	}
+
+	private KhachHang timTenKhachHang(ArrayList<KhachHang> dsKH, String tenKH) {
+	    for (KhachHang kh : dsKH) {
+	        if (tenKH.equalsIgnoreCase(kh.getTenKH())) {
+	            return kh;
+	        }
+	    }
+	    return null;
+	}
+	private void capNhatCmbTheoKhuVuc(String chonKV) {
+	    cmbPhong.removeAllItems();
+	    cmbban.removeAllItems();
+	    
+	    ArrayList<Phong> listPhong = phong_dao.layThongTinTheoKhuVuc(chonKV);
+	    for (Phong phong : listPhong) {
+	        cmbPhong.addItem(phong.getTenPhong());
+	    }
+	    
+	    ArrayList<Ban> listBan = ban_dao.layThongTinTheoKhuVuc(chonKV);
+	    for (Ban ban : listBan) {
+	        cmbban.addItem(ban.getSoBan());
+	    }
+	}
+
+	private void capNhatCmbBanTheoPhong(String chonPhong) {
+	    cmbban.removeAllItems();
+	    ArrayList<Ban> dsB = ban_dao.layThongTinTheoPhong(chonPhong); 
+	    for (Ban ban : dsB) {
+	            cmbban.addItem(ban.getSoBan());
+	    }
+	}
+
+	private int soLuongGheBanDaChon() {
+	    String chonBan = cmbban.getSelectedItem().toString();
+	    int soGhe = 0;
+	    ArrayList<Ban> dsB = ban_dao.layThongTin(); 
+	    for (Ban ban : dsB) {
+	        if (ban.getSoBan().equals(chonBan)) {
+	            soGhe = ban.getSoGhe();
+	            break;
+	        }
+	    }
+
+	    return soGhe;
+	}
+
+	public void docDuLieuDBVaoTable() {
+	    List<PhieuDatBan> listPhieu = phieu_dao.layThongTin();
+	    for (PhieuDatBan p : listPhieu) {
+	        modelPhieu.addRow(new Object[]{p.getMaPhieu(), p.getKhuVuc().getMaKhuVuc(), p.getPhong().getMaPhong(), p.getTenBan().getMaBan(), p.getSoLuongNguoi(),
+	                p.getNgayDat(), p.getNgayLap(), p.getGioDat(), p.getKhachHang().getMaKH(), p.getNhanVien().getMaNV()});
+	    }
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		 int row = table.getSelectedRow();
+		    txtmaPhieu.setText(modelPhieu.getValueAt(row, 0).toString());
+		    cmbkhuVuc.setSelectedItem(modelPhieu.getValueAt(row, 1).toString());
+		    cmbPhong.setSelectedItem(modelPhieu.getValueAt(row, 2).toString());
+		    cmbban.setSelectedItem(modelPhieu.getValueAt(row, 3).toString());
+		    cmbsoLuongNguoi.setSelectedItem(modelPhieu.getValueAt(row, 4).toString());
+		    String dateString = modelPhieu.getValueAt(row, 5).toString(); 
+		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		    try {
+		        Date date = dateFormat.parse(dateString);
+		        spnngayThang.setValue(date);
+		    } catch (ParseException ex) {
+		        ex.printStackTrace(); 
 		    }
-		}
+		    cmbgioDat.setSelectedItem(modelPhieu.getValueAt(row, 7).toString());
+		    cmbkhachHang.setSelectedItem(modelPhieu.getValueAt(row, 8).toString());
+		    cmbnhanVien.setSelectedItem(modelPhieu.getValueAt(row, 9).toString());
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

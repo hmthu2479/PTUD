@@ -84,9 +84,15 @@ public class Frm_TimKiemNhanVien extends JPanel implements ActionListener {
         header.setFont(new Font("Arial", Font.BOLD, 20));
 
         String[] luaChon = {"Nam", "Nữ"};
-        TableColumn phaiColumn = tableNhanVien.getColumnModel().getColumn(2); // Changed column index from 3 to 2
+        TableColumn phaiColumn = tableNhanVien.getColumnModel().getColumn(2); 
         phaiColumn.setCellEditor(new DefaultCellEditor(new JComboBox<>(luaChon)));
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 
+		for (int i = 0; i < tableNhanVien.getColumnCount(); i++) {
+			tableNhanVien.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+		}
+        
         JScrollPane scrollPane = new JScrollPane(tableNhanVien);
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         add(scrollPane);

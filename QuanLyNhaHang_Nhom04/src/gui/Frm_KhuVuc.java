@@ -23,6 +23,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -30,7 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.border.EmptyBorder;
 
-public class Frm_KhuVuc extends JDialog implements ActionListener{
+public class Frm_KhuVuc extends JDialog implements ActionListener,MouseListener{
 
 	    private static final long serialVersionUID = 1L;
 	    private JTable table;
@@ -130,6 +132,7 @@ public class Frm_KhuVuc extends JDialog implements ActionListener{
 	        btnthem.addActionListener(this);
 	        btnxoa.addActionListener(this);
 	        btnluu.addActionListener(this);
+	        table.addMouseListener(this);
 	        docDuLieuDBVaoTable();
 	    }
 
@@ -161,23 +164,29 @@ public class Frm_KhuVuc extends JDialog implements ActionListener{
 			}
 		
 			if (o.equals(btnluu)) {
-		    int rowCount = modelKV.getRowCount();
-		    for (int i = 0; i < rowCount; i++) {
-		        String maKV = (String) modelKV.getValueAt(i, 0);
-		        String tenKV = (String) modelKV.getValueAt(i, 1);
+			    String maKV = txtmaKV.getText().trim();
+			    String tenKV = txttenKV.getText().trim();
+			    int rowCount = modelKV.getRowCount();
+			    for (int i = 0; i < rowCount; i++) {
+			        String tableMaKV = (String) modelKV.getValueAt(i, 0);
+			        if (tableMaKV.equals(maKV)) {
+			            KhuVuc kv = new KhuVuc(maKV, tenKV);
+			            try {
+			                kv_dao.capNhatKhuVuc(kv);
+			                modelKV.setValueAt(tenKV, i, 1);
+			            } catch (Exception e2) {
+			                e2.printStackTrace(); 
+			                JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu vào cơ sở dữ liệu");
+			                return; 
+			            }
+			            break;
+			        }
+			    }
+			    txtmaKV.setText("");
+                txttenKV.setText("");
+			    JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
+			}
 
-		        KhuVuc kv = new KhuVuc(maKV, tenKV);
-		        
-		        try {
-		            kv_dao.capNhatKhuVuc(kv);
-		        } catch (Exception e2) {
-		            e2.printStackTrace(); 
-		            JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu vào cơ sở dữ liệu");
-		            return; 
-		        }
-		    }
-		    JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
-		}
 	}
 
 		public void docDuLieuDBVaoTable() {
@@ -185,6 +194,38 @@ public class Frm_KhuVuc extends JDialog implements ActionListener{
 			for (KhuVuc kv : listKV ) {
 				modelKV.addRow(new Object [] {kv.getMaKhuVuc(),kv.getTenKhuVuc()});
 			}
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			int row = table.getSelectedRow();
+			txtmaKV.setText(modelKV.getValueAt(row, 0).toString());
+			txttenKV.setText(modelKV.getValueAt(row, 1).toString());
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
 		}
 	    
 	

@@ -7,6 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class KhuVucDAO {
+
     //lấy danh sách khu vực
     public ArrayList<KhuVuc> layThongTin(){
         ArrayList<KhuVuc> dsKhuVuc = new ArrayList<KhuVuc>();
@@ -27,6 +28,7 @@ public class KhuVucDAO {
         }
         return dsKhuVuc;
     }
+
     //thêm khu vực
     public boolean themKhuVuc(KhuVuc khuVuc){
         ConnectDB.getInstance();
@@ -81,25 +83,6 @@ public class KhuVucDAO {
         return n > 0;
     }
 
-    /*//kiểm tra mã khu vực
-    public boolean kiemTraKV(String maKhuVuc){
-        ConnectDB.getInstance();
-        Connection con = ConnectDB.getConnection();
-        PreparedStatement statement =null;
-        ResultSet rs = null;
-        try{
-            String SQL = "SELECT * FROM KhuVuc WHERE maKhuVuc = ?";
-            statement = con.prepareStatement(SQL);
-            statement.setString(1,maKhuVuc);
-            rs = statement.executeQuery();
-            if (rs.next()){
-                return true;
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return false;
-    }*/
 
 }
 

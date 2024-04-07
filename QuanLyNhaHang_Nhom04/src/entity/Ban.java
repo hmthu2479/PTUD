@@ -7,16 +7,26 @@ public class Ban {
 	private KhuVuc khuVuc;
 	private Phong phong;
 	public Ban(String maBan, String soBan, int soGhe, KhuVuc khuVuc, Phong phong) {
-		super();
 		this.maBan = maBan;
 		this.soBan = soBan;
 		this.soGhe = soGhe;
 		this.khuVuc = khuVuc;
 		this.phong = phong;
 	}
+	 public Ban(String maBan, String soBan, int soGhe, Phong phong) {
+	        this.maBan = maBan;
+	        this.soBan = String.valueOf(soBan);
+	        this.soGhe = soGhe;
+	        this.phong = phong;
+	    }
 	public Ban(String maBan) {
+		this.maBan = maBan;
+	}
+	public Ban(String maBan, String soBan, int soGhe) {
 		// TODO Auto-generated constructor stub
 		this.maBan = maBan;
+        this.soBan = soBan;
+        this.soGhe = soGhe;
 	}
 	public String getMaBan() {
 		return maBan;

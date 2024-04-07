@@ -8,32 +8,82 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class PhongDAO {
+	 public ArrayList<Phong> layThongTin() {
+	        ArrayList<Phong> dsPhong = new ArrayList<>();
+	        try {
+	            Connection con = ConnectDB.getInstance().getConnection();
+	            String SQL = "SELECT p.maPhong, p.tenPhong, k.tenKhuVuc, " +
+	                    "(SELECT SUM(b.soGhe) FROM Ban b WHERE b.maPhong = p.maPhong) AS soGhe " +
+	                    "FROM Phong p " +
+	                    "INNER JOIN KhuVuc k ON p.maKhuVuc = k.maKhuVuc";
 
-    public ArrayList<Phong> layThongTin() {
-        ArrayList<Phong> dsPhong = new ArrayList<>();
-        try {
-            Connection con = ConnectDB.getInstance().getConnection();
-            String SQL = "SELECT p.maPhong, p.tenPhong, k.tenKhuVuc, " +
-                         "       (SELECT SUM(b.soGhe) FROM Ban b WHERE b.maPhong = p.maPhong) AS soGhe " +
-                         "FROM Phong p " +
-                         "INNER JOIN KhuVuc k ON p.maKhuVuc = k.maKhuVuc";
+	            Statement statement = con.createStatement();
+	            ResultSet rs = statement.executeQuery(SQL);
+	            while (rs.next()) {
+	                String maPhong = rs.getString(1).trim();
+	                String tenPhong = rs.getString(2).trim();
+	                String tenKhuVuc = rs.getString(3).trim();
+	                int soGhe = rs.getInt(4);
+	                KhuVuc khuVuc = new KhuVuc(tenKhuVuc); 
+	                Phong p = new Phong(maPhong, tenPhong, khuVuc, soGhe);
+	                dsPhong.add(p);
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return dsPhong;
+	 }
+	 public ArrayList<Phong> layThongTinTheoKhuVuc(String tenKhuVuc) {
+		    ArrayList<Phong> dsPhong = new ArrayList<>();
+		    try {
+		        Connection con = ConnectDB.getInstance().getConnection();
+		        String SQL = "SELECT p.maPhong, p.tenPhong, k.tenKhuVuc, " +
+		                "(SELECT SUM(b.soGhe) FROM Ban b WHERE b.maPhong = p.maPhong) AS soGhe " +
+		                "FROM Phong p " +
+		                "INNER JOIN KhuVuc k ON p.maKhuVuc = k.maKhuVuc " +
+		                "WHERE k.tenKhuVuc = ?";
 
-            Statement statement = con.createStatement();
-            ResultSet rs = statement.executeQuery(SQL);
-            while (rs.next()) {
-                String maPhong = rs.getString(1).trim();
-                String tenPhong = rs.getString(2).trim();
-                String tenKhuVuc = rs.getString(3).trim();
-                int soGhe = rs.getInt(4);
-                KhuVuc khuVuc = new KhuVuc(tenKhuVuc);
-                Phong p = new Phong(maPhong, tenPhong, khuVuc, soGhe);
-                dsPhong.add(p);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return dsPhong;
-    }
+		        PreparedStatement statement = con.prepareStatement(SQL);
+		        statement.setString(1, tenKhuVuc);
+		        ResultSet rs = statement.executeQuery();
+		        while (rs.next()) {
+		            String maPhong = rs.getString(1).trim();
+		            String tenPhong = rs.getString(2).trim();
+		            String tenKV = rs.getString(3).trim();
+		            int soGhe = rs.getInt(4);
+		            KhuVuc khuVuc = new KhuVuc(tenKV);
+		            Phong p = new Phong(maPhong, tenPhong, khuVuc, soGhe);
+		            dsPhong.add(p);
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+		    return dsPhong;
+		}
+	 public Phong layThongTinBangMaPhong(String maPhong) {
+		    Phong phong = null;
+		    try {
+		        Connection con = ConnectDB.getInstance().getConnection();
+		        String SQL = "SELECT p.maPhong, p.tenPhong, k.tenKhuVuc " +
+		                "FROM Phong p " +
+		                "INNER JOIN KhuVuc k ON p.maKhuVuc = k.maKhuVuc " +
+		                "WHERE k.tenKhuVuc = ?";
+		        PreparedStatement statement = con.prepareStatement(SQL);
+		        statement.setString(1, maPhong);
+		        ResultSet rs = statement.executeQuery();
+		        if (rs.next()) {
+		            String tenPhong = rs.getString(1).trim();
+		            String tenKhuVuc = rs.getString(2).trim();
+		            int soGhe = rs.getInt(3);
+		            KhuVuc khuVuc = new KhuVuc(tenKhuVuc);
+		            phong = new Phong(maPhong, tenPhong, khuVuc, soGhe);
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+		    return phong;
+		}
+
 
     public boolean themPhong(Phong phong) {
         try {
@@ -63,19 +113,24 @@ public class PhongDAO {
         return false;
     }
 
-    public boolean capNhatPhong(Phong phong) {
+    public void capNhatThongTinPhong(String maPhong, String tenPhong, String tenKhuVuc) throws SQLException {
+        Connection con = null;
+        PreparedStatement statement = null;
         try {
-            Connection con = ConnectDB.getInstance().getConnection();
-            String SQL = "UPDATE Phong SET tenPhong = ?, maKhuVuc = ?, soGhe = ? WHERE maPhong = ?";
-            PreparedStatement statement = con.prepareStatement(SQL);
-            statement.setString(1, phong.getTenPhong());
-            statement.setString(2, phong.getKhuVuc().getMaKhuVuc());
-            statement.setInt(3, phong.getSoGhe());
-            statement.setString(4, phong.getMaPhong());
-            return statement.executeUpdate() > 0;
+            con = ConnectDB.getInstance().getConnection();
+            String SQL = "UPDATE Phong " +
+                    "SET tenPhong = ?, maKhuVuc = (SELECT maKhuVuc FROM KhuVuc WHERE tenKhuVuc = ?) " +
+                    "WHERE maPhong = ?";
+
+            statement = con.prepareStatement(SQL);
+            statement.setString(1, tenPhong);
+            statement.setString(2, tenKhuVuc);
+            statement.setString(3, maPhong);
+            statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+            e.printStackTrace(); 
+        } 
     }
+
+
 }

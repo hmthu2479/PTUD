@@ -1,6 +1,4 @@
-/gui/
 /dao/
-/db/
+/gui/
 /entity/
-/dto/
-/model/
+/timKiem/

@@ -8,11 +8,6 @@ public class Phong {
     private KhuVuc khuVuc;
     private int soGhe;
 
-    
-    public Phong() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 
 	public Phong(String maPhong, String tenPhong, KhuVuc khuVuc, int soGhe) {
         super();
@@ -22,8 +17,8 @@ public class Phong {
         this.soGhe = soGhe;
     }
 
-    public Phong(String tenPhong) {
-        this.tenPhong = tenPhong;
+    public Phong(String maPhong) {
+        this.maPhong = maPhong;
     }
 
     public String getMaPhong() {
