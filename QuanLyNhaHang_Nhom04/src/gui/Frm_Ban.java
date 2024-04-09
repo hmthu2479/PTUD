@@ -12,7 +12,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -26,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -51,8 +54,6 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 	private JLabel lbltim;
 	private JTextField txttim;
 	private JButton btntim;
-	private JLabel lblmaBan;
-	private JTextField txtmaBan;
 	private JLabel lbltenBan;
 	private JTextField txttenBan;
 	private KhuVucDAO kvdao;
@@ -65,6 +66,8 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 	private JComboBox<String> cmbPhong;
 	private JLabel lblkhuVuc;
 	private JLabel lblphong;
+	private JButton btnxoaRong;
+	private JButton btnlamMoi;
 
     public Frm_Ban() {
     	try {
@@ -100,7 +103,7 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 
         JTableHeader header = table.getTableHeader();
         header.setPreferredSize(new Dimension(header.getPreferredSize().width, 40));
-        Color lightBlue = new Color(173, 216, 230); // Light blue color
+        Color lightBlue = new Color(173, 216, 230); 
         header.setBackground(lightBlue);
         header.setFont(new Font("Arial", Font.BOLD, 18));
 
@@ -109,17 +112,14 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
         pnlButton1.setBackground(new Color(255, 255, 255));
         pnlButton1.setPreferredSize(new Dimension(800, 35));
 
-        
-        lblmaBan = new JLabel("Nhập mã bàn: ");
-        lblmaBan.setFont(new Font("Tahoma", Font.BOLD, 14));
 
         cmbkhuVuc = new JComboBox<String>();
         cmbkhuVuc.setEditable(false);	
-		
 		ArrayList<KhuVuc> listKV = kvdao.layThongTin() ;
 		for (KhuVuc kv : listKV) {
 			cmbkhuVuc.addItem(kv.getTenKhuVuc());
 		}
+        cmbkhuVuc.setSelectedItem("Chọn khu vực");
         cmbPhong = new JComboBox<String>();
 		ArrayList<Phong> listPhong = phongdao.layThongTin() ;
 		for (Phong p : listPhong) {
@@ -129,7 +129,7 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 		    public void actionPerformed(ActionEvent e) {
 		        String chonKhuVuc = (String) cmbkhuVuc.getSelectedItem();
 		        cmbPhong.removeAllItems();
-		        ArrayList<Phong> chonPhongTuKV = phongdao.layThongTinTheoKhuVuc(chonKhuVuc);
+		        ArrayList<Phong> chonPhongTuKV = phongdao.layThongTinPhongTheoKhuVuc(chonKhuVuc);
 		        for (Phong p : chonPhongTuKV) {
 		            cmbPhong.addItem(p.getTenPhong());
 		        }
@@ -138,11 +138,7 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 
 		cmbkhuVuc.setFont(new Font("Tahoma", Font.BOLD, 15));
 		cmbPhong.setFont(new Font("Tahoma", Font.BOLD, 15));
-        txtmaBan = new JTextField(10);
-        txtmaBan.setFont(new Font("Tahoma", Font.BOLD, 15));
-        pnlButton1.add(lblmaBan);
-        pnlButton1.add(Box.createHorizontalStrut(3));
-        pnlButton1.add(txtmaBan);
+		cmbPhong.setPreferredSize(new Dimension(150, 15));
         pnlButton1.add(Box.createHorizontalStrut(6));
         lblkhuVuc = new JLabel("Chọn khu vực: ");
         lblkhuVuc.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -158,8 +154,6 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
         txtsoGhe.setFont(new Font("Tahoma", Font.BOLD, 15));
         btnthem = new JButton("Thêm");
         btnthem.setFont(new Font("Tahoma", Font.BOLD, 16));
-        btnxoa = new JButton("Xóa");
-        btnxoa.setFont(new Font("Tahoma", Font.BOLD, 16));
         pnlButton1.add(lbltenBan);
         pnlButton1.add(Box.createHorizontalStrut(3));
         pnlButton1.add(txttenBan);
@@ -174,36 +168,38 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
         pnlButton1.add(lblphong);
         pnlButton1.add(cmbPhong);
         pnlButton1.add(Box.createHorizontalStrut(12));
-        JPanel pnlBtnThemXoa = new JPanel();
-        pnlBtnThemXoa.setLayout(new BoxLayout(pnlBtnThemXoa, BoxLayout.X_AXIS));
+        pnlButton1.add(btnthem);
+        pnlButton1.add(Box.createHorizontalStrut(5));
 
-        pnlBtnThemXoa.add(btnthem);
-        pnlBtnThemXoa.add(Box.createHorizontalStrut(10));
-        pnlBtnThemXoa.add(btnxoa);
-        pnlBtnThemXoa.setPreferredSize(new Dimension(155, 55));
-        pnlBtnThemXoa.setBackground(Color.white);
-        pnlButton1.add(pnlBtnThemXoa);
-        pnlButton1.setPreferredSize(new Dimension(150, 23));
-        
         JPanel pnlButton2 = new JPanel(new FlowLayout(FlowLayout.CENTER));
         pnlButton2.setBorder(BorderFactory.createEmptyBorder(7, 0, 7, 0));
 
         lbltim = new JLabel("Nhập tên bàn cần tìm: ");
         lbltim.setFont(new Font("Tahoma", Font.BOLD, 14));
-
         txttim = new JTextField();
         txttim.setFont(new Font("Tahoma", Font.BOLD, 15));
         txttim.setPreferredSize(new Dimension(150, 25)); 
         btntim = new JButton("Tìm");
         btntim.setFont(new Font("Tahoma", Font.BOLD, 15));
+        btnxoa = new JButton("Xóa");
+        btnxoa.setFont(new Font("Tahoma", Font.BOLD, 16));
+        btnxoaRong = new JButton("Xóa rỗng");
+        btnxoaRong.setFont(new Font("Tahoma", Font.BOLD, 16));
         btnluu = new JButton("Lưu");
         btnluu.setFont(new Font("Tahoma", Font.BOLD, 16));
-
+        btnlamMoi = new JButton("Làm mới");
+        btnlamMoi.setFont(new Font("Tahoma", Font.BOLD, 16));
+        
         pnlButton2.add(lbltim);
         pnlButton2.add(txttim);
         pnlButton2.add(btntim);
-        pnlButton2.add(Box.createHorizontalStrut(10));
+        pnlButton2.add(Box.createHorizontalStrut(12));
+        pnlButton2.add(btnxoa);
+        pnlButton2.add(btnxoaRong);
         pnlButton2.add(btnluu);
+        pnlButton2.add(Box.createHorizontalStrut(12));
+        pnlButton2.add(btnlamMoi);
+
 
         pnlButton2.setBackground(new Color(255, 255, 255));
         pnlButton2.setPreferredSize(new Dimension(120, 55));
@@ -228,25 +224,29 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
         pnlContainer.add(pnlButton, BorderLayout.SOUTH);
         add(pnlContainer);
         pnlContainer.setBorder(new EmptyBorder(7, 15, 7, 15));
-        setSize(1290, 635);
+        setSize(1090, 635);
         
         btnthem.addActionListener(this);
         btnxoa.addActionListener(this);
         btntim.addActionListener(this);
         btnluu.addActionListener(this);
+        btnxoaRong.addActionListener(this);
+        btnlamMoi.addActionListener(this);
         table.addMouseListener(this);
         docDuLieuDBVaoTable();
     }
     
     	  		
-	public void docDuLieuDBVaoTable() {
-		
-		List<Ban> listBan = bandao.layThongTin();
-		for (Ban b : listBan ) {
-			modelBan.addRow(new Object [] {b.getMaBan(), b.getSoBan(),b.getSoGhe(),b.getKhuVuc().getMaKhuVuc(),b.getPhong().getMaPhong()});
-			
-		}
-	}
+    public void docDuLieuDBVaoTable() {
+        List<Ban> listBan = bandao.layThongTin();
+        for (Ban b : listBan) {
+            String maPhong = "";
+            if (b.getPhong() != null) {
+                maPhong = b.getPhong().getMaPhong();
+            }
+            modelBan.addRow(new Object[]{b.getMaBan(), b.getSoBan(), b.getSoGhe(), b.getKhuVuc().getMaKhuVuc(), maPhong});
+        }
+    }
 
 
 	@Override
@@ -255,7 +255,7 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 		Object o = e.getSource();
 	  	
 		if (o.equals(btnthem)) {
-		    String maBan = txtmaBan.getText();
+		    String maBan = maNgauNhien();
 		    String soBan = txttenBan.getText();
 		    int soGhe = Integer.parseInt(txtsoGhe.getText().trim());
 		    String khuVuc = String.valueOf(cmbkhuVuc.getSelectedItem());
@@ -266,20 +266,25 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 		    PhongDAO phongDao = new PhongDAO();
 		    ArrayList<Phong> dsPhong = phongDao.layThongTin();
 		    
-	        KhuVuc kv = timTenKhuVuc(dsKV, khuVuc);
-	        Phong ph = timTenPhong(dsPhong, phong);
-	        if (kv != null && ph != null ) {
-		    	 Ban b = new Ban(maBan, soBan, soGhe, kv, ph);
-                if (bandao.themBan(b)) {
-                    modelBan.addRow(new Object[]{b.getMaBan(), b.getSoBan(), b.getSoGhe(), kv.getTenKhuVuc(), ph.getTenPhong()});
-                } else {
-                    JOptionPane.showMessageDialog(null, "Trùng mã", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                }
-	        }
+		    KhuVuc kv = timTenKhuVuc(dsKV, khuVuc);
+		    Phong ph = timTenPhong(dsPhong, phong);
+		    
+		    if (kv != null) {
+		        Ban b = new Ban(maBan, soBan, soGhe, kv, ph);
+		        if (bandao.themBan(b)) {
+		            modelBan.addRow(new Object[]{b.getMaBan(), b.getSoBan(), b.getSoGhe(), kv.getTenKhuVuc(), ph.getTenPhong()});
+		            JOptionPane.showMessageDialog(this, "Thêm thành công");
+		            xoaRong();
+		        } else {
+		            JOptionPane.showMessageDialog(null, "Trùng mã", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		        }
+		    } 
+
+	    }	
+	    if(o.equals(btnlamMoi)) {
+	    	modelBan.setRowCount(0);
+	    	docDuLieuDBVaoTable();
 	    }
-		   
-
-
         if (o.equals(btnxoa)) {
             int r = table.getSelectedRow();
             if (r != -1) {
@@ -290,49 +295,70 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
         }
         
         if (o.equals(btntim)) {
-            String maPhong = txttim.getText();
+            String tenBan = txttim.getText();
+            ListSelectionModel timBan = table.getSelectionModel();
+            timBan.clearSelection(); 
             for (int i = 0; i < modelBan.getRowCount(); i++) {
-                Object maPhongRow = modelBan.getValueAt(i, 0);
-                if (maPhong.equals(maPhongRow.toString())) {
-                    table.setRowSelectionInterval(i, i);
-                    table.scrollRectToVisible(table.getCellRect(i, 0, true));
-                    return;
+                if (modelBan.getValueAt(i, 1).toString().contains(tenBan)) {
+                	timBan.addSelectionInterval(i, i); 
                 }
             }
-            JOptionPane.showMessageDialog(this, "Không tìm thấy mã");
+            if (timBan.isSelectionEmpty()) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy bàn");
+            }
+        }
+
+
+    
+        if(o.equals(btnxoaRong)) {
+        	xoaRong();
         }
         if (e.getSource() == btnluu) {
-            String maBan = txtmaBan.getText().trim();
-            String tenBan = txttenBan.getText().trim();
-            int soGhe = Integer.parseInt(txtsoGhe.getText().trim());
-            String khuVuc = String.valueOf(cmbkhuVuc.getSelectedItem());
-            String phong = String.valueOf(cmbPhong.getSelectedItem());
-            try {
-                bandao.capNhatThongTinBan(maBan, tenBan,soGhe, khuVuc,phong);
+            int r = table.getSelectedRow();
+            if (r != -1) { 
+            	// Lấy dữ liệu sau khi thay đổi
+                String maBan = (String) modelBan.getValueAt(r, 0);
+                String tenBan = txttenBan.getText().trim();
+                int soGhe = Integer.parseInt(txtsoGhe.getText().trim());
+                String khuVuc = String.valueOf(cmbkhuVuc.getSelectedItem()).trim();
+                String phong = String.valueOf(cmbPhong.getSelectedItem());
 
-                int rowCount = modelBan.getRowCount();
-                for (int i = 0; i < rowCount; i++) {
-                    if (modelBan.getValueAt(i, 0).equals(maBan)) {
-                    	modelBan.setValueAt(tenBan, i, 1);
-                    	modelBan.setValueAt(soGhe, i, 2);
-                    	modelBan.setValueAt(khuVuc, i, 3);
-                    	modelBan.setValueAt(phong, i, 4);
-                        break;
-                    }
-                }
-                txtmaBan.setText("");
-                txttenBan.setText("");
-                txtsoGhe.setText("");
-                cmbkhuVuc.setSelectedIndex(0);
-                cmbPhong.setSelectedIndex(0);
+                // Lấy dữ liệu chưa bị thay đổi trên bảng
+                String ban = (String) modelBan.getValueAt(r, 1);
+                int ghe = (int) modelBan.getValueAt(r, 2);
+                String kv = (String) modelBan.getValueAt(r, 3);
+                String p = (String) modelBan.getValueAt(r, 4);
+
                 
-                JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
-            } catch (Exception e2) {
-                e2.printStackTrace(); 
-                JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu vào cơ sở dữ liệu");
+                if (!tenBan.equals(ban) || soGhe != ghe || !khuVuc.equals(kv) || !phong.equals(p)) {
+                    try {
+                        bandao.capNhatThongTinBan(maBan, tenBan, soGhe, khuVuc, phong);
+                        modelBan.setValueAt(tenBan, r, 1);
+                        modelBan.setValueAt(soGhe, r, 2);
+                        modelBan.setValueAt(khuVuc, r, 3);
+                        modelBan.setValueAt(phong, r, 4);
+                        xoaRong();
+
+                        JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
+                    } catch (Exception e2) {
+                        e2.printStackTrace(); 
+                        JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu vào cơ sở dữ liệu");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Không có thay đổi nào để lưu");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn một hàng để cập nhật");
             }
-        }    
+        }
+
     }
+	private void xoaRong () {
+		txttenBan.setText("");
+        txtsoGhe.setText("");
+        cmbkhuVuc.setSelectedIndex(0);
+        cmbPhong.setSelectedIndex(0);
+	}
 	private KhuVuc timTenKhuVuc(ArrayList<KhuVuc> dsKV, String tenKhuVuc) {
 	    for (KhuVuc kv : dsKV) {
 	        if (tenKhuVuc.equalsIgnoreCase(kv.getTenKhuVuc())) {
@@ -350,13 +376,16 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 	    }
 	    return null;
 	}
-
+	private String maNgauNhien() {
+        Random rd = new Random();
+        int ma = rd.nextInt(1000);
+        return String.format("B%03d", ma); 
+    }
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		 int row = table.getSelectedRow();
-		    txtmaBan.setText(modelBan.getValueAt(row, 0).toString());
 		    txttenBan.setText(modelBan.getValueAt(row, 1).toString());
 		    txtsoGhe.setText(modelBan.getValueAt(row, 2).toString());
 		    cmbkhuVuc.setSelectedItem(modelBan.getValueAt(row, 3).toString());

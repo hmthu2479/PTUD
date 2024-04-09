@@ -27,6 +27,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -39,8 +40,6 @@ public class Frm_KhuVuc extends JDialog implements ActionListener,MouseListener{
 		private DefaultTableModel modelKV;
 		private JButton btnthem;
 		private JButton btnxoa;
-		private JLabel lblmaKV;
-		private JTextField txtmaKV;
 		private JLabel lbltenKV;
 		private JTextField txttenKV;
 		private KhuVucDAO kv_dao;
@@ -88,13 +87,6 @@ public class Frm_KhuVuc extends JDialog implements ActionListener,MouseListener{
 	        pnlButton.setPreferredSize(new Dimension(100, 35));
 	        pnlButton.setLayout(new BoxLayout(pnlButton, BoxLayout.X_AXIS));
 
-	        lblmaKV = new JLabel("Nhập mã khu vực: ");
-	        lblmaKV.setFont(new Font("Tahoma", Font.BOLD, 15));
-	        txtmaKV = new JTextField();
-	        txtmaKV.setFont(new Font("Tahoma", Font.BOLD, 15));
-	        pnlButton.add(lblmaKV);
-	        pnlButton.add(txtmaKV);
-	        pnlButton.add(Box.createHorizontalStrut(6));
 	        lbltenKV = new JLabel("Nhập tên khu vực: ");
 	        lbltenKV.setFont(new Font("Tahoma", Font.BOLD, 15));
 	        txttenKV = new JTextField();
@@ -141,7 +133,7 @@ public class Frm_KhuVuc extends JDialog implements ActionListener,MouseListener{
 			// TODO Auto-generated method stub
 			Object o = e.getSource();
 			if (o.equals(btnthem)){
-				String maKV = txtmaKV.getText();
+				String maKV = maNgauNhien();
 				String tenKV = txttenKV.getText();
 				KhuVuc kv = new KhuVuc(maKV, tenKV);
 				try {
@@ -149,6 +141,7 @@ public class Frm_KhuVuc extends JDialog implements ActionListener,MouseListener{
 				    kv_dao.themKhuVuc(kv);
 				    modelKV.addRow(new Object[] { kv.getMaKhuVuc(), kv.getTenKhuVuc()
 				    });
+				    txttenKV.setText("");
 				} catch (Exception e2) {
 				    e2.printStackTrace(); 
 				    JOptionPane.showMessageDialog(this, "Trùng mã");
@@ -164,43 +157,38 @@ public class Frm_KhuVuc extends JDialog implements ActionListener,MouseListener{
 			}
 		
 			if (o.equals(btnluu)) {
-			    String maKV = txtmaKV.getText().trim();
-			    String tenKV = txttenKV.getText().trim();
-			    int rowCount = modelKV.getRowCount();
-			    for (int i = 0; i < rowCount; i++) {
-			        String tableMaKV = (String) modelKV.getValueAt(i, 0);
-			        if (tableMaKV.equals(maKV)) {
+			    int selectedRow = table.getSelectedRow();
+			    if (selectedRow != -1) {
+			        String maKV = (String) modelKV.getValueAt(selectedRow, 0);
+			        String tenKV = txttenKV.getText().trim();
+			        try {
 			            KhuVuc kv = new KhuVuc(maKV, tenKV);
-			            try {
-			                kv_dao.capNhatKhuVuc(kv);
-			                modelKV.setValueAt(tenKV, i, 1);
-			            } catch (Exception e2) {
-			                e2.printStackTrace(); 
-			                JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu vào cơ sở dữ liệu");
-			                return; 
-			            }
-			            break;
+			            kv_dao.capNhatKhuVuc(kv);
+			            modelKV.setValueAt(tenKV, selectedRow, 1);
+			            JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
+			        } catch (Exception e2) {
+			            e2.printStackTrace(); 
+			            JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu vào cơ sở dữ liệu");
 			        }
+			        txttenKV.setText("");
 			    }
-			    txtmaKV.setText("");
-                txttenKV.setText("");
-			    JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
 			}
-
-	}
-
+		}
 		public void docDuLieuDBVaoTable() {
 			List<KhuVuc> listKV = kv_dao.layThongTin();
 			for (KhuVuc kv : listKV ) {
 				modelKV.addRow(new Object [] {kv.getMaKhuVuc(),kv.getTenKhuVuc()});
 			}
 		}
-
+		private String maNgauNhien() {
+	        Random rd = new Random();
+	        int ma = rd.nextInt(100);
+	        return String.format("KV%02d", ma); 
+	    }
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			// TODO Auto-generated method stub
 			int row = table.getSelectedRow();
-			txtmaKV.setText(modelKV.getValueAt(row, 0).toString());
 			txttenKV.setText(modelKV.getValueAt(row, 1).toString());
 		}
 

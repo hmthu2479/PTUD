@@ -77,11 +77,11 @@ public class KhachHangDAO {
         try{
         	String SQL = "UPDATE KhachHang SET tenKH = ?, phai = ?, sdt = ?, diaChi = ? WHERE maKH = ?";
             statement = con.prepareStatement(SQL);
-            statement.setString(1,khachHang.getMaKH());
-            statement.setString(2,khachHang.getTenKH());
-            statement.setString(3,khachHang.getPhai().trim());
-            statement.setString(4,khachHang.getSdt());
-            statement.setString(5,khachHang.getDiaChi());
+            statement.setString(1,khachHang.getTenKH());
+            statement.setString(2,khachHang.getPhai().trim());
+            statement.setString(3,khachHang.getSdt());
+            statement.setString(4,khachHang.getDiaChi());
+            statement.setString(5,khachHang.getMaKH());
             n = statement.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();

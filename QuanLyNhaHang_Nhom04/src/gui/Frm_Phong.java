@@ -12,6 +12,7 @@ import java.awt.event.MouseListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -25,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -50,8 +52,6 @@ public class Frm_Phong extends JDialog implements ActionListener, MouseListener 
 	private JLabel lbltim;
 	private JTextField txttim;
 	private JButton btntim;
-	private JLabel lblmaPhong;
-	private JTextField txtmaPhong;
 	private JLabel lbltenPhong;
 	private JTextField txttenPhong;
 	private KhuVucDAO kv_dao;
@@ -101,9 +101,6 @@ public class Frm_Phong extends JDialog implements ActionListener, MouseListener 
         pnlButton1.setBackground(new Color(255, 255, 255));
         pnlButton1.setPreferredSize(new Dimension(100, 35));
 
-        
-        lblmaPhong = new JLabel("Nhập mã phòng: ");
-        lblmaPhong.setFont(new Font("Tahoma", Font.BOLD, 14));
         cmbkhuVuc = new JComboBox<String>();
         cmbkhuVuc.setEditable(false);	
 		
@@ -112,11 +109,6 @@ public class Frm_Phong extends JDialog implements ActionListener, MouseListener 
 			cmbkhuVuc.addItem(kv.getTenKhuVuc());
 		}
 		cmbkhuVuc.setFont(new Font("Tahoma", Font.BOLD, 15));
-        txtmaPhong = new JTextField();
-        txtmaPhong.setFont(new Font("Tahoma", Font.BOLD, 15));
-        pnlButton1.add(lblmaPhong);
-        pnlButton1.add(Box.createHorizontalStrut(3));
-        pnlButton1.add(txtmaPhong);
         pnlButton1.add(Box.createHorizontalStrut(6));
         lbltenPhong = new JLabel("Nhập tên phòng: ");
         lbltenPhong.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -136,7 +128,7 @@ public class Frm_Phong extends JDialog implements ActionListener, MouseListener 
         JPanel pnlButton2 = new JPanel();
         pnlButton2.setBorder(BorderFactory.createEmptyBorder(8, 0, 0, 0));
         pnlButton2.add(Box.createHorizontalStrut(30));
-        lbltim = new JLabel("Nhập mã phòng cần tìm: ");
+        lbltim = new JLabel("Nhập tên phòng cần tìm: ");
         lbltim.setFont(new Font("Tahoma", Font.BOLD, 14));
         txttim = new JTextField();
         txttim.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -193,7 +185,7 @@ public class Frm_Phong extends JDialog implements ActionListener, MouseListener 
     	Object o = e.getSource();
     	  	
     	if (o.equals(btnthem)) {
-    	    String maPhong = txtmaPhong.getText().trim();
+    	    String maPhong = maNgauNhien();
     	    String tenPhong = txttenPhong.getText().trim();
     	    String khuVuc = String.valueOf(cmbkhuVuc.getSelectedItem());
     	    int soGhe = 0;
@@ -205,6 +197,8 @@ public class Frm_Phong extends JDialog implements ActionListener, MouseListener 
     	            Phong p = new Phong(maPhong, tenPhong, kv,soGhe);
     	                if (phong_dao.themPhong(p)) {
     	                    modelPhong.addRow(new Object[]{p.getMaPhong(), p.getTenPhong(), kv.getTenKhuVuc(),p.getSoGhe()});
+    	                    txttenPhong.setText("");
+    	                    cmbkhuVuc.setSelectedIndex(0);
     	                } else {
     	                    JOptionPane.showMessageDialog(null, "Trùng mã", "Lỗi", JOptionPane.ERROR_MESSAGE);
     	                }
@@ -224,45 +218,61 @@ public class Frm_Phong extends JDialog implements ActionListener, MouseListener 
         }
         
         if (o.equals(btntim)) {
-            String maPhong = txttim.getText();
+            String tenPhong = txttim.getText();
+            ListSelectionModel timBan = table.getSelectionModel();
+            timBan.clearSelection(); 
             for (int i = 0; i < modelPhong.getRowCount(); i++) {
-                Object maPhongRow = modelPhong.getValueAt(i, 0);
-                if (maPhong.equals(maPhongRow.toString())) {
-                    table.setRowSelectionInterval(i, i);
-                    table.scrollRectToVisible(table.getCellRect(i, 0, true));
-                    return;
+                if (modelPhong.getValueAt(i, 1).toString().contains(tenPhong)) {
+                	timBan.addSelectionInterval(i, i); 
                 }
             }
-            JOptionPane.showMessageDialog(this, "Không tìm thấy mã");
+            if (timBan.isSelectionEmpty()) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy phòng");
+            }
         }
+     
         if (e.getSource() == btnluu) {
-            String maPhong = txtmaPhong.getText().trim();
-            String tenPhong = txttenPhong.getText().trim();
-            String khuVuc = String.valueOf(cmbkhuVuc.getSelectedItem());
-            try {
-                phong_dao.capNhatThongTinPhong(maPhong, tenPhong, khuVuc);
-
-                int rowCount = modelPhong.getRowCount();
-                for (int i = 0; i < rowCount; i++) {
-                    if (modelPhong.getValueAt(i, 0).equals(maPhong)) {
-                        modelPhong.setValueAt(tenPhong, i, 1);
-                        modelPhong.setValueAt(khuVuc, i, 2);
-                        break;
-                    }
-                }
-                txtmaPhong.setText("");
-                txttenPhong.setText("");
-                cmbkhuVuc.setSelectedIndex(0);
+            int r = table.getSelectedRow();
+            if (r != -1) {
+                String maPhong = String.valueOf(modelPhong.getValueAt(r, 0)); 
+                String tenPhong = txttenPhong.getText().trim();
+                String khuVuc = String.valueOf(cmbkhuVuc.getSelectedItem());
                 
-                JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
-            } catch (Exception e2) {
-                e2.printStackTrace(); 
-                JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu vào cơ sở dữ liệu");
+                String ph = (String) modelPhong.getValueAt(r, 1);
+                String kv = (String) modelPhong.getValueAt(r, 2);
+
+                // Check if any changes have been made
+                if (!tenPhong.equals(ph) || !khuVuc.equals(kv)) {
+                    try {
+                        phong_dao.capNhatThongTinPhong(maPhong, tenPhong, khuVuc); 
+                        modelPhong.setValueAt(tenPhong, r, 1); 
+                        modelPhong.setValueAt(khuVuc, r, 2); 
+                        
+                        txttenPhong.setText("");
+                        cmbkhuVuc.setSelectedIndex(0);
+                        
+                        JOptionPane.showMessageDialog(this, "Dữ liệu đã được cập nhật thành công");
+                    } catch (Exception e2) {
+                        e2.printStackTrace(); 
+                        JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật dữ liệu vào cơ sở dữ liệu");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Không có thay đổi nào để lưu");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn một hàng để cập nhật");
             }
         }
+
+
+
 
 }
-	
+	private String maNgauNhien() {
+        Random rd = new Random();
+        int ma = rd.nextInt(1000);
+        return String.format("P%03d", ma); 
+    }
 	public void docDuLieuDBVaoTable() {
 		
 		List<Phong> listPhong = phong_dao.layThongTin();
@@ -274,7 +284,6 @@ public class Frm_Phong extends JDialog implements ActionListener, MouseListener 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		int row = table.getSelectedRow();
-		txtmaPhong.setText(modelPhong.getValueAt(row, 0).toString());
 		txttenPhong.setText(modelPhong.getValueAt(row, 1).toString());
 		cmbkhuVuc.setSelectedItem(modelPhong.getValueAt(row, 2).toString());
 	}

@@ -17,9 +17,9 @@ public class BanDAO {
 	        ConnectDB.getInstance().connect();
 	        Connection con = ConnectDB.getConnection();
 	        String SQL = "SELECT b.maBan, b.soBan, b.soGhe, k.tenKhuVuc, p.tenPhong " +
-		                "FROM Ban b " +
-		                "INNER JOIN KhuVuc k ON b.maKhuVuc = k.maKhuVuc " +
-		                "INNER JOIN Phong p ON b.maPhong = p.maPhong";		
+	                    "FROM Ban b " +
+	                    "INNER JOIN KhuVuc k ON b.maKhuVuc = k.maKhuVuc " +
+	                    "LEFT JOIN Phong p ON b.maPhong = p.maPhong";       
 	        Statement statement = con.createStatement();
 	        ResultSet rs = statement.executeQuery(SQL);
 	        while (rs.next()) {
@@ -38,15 +38,15 @@ public class BanDAO {
 	    }
 	    return dsBan;
 	}
+
 	public ArrayList<Ban> layThongTinTheoKhuVuc(String tenKhuVuc) {
 	    ArrayList<Ban> dsBan = new ArrayList<>();
 	    try {
 	        Connection con = ConnectDB.getInstance().getConnection();
 	        String SQL = "SELECT b.maBan, b.soBan, b.soGhe, p.maPhong " +
-	                     "FROM Ban b " +
-	                     "INNER JOIN Phong p ON b.maPhong = p.maPhong " +
-	                     "INNER JOIN KhuVuc k ON p.maKhuVuc = k.maKhuVuc " +
-	                     "WHERE k.tenKhuVuc = ?";
+                    "FROM Ban b " +
+                    "INNER JOIN Phong p ON b.maPhong = p.maPhong " +
+                    "WHERE p.maKhuVuc = ?";
 	        PreparedStatement statement = con.prepareStatement(SQL);
 	        statement.setString(1, tenKhuVuc);
 	        ResultSet rs = statement.executeQuery();
@@ -54,8 +54,8 @@ public class BanDAO {
 	            String maBan = rs.getString(1).trim();
 	            String soBan = rs.getString(2);
 	            int soGhe = rs.getInt(3);
-	            String maPhong = rs.getString(4).trim();
-	            Phong phong = new PhongDAO().layThongTinBangMaPhong(maPhong); 
+	            String maPhong = rs.getString(4);
+	            Phong phong = new PhongDAO().layThongTinBangMaPhong(maPhong.trim());
 	            Ban ban = new Ban(maBan, soBan, soGhe, phong);
 	            dsBan.add(ban);
 	        }
@@ -64,11 +64,13 @@ public class BanDAO {
 	    }
 	    return dsBan;
 	}
+
+
 	public ArrayList<Ban> layThongTinTheoPhong(String tenPhong) {
 	    ArrayList<Ban> dsBan = new ArrayList<>();
 	    try {
 	        Connection con = ConnectDB.getInstance().getConnection();
-	        String SQL = "SELECT b.maBan, b.soBan, b.soGhe " +
+	        String SQL = "SELECT b.maBan, b.soBan, b.soGhe, b.maPhong " +
 	                     "FROM Ban b " +
 	                     "INNER JOIN Phong p ON b.maPhong = p.maPhong " +
 	                     "WHERE p.tenPhong = ?";
@@ -79,7 +81,9 @@ public class BanDAO {
 	            String maBan = rs.getString(1).trim();
 	            String soBan = rs.getString(2);
 	            int soGhe = rs.getInt(3);
-	            Ban ban = new Ban(maBan, soBan, soGhe);
+	            String maPhong = rs.getString(4).trim();
+	            Phong phong = new PhongDAO().layThongTinBangMaPhong(maPhong);
+	            Ban ban = new Ban(maBan, soBan, soGhe, phong);
 	            dsBan.add(ban);
 	        }
 	    } catch (SQLException e) {
@@ -89,27 +93,29 @@ public class BanDAO {
 	}
 
 
+
     	//thêm Bàn
-    	public boolean themBan(Ban ban) {
-	        ConnectDB.getInstance();
-	        Connection con = ConnectDB.getConnection();
-	        PreparedStatement statement = null;
-	        
-	        String SQL = "insert into Ban (maBan, soBan, soGhe, maKhuVuc, maPhong) values (?, ?, ?,?,?)";
-	        int n = 0;
-	        try {
-	            statement = con.prepareStatement(SQL);
-	            statement.setString(1, ban.getMaBan());
-	            statement.setString(2, ban.getSoBan());
-	            statement.setInt(3, ban.getSoGhe());
-	            statement.setString(4, ban.getKhuVuc().getMaKhuVuc());
-	            statement.setString(5, ban.getPhong().getMaPhong());
-	            n = statement.executeUpdate();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	        return n > 0;
-    }
+	public boolean themBan(Ban ban) {
+	    ConnectDB.getInstance();
+	    Connection con = ConnectDB.getConnection();
+	    PreparedStatement statement = null;
+	    
+	    String SQL = "insert into Ban (maBan, soBan, soGhe, maKhuVuc, maPhong) values (?, ?, ?, ?, ?)";
+	    int n = 0;
+	    try {
+	        statement = con.prepareStatement(SQL);
+	        statement.setString(1, ban.getMaBan());
+	        statement.setString(2, ban.getSoBan());
+	        statement.setInt(3, ban.getSoGhe());
+	        statement.setString(4, ban.getKhuVuc().getMaKhuVuc());
+	        statement.setString(5, ban.getPhong().getMaPhong());
+	        n = statement.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return n > 0;
+	}
+
 	
     // Xóa khu vực
     public boolean xoaBan(String maBan){

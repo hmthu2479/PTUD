@@ -33,17 +33,17 @@ public class PhongDAO {
 	        }
 	        return dsPhong;
 	 }
-	 public ArrayList<Phong> layThongTinTheoKhuVuc(String tenKhuVuc) {
+	 public ArrayList<Phong> layThongTinPhongTheoKhuVuc(String tenKhuVuc) {
 		    ArrayList<Phong> dsPhong = new ArrayList<>();
+		    Connection con = null;
+		    PreparedStatement statement = null;
 		    try {
-		        Connection con = ConnectDB.getInstance().getConnection();
-		        String SQL = "SELECT p.maPhong, p.tenPhong, k.tenKhuVuc, " +
-		                "(SELECT SUM(b.soGhe) FROM Ban b WHERE b.maPhong = p.maPhong) AS soGhe " +
-		                "FROM Phong p " +
-		                "INNER JOIN KhuVuc k ON p.maKhuVuc = k.maKhuVuc " +
-		                "WHERE k.tenKhuVuc = ?";
-
-		        PreparedStatement statement = con.prepareStatement(SQL);
+		        con = ConnectDB.getInstance().getConnection();
+		        String sql = "SELECT p.maPhong, p.tenPhong, k.tenKhuVuc, p.soGhe " +
+		                     "FROM Phong p " +
+		                     "INNER JOIN KhuVuc k ON p.maKhuVuc = k.maKhuVuc " +
+		                     "WHERE k.tenKhuVuc = ?";
+		        statement = con.prepareStatement(sql);
 		        statement.setString(1, tenKhuVuc);
 		        ResultSet rs = statement.executeQuery();
 		        while (rs.next()) {
@@ -57,32 +57,34 @@ public class PhongDAO {
 		        }
 		    } catch (SQLException e) {
 		        e.printStackTrace();
-		    }
+		    } 
 		    return dsPhong;
 		}
+
 	 public Phong layThongTinBangMaPhong(String maPhong) {
 		    Phong phong = null;
 		    try {
 		        Connection con = ConnectDB.getInstance().getConnection();
-		        String SQL = "SELECT p.maPhong, p.tenPhong, k.tenKhuVuc " +
+		        String SQL = "SELECT p.maPhong, p.tenPhong, k.tenKhuVuc, p.soGhe " +
 		                "FROM Phong p " +
 		                "INNER JOIN KhuVuc k ON p.maKhuVuc = k.maKhuVuc " +
-		                "WHERE k.tenKhuVuc = ?";
+		                "WHERE p.maPhong = ?";
 		        PreparedStatement statement = con.prepareStatement(SQL);
 		        statement.setString(1, maPhong);
 		        ResultSet rs = statement.executeQuery();
 		        if (rs.next()) {
-		            String tenPhong = rs.getString(1).trim();
-		            String tenKhuVuc = rs.getString(2).trim();
-		            int soGhe = rs.getInt(3);
+		            String tenPhong = rs.getString(2).trim();
+		            String tenKhuVuc = rs.getString(3).trim();
+		            int soGhe = rs.getInt(4);
 		            KhuVuc khuVuc = new KhuVuc(tenKhuVuc);
-		            phong = new Phong(maPhong, tenPhong, khuVuc, soGhe);
+		            phong = new Phong(maPhong, tenPhong, khuVuc,soGhe);
 		        }
 		    } catch (SQLException e) {
 		        e.printStackTrace();
 		    }
 		    return phong;
 		}
+
 
 
     public boolean themPhong(Phong phong) {

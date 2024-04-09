@@ -49,6 +49,10 @@ public class Frm_TimKiemNhanVien extends JPanel implements ActionListener {
     private NhanVienDAO nv_dao;
     private JLabel lbNhap;
     private JLabel lbTitle;
+	private JTextField txtNhap1;
+	private JLabel lbNhap1;
+	private JButton tim1;
+	private JLabel lbHoac;
 
     public Frm_TimKiemNhanVien() {
         try {
@@ -98,24 +102,41 @@ public class Frm_TimKiemNhanVien extends JPanel implements ActionListener {
         add(scrollPane);
 
         jpS = new JPanel();
-        jpS.setBorder(new EmptyBorder(30, 400, 30, 400));
+        jpS.setBorder(new EmptyBorder(30, 80, 30, 80));
         jpS.setLayout(new BoxLayout(jpS, BoxLayout.X_AXIS));
         jpS.setBackground(new Color(173, 216, 230));
 
-        lbNhap = new JLabel("Nhập mã số cần tìm: ");
+        lbNhap = new JLabel("Nhập tên cần tìm: ");
         lbNhap.setFont(new Font("Arial", Font.BOLD, 20)); 
-        txtNhap = new JTextField(10);
+        txtNhap = new JTextField(8);
         txtNhap.setFont(new Font("Arial", Font.PLAIN, 20)); 
         tim = new JButton("Tìm");
         tim.setFont(new Font("Arial", Font.BOLD, 20)); 
+        lbHoac = new JLabel("Hoặc");
+        lbHoac.setFont(new Font("Arial", Font.BOLD, 20)); 
+        lbNhap1 = new JLabel("Nhập số điện thoại cần tìm: ");
+        lbNhap1.setFont(new Font("Arial", Font.BOLD, 20)); 
+        txtNhap1 = new JTextField(8);
+        txtNhap1.setFont(new Font("Arial", Font.PLAIN, 20)); 
+        tim1 = new JButton("Tìm");
+        tim1.setFont(new Font("Arial", Font.BOLD, 20)); 
 
         jpS.add(lbNhap);
         jpS.add(txtNhap);
+        jpS.add(Box.createHorizontalStrut(10));
         jpS.add(tim);
+        jpS.add(Box.createHorizontalStrut(15));
+        jpS.add(lbHoac);
+        jpS.add(Box.createHorizontalStrut(15));
+        jpS.add(lbNhap1);
+        jpS.add(txtNhap1);
+        jpS.add(Box.createHorizontalStrut(10));
+        jpS.add(tim1);
 
         add(jpS);
 
         tim.addActionListener(this);
+        tim1.addActionListener(this);
         docDuLieuDBVaoTable();
         setVisible(true);
     }
@@ -124,17 +145,33 @@ public class Frm_TimKiemNhanVien extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();	
 		if (o.equals(tim)) {
-		    String maNV = txtNhap.getText();
-		    for (int i = 0; i < modelNV.getRowCount(); i++) {
-		        Object maNVRow = modelNV.getValueAt(i, 0); 
-		        if (maNV.equals(maNVRow)) { 
-		            tableNhanVien.setRowSelectionInterval(i, i);
-		            tableNhanVien.scrollRectToVisible(tableNhanVien.getCellRect(i, 0, true));
-		            return;
-		        }
-		    }
-		    JOptionPane.showMessageDialog(this, "Không tìm thấy mã");
-		}
+            String tenNV = txtNhap.getText();
+            List<Integer> timNV = new ArrayList<>();
+            for (int i = 0; i < modelNV.getRowCount(); i++) {
+                if (modelNV.getValueAt(i, 1).toString().contains(tenNV)) {
+                	timNV.add(i);
+                }
+            }
+            if (!timNV.isEmpty()) {
+                tableNhanVien.setRowSelectionInterval(timNV.get(0), timNV.get(timNV.size() - 1));
+            } else {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên");
+            }
+        }
+		if (o.equals(tim1)) {
+            String sdtNV = txtNhap1.getText();
+            List<Integer> timNV = new ArrayList<>();
+            for (int i = 0; i < modelNV.getRowCount(); i++) {
+                if (modelNV.getValueAt(i, 4).toString().contains(sdtNV)) {
+                	timNV.add(i);
+                }
+            }
+            if (!timNV.isEmpty()) {
+                tableNhanVien.setRowSelectionInterval(timNV.get(0), timNV.get(timNV.size() - 1));
+            } else {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên");
+            }
+        }
 	}
 
 	public void docDuLieuDBVaoTable() {

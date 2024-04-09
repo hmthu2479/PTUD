@@ -21,7 +21,11 @@ public class Phong {
         this.maPhong = maPhong;
     }
 
-    public String getMaPhong() {
+    public Phong() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public String getMaPhong() {
         return maPhong;
     }
 

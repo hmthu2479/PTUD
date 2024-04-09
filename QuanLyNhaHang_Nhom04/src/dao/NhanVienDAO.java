@@ -77,14 +77,13 @@ public class NhanVienDAO {
         PreparedStatement statement =null;
         int n = 0;
         try{
-        	String SQL = "UPDATE NhanVien SET maNV = ?, tenNV = ?, phai = ?, tuoi = ?, sdt = ? WHERE maNV = ?";
+        	String SQL = "UPDATE NhanVien SET tenNV = ?, phai = ?, tuoi = ?, sdt = ? WHERE maNV = ?";
             statement = con.prepareStatement(SQL);
-            statement.setString(1, nhanVien.getMaNV().trim());
-            statement.setString(2, nhanVien.getHoTenNV().trim());
-            statement.setString(3, nhanVien.getPhai().trim());
-            statement.setInt(4, nhanVien.getTuoi());
-            statement.setString(5, nhanVien.getSdt().trim());
-            statement.setString(6, nhanVien.getMaNV().trim());
+            statement.setString(1, nhanVien.getHoTenNV().trim());
+            statement.setString(2, nhanVien.getPhai().trim());
+            statement.setInt(3, nhanVien.getTuoi());
+            statement.setString(4, nhanVien.getSdt().trim());
+            statement.setString(5, nhanVien.getMaNV().trim());
 
 
             n = statement.executeUpdate();
@@ -92,26 +91,6 @@ public class NhanVienDAO {
             e.printStackTrace();
         }
         return n>0;
-    }
-
-    //kiểm tra mã nhân viên
-    public boolean kiemTraMaNV(String maNV){
-        ConnectDB.getInstance();
-        Connection con = ConnectDB.getConnection();
-        PreparedStatement statement =null;
-        ResultSet rs = null;
-        try{
-            String SQL = "SELECT * FROM NhanVien WHERE maNV = ?";
-            statement = con.prepareStatement(SQL);
-            statement.setString(1,maNV);
-            rs = statement.executeQuery();
-            if (rs.next()){
-                return true;
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return false;
     }
 
 }

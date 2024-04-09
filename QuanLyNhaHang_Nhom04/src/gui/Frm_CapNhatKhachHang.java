@@ -9,9 +9,12 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -29,6 +32,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -38,14 +42,10 @@ import javax.swing.table.TableColumn;
 
 import connectDB.ConnectDB;
 import dao.KhachHangDAO;
-import dao.NhanVienDAO;
 import entity.KhachHang;
-import entity.NhanVien;
 
-public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
+public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, MouseListener {
 	private JLabel lbtitle;
-	private JLabel lbMaKH;
-	private JTextField txtMaKH;
 	private JLabel lbhoTen;
 	private JTextField txthoTen;
 	private JLabel lbdiaChi;
@@ -91,8 +91,6 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
 		lbtitle.setFont(new Font("Arial", Font.BOLD, 35));
 		lbtitle.setForeground(Color.black);
 
-		lbMaKH = new JLabel("Mã khách hàng: ");
-		txtMaKH = new JTextField();
 		lbhoTen = new JLabel("Họ tên: ");
 		txthoTen = new JTextField();
 		phai = new JLabel("Phái: ");
@@ -108,8 +106,6 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
 		
 
 		JPanel jpFields = new JPanel(new GridLayout(0, 1));
-		jpFields.add(lbMaKH);
-		jpFields.add(txtMaKH);
 		jpFields.add(lbhoTen);
 		jpFields.add(txthoTen);
 		jpFields.add(lbsdt);
@@ -130,7 +126,7 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
 		
 		Dimension textFieldSize = new Dimension(200, 30);
 		Font textFieldFont = new Font("Arial", Font.BOLD, 18); 
-		JTextField[] textFields = {txtMaKH, txthoTen, txtdiaChi, txtsdt};
+		JTextField[] textFields = {txthoTen, txtdiaChi, txtsdt};
 
 		for (JTextField textField : textFields) {
 		    textField.setPreferredSize(textFieldSize);
@@ -138,7 +134,6 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
 		    textField.setFont(textFieldFont);
 		}
 		
-		lbMaKH.setHorizontalAlignment(JLabel.CENTER);
 		lbhoTen.setHorizontalAlignment(JLabel.CENTER);
 		lbdiaChi.setHorizontalAlignment(JLabel.CENTER);
 		lbsdt.setHorizontalAlignment(JLabel.CENTER);
@@ -160,7 +155,6 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
 		emptyPanel.setBackground(new Color(204, 235, 150)); 
 		add(emptyPanel,BorderLayout.CENTER);
 
-        lbMaKH.setFont(lbMaKH.getFont().deriveFont(Font.BOLD, 20));
         lbhoTen.setFont(lbhoTen.getFont().deriveFont(Font.BOLD, 20));
         lbdiaChi.setFont(lbdiaChi.getFont().deriveFont(Font.BOLD, 20));
         lbsdt.setFont(lbsdt.getFont().deriveFont(Font.BOLD, 20));
@@ -194,7 +188,7 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
         header.setFont(new Font("Arial", Font.BOLD, 20));
 		
 		String[] luaChon = {"Nam", "Nữ"};
-        TableColumn phaiColumn = tableKhachHang.getColumnModel().getColumn(3);
+        TableColumn phaiColumn = tableKhachHang.getColumnModel().getColumn(2);
         phaiColumn.setCellEditor(new DefaultCellEditor(new JComboBox<>(luaChon)));
         
         JScrollPane scrollPane = new JScrollPane(tableKhachHang);
@@ -209,8 +203,9 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
                 
 		bTrai.setLayout(new BoxLayout(bTrai, BoxLayout.X_AXIS));
 		bTrai.setBackground(new Color(204, 235, 150));
-			bTrai.add(lbNhap = new JLabel("Nhập mã số cần tìm: "));
+			bTrai.add(lbNhap = new JLabel("Nhập tên cần tìm: "));
 			bTrai.add(txtNhap = new JTextField(15));
+			txtNhap.setFont(new Font("Arial", Font.BOLD, 16));
 			bTrai.add(tim = new JButton("Tìm"));
 			lbNhap.setFont(textFieldFont);
 			txthoTen.setFont(textFieldFont);
@@ -245,6 +240,7 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
 		xoa.addActionListener(this);
 		tim.addActionListener(this);
 		luu.addActionListener(this);
+		tableKhachHang.addMouseListener(this);
 		docDuLieuDBVaoTable();
 		setVisible(true);
 		
@@ -254,7 +250,7 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o.equals(them)) {
-			String maKH = txtMaKH.getText();
+			String maKH = maNgauNhien();
 			String tenKH = txthoTen.getText();
 			String phai = nam.isSelected()?"Nam" : nu.isSelected()?"Nữ":"";
 			String diaChi = txtdiaChi.getText();
@@ -273,27 +269,48 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
 			    JOptionPane.showMessageDialog(this, "Trùng mã");
 			    return;
 			}
-		}if (o.equals(luu)) {
-		    int rowCount = modelKH.getRowCount();
-		    for (int i = 0; i < rowCount; i++) {
-		        String maKH = (String) modelKH.getValueAt(i, 0);
-		        String tenKH = (String) modelKH.getValueAt(i, 1);
-		        String phai = (String) modelKH.getValueAt(i, 2);
-		        String soDienThoai = (String) modelKH.getValueAt(i, 3);
-		        String diaChi = (String) modelKH.getValueAt(i, 4);
-
-		        KhachHang kh = new KhachHang(maKH, tenKH, phai, soDienThoai, diaChi);
+		}
+		if (o.equals(luu)) {
+		    int r = tableKhachHang.getSelectedRow();
+		    if (r != -1) {
+		        String maKH = (String) modelKH.getValueAt(r, 0);
+		        String tenKH = txthoTen.getText().trim();
+		        String phai = nam.isSelected() ? "Nam" : "Nữ";
+		        String sdt = txtsdt.getText().trim();
+		        String diaChi = txtdiaChi.getText().trim();
 		        
-		        try {
-		            kh_dao.capNhatKhachHang(kh);
-		        } catch (Exception e2) {
-		            e2.printStackTrace(); 
-		            JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu vào cơ sở dữ liệu");
-		            return;
+		        if (!tenKH.equals(modelKH.getValueAt(r, 1)) || !phai.equals(modelKH.getValueAt(r, 2)) || !sdt.equals(modelKH.getValueAt(r, 3)) || !diaChi.equals(modelKH.getValueAt(r, 4))) {
+		            KhachHang kh = new KhachHang(maKH, tenKH, phai, sdt, diaChi);
+		            try {
+		                kh_dao.capNhatKhachHang(kh);
+		                
+		                modelKH.setValueAt(kh.getTenKH(), r, 1); 
+		                modelKH.setValueAt(kh.getPhai(), r, 2);    
+		                modelKH.setValueAt(kh.getSdt(), r, 3);  
+		                modelKH.setValueAt(kh.getDiaChi(), r, 4);
+		                
+		                txthoTen.setText("");
+		                nam.setSelected(false);
+		                nu.setSelected(false);
+		                txtdiaChi.setText("");
+		                txtsdt.setText("");
+		                
+		                ButtonGroup gr = new ButtonGroup();
+		                gr.add(nam);
+		                gr.add(nu);
+		                gr.clearSelection();
+		                
+		                JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
+		            } catch (Exception e2) {
+		                e2.printStackTrace(); 
+		                JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu vào cơ sở dữ liệu");
+		            }
+		        } else {
+		            JOptionPane.showMessageDialog(this, "Không có thay đổi nào để lưu");
 		        }
+		    } else {
+		        JOptionPane.showMessageDialog(this, "Vui lòng chọn một hàng để cập nhật");
 		    }
-		    
-		    JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
 		}
 
 		
@@ -306,7 +323,6 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
 		    }
 		}
 		if(o.equals(xoaTrang)) {
-			txtMaKH.setText("");
 			txthoTen.setText("");
 			nam.setSelected(false);
 			nu.setSelected(false);
@@ -320,19 +336,24 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
 		}
 		
 		if (o.equals(tim)) {
-		    String maKH = txtNhap.getText();
-		    for (int i = 0; i < modelKH.getRowCount(); i++) {
-		        Object maKHRow = modelKH.getValueAt(i, 0); 
-		        if (maKH.equals(maKHRow)) { 
-		            tableKhachHang.setRowSelectionInterval(i, i);
-		            tableKhachHang.scrollRectToVisible(tableKhachHang.getCellRect(i, 0, true));
-		            return;
-		        }
-		    }
-		    JOptionPane.showMessageDialog(this, "Không tìm thấy mã");
-		}
+            String tenKH = txtNhap.getText();
+            ListSelectionModel timKH = tableKhachHang.getSelectionModel();
+            timKH.clearSelection(); 
+            for (int i = 0; i < modelKH.getRowCount(); i++) {
+                if (modelKH.getValueAt(i, 1).toString().contains(tenKH)) {
+                	timKH.addSelectionInterval(i, i); 
+                }
+            }
+            if (timKH.isSelectionEmpty()) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng");
+            }
+        }
 	}
-
+	private String maNgauNhien() {
+        Random rd = new Random();
+        int ma = rd.nextInt(1000);
+        return String.format("KH%03d", ma); 
+    }
 	public void docDuLieuDBVaoTable() {
 
 	    List<KhachHang> listKH = kh_dao.layThongTin();
@@ -340,6 +361,45 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener {
 	        modelKH.addRow(new Object[] { kh.getMaKH(), kh.getTenKH(), kh.getPhai().trim(),
 	        		kh.getSdt(), kh.getDiaChi() });
 	    }
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		int row = tableKhachHang.getSelectedRow();
+		txthoTen.setText(modelKH.getValueAt(row, 1).toString());
+		String gioiTinh = modelKH.getValueAt(row, 2).toString();
+	    if (gioiTinh.equals("Nam")) {
+	        nam.setSelected(true);
+	    } else {
+	        nu.setSelected(true);
+	    }
+		txtsdt.setText(modelKH.getValueAt(row, 3).toString());
+		txtdiaChi.setText(modelKH.getValueAt(row, 4).toString());
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

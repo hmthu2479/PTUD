@@ -25,11 +25,11 @@ public class PhieuDatBanDAO {
 	        Connection con = ConnectDB.getConnection();
 	        String SQL = "SELECT phieu.maPhieuDatBan, k.tenKhuVuc, p.tenPhong, b.soBan, phieu.soNguoi, phieu.ngayDat, phieu.ngayLap, phieu.gioDat, kh.tenKH, nv.tenNV " +
 	                "FROM PhieuDatBan phieu " +
-	                "INNER JOIN KhuVuc k ON phieu.maKhuVuc = k.maKhuVuc " +
+	                "LEFT JOIN KhuVuc k ON phieu.maKhuVuc = k.maKhuVuc " +
 	                "INNER JOIN KhachHang kh ON phieu.maKH = kh.maKH " +
 	                "INNER JOIN NhanVien nv ON phieu.maNV = nv.maNV " + 
 	                "INNER JOIN Ban b ON phieu.maBan = b.maBan " +
-	                "INNER JOIN Phong p ON phieu.maPhong = p.maPhong";
+	                "LEFT JOIN Phong p ON phieu.maPhong = p.maPhong";
 
 	        Statement statement = con.createStatement();
 	        ResultSet rs = statement.executeQuery(SQL);

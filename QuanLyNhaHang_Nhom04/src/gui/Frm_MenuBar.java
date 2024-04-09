@@ -8,6 +8,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,7 +42,7 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
         setTitle("Quản lý nhà hàng");
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-       
+        
         JMenu thucDon = new JMenu("Thực đơn");
         JMenuItem mniCapNhatMonNuoc = new JMenuItem("Cập nhật món nước");
         JMenuItem mniCapNhatMonAn = new JMenuItem("Cập nhật món ăn");
@@ -82,10 +83,6 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
         menuBar.add(khachHangMenu);
 
         ActionListener menuActionListener = new ActionListener() {
-
-
-
-
 			@Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == mniDatBan) {
@@ -160,27 +157,18 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
         preferredSize.height = 55;
         menuBar.setPreferredSize(preferredSize);
         menuBar.setBackground(Color.white);
-        
-        // Image on screen
-        JLabel imageLabel = new JLabel();
-        ImageIcon icon = new ImageIcon(getClass().getResource("/img/images.jpg"));
-        Image originalImage = icon.getImage();
-
-        imageLabel.addComponentListener(new ComponentAdapter() {
+     
+        JPanel panel = new JPanel(new BorderLayout()) {
+            // Phương thức paintComponent sẽ được ghi đè để vẽ hình ảnh lên panel
             @Override
-            public void componentResized(ComponentEvent e) {
-                int width = imageLabel.getWidth();
-                int height = imageLabel.getHeight();
-                Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-                imageLabel.setIcon(new ImageIcon(scaledImage));
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(new ImageIcon(getClass().getResource("/img/mainScreen.jpg")).getImage(), 0, 0, getWidth(), getHeight(), this);
             }
-        });
+        };
 
-        
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
+
         panel.add(menuBar, BorderLayout.NORTH);
-        panel.add(imageLabel, BorderLayout.CENTER);
         setContentPane(panel);
         setJMenuBar(menuBar);
         setVisible(true);
