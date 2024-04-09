@@ -27,8 +27,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -40,7 +38,6 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
     private JComboBox<String> cmbkhuVuc;
     private JComboBox<String> cmbban;
 	private JButton btnThem,btnTim, btnXoa, btnxoaRong;
-	private JTextField txtmaPhieu;
 	private DefaultTableModel modelPhieu;
 	private JTable table;
 	private JTextField txtTim;
@@ -233,50 +230,60 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
         pnlBan.add(cmbban, BorderLayout.CENTER);
         pnlN.add(pnlBan);  
         
-        //Buttons
-        JPanel pnlbtn = new JPanel(new GridLayout(2, 3));
-        pnlbtn.setBackground(new Color(160, 210, 180));
-        pnlbtn.setBorder(new EmptyBorder(5, 2, 0, 2));
-
-        int horizontalGap = 5; 
-        int verticalGap = 5; 
-
-        GridLayout gridLayout = (GridLayout) pnlbtn.getLayout();
-        gridLayout.setHgap(horizontalGap);
-        gridLayout.setVgap(verticalGap);
-
-        btnThem = new JButton("Thêm");
-        btnXoa = new JButton("Xóa");
-        btnxoaRong = new JButton("Xóa rỗng");
+        JPanel pnltim = new JPanel();
+        pnltim.setBackground(new Color(160, 210, 180));
+        pnltim.setLayout(new FlowLayout(FlowLayout.CENTER, 7, 5));
         lblTim = new JLabel("Nhập tên khách hàng cần tìm:");
         lblTim.setFont(new Font("Arial", Font.BOLD, 16));
         txtTim = new JTextField(12);
         txtTim.setFont(new Font("Arial", Font.BOLD, 16));
         btnTim = new JButton("Tìm kiếm");
+        pnltim.add(lblTim);
+        txtTim.setPreferredSize(new Dimension(200, 25)); 
+        pnltim.add(txtTim);
+        pnltim.add(btnTim);
+        
+        
+      //Buttons
+        JPanel pnlbtn = new JPanel(new GridLayout(1, 2,10,0));
+        pnlbtn.setBackground(new Color(160, 210, 180));
+        pnlbtn.setBorder(new EmptyBorder(30, 30, 0, 30));
+
+        btnThem = new JButton("Thêm");
+        btnXoa = new JButton("Xóa");
+        btnxoaRong = new JButton("Xóa rỗng");
+
         btnLamMoi = new JButton("Làm mới");
         btnLamMoi.setFont(new Font("Arial", Font.BOLD, 16));
         pnlbtn.add(btnThem);
         pnlbtn.add(btnXoa);
-        pnlbtn.add(btnxoaRong);
-        pnlbtn.add(btnLamMoi);
-        JPanel pnltim = new JPanel();
-        pnltim.setBackground(new Color(160, 210, 180));
-        pnltim.setLayout(new FlowLayout(FlowLayout.CENTER, 7, 7));
-        pnltim.add(lblTim);
-        txtTim.setPreferredSize(new Dimension(200, 23)); 
-        pnltim.add(txtTim);
-        pnltim.add(btnTim);
-
         Font bFont = new Font("Arial", Font.BOLD, 16);
         btnThem.setFont(bFont);
         btnXoa.setFont(bFont);
         btnxoaRong.setFont(bFont);
         btnTim.setFont(bFont);
+
+
+        JPanel pnlbtn1 = new JPanel(new GridLayout(1, 2,10,0));
+        pnlbtn1.setBackground(new Color(160, 210, 180));
+        pnlbtn1.setBorder(new EmptyBorder(30, 40, 0, 30));
+
+        pnlbtn1.add(btnxoaRong);
+        pnlbtn1.add(btnLamMoi);
+        
         pnlN.add(pnltim);
         pnlN.add(pnlbtn);
-
+        pnlN.add(pnlbtn1);
+        
+        JPanel pnlbtnLuu = new JPanel(new GridLayout(1, 2,10,0));
+        pnlbtnLuu.setBackground(new Color(160, 210, 180));
+        pnlbtnLuu.setBorder(new EmptyBorder(30, 30, 0, 180));
+        btnLuu = new JButton("Lưu");
+        Font btnFont = new Font("Arial", Font.BOLD, 17); 
+        btnLuu.setFont(btnFont);
+        pnlbtnLuu.add(btnLuu);
+        pnlN.add(pnlbtnLuu);
         mainPanel.add(pnlN, BorderLayout.NORTH);
-
         add(mainPanel);
 
         JPanel rightPanel = new JPanel(new BorderLayout());
@@ -306,27 +313,6 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
 
         mainPanel.add(rightPanel, BorderLayout.CENTER);
             
-        JPanel btnPanel = new JPanel();
-        btnPanel.setBackground(new Color(160, 210, 180));
-        btnPanel.setLayout(new FlowLayout(FlowLayout.RIGHT)); 
-        btnPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
-        
-        btnChonMon = new JButton("Chọn món");
-        btnLuu = new JButton("Lưu");
-
-        Font btnFont = new Font("Arial", Font.BOLD, 17); 
-        btnChonMon.setFont(btnFont);
-        btnLuu.setFont(btnFont);
-
-       
-        Dimension buttonSize = new Dimension(130, 35);
-        btnChonMon.setPreferredSize(buttonSize);
-        btnLuu.setPreferredSize(buttonSize);
-        
-        btnPanel.add(btnChonMon);
-        btnPanel.add(btnLuu);
-
-        mainPanel.add(btnPanel, BorderLayout.SOUTH);
                 
         btnThem.addActionListener(this );
         btnXoa.addActionListener(this);
