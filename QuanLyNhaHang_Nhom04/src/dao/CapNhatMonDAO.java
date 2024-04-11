@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 public class CapNhatMonDAO {
-    private static final String JDBC_URL = "jdbc:sqlserver://localhost:1433;databaseName=QuanLyNhaHang2";
+    private static final String JDBC_URL = "jdbc:sqlserver://localhost:1433;databaseName=QuanLyNhaHang";
     private static final String USERNAME = "sa";
     private static final String PASSWORD = "123";
 
