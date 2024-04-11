@@ -116,6 +116,21 @@ public class BanDAO {
 	    return n > 0;
 	}
 
+	public String layMaBanMoiNhat() {
+	    String ma = null;
+	    try {
+	        Connection connection = ConnectDB.getInstance().getConnection();
+	        Statement statement = connection.createStatement();
+	        ResultSet resultSet = statement.executeQuery("SELECT MAX(maBan) AS ma FROM Ban");
+	        if (resultSet.next()) {
+	            ma = resultSet.getString("ma");
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return ma;
+	}
 	
     // Xóa khu vực
     public boolean xoaBan(String maBan){

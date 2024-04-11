@@ -78,6 +78,7 @@ public class FrmTimKiemKhachHang extends JPanel implements ActionListener {
         tableKhachHang.setRowHeight(30);
         tableKhachHang.setFont(new Font("Arial", Font.BOLD, 18));
 
+
         JTableHeader header = tableKhachHang.getTableHeader();
         header.setPreferredSize(new Dimension(header.getPreferredSize().width, 30));
         header.setFont(new Font("Arial", Font.BOLD, 20));

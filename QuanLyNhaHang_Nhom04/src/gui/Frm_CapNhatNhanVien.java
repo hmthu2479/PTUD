@@ -170,6 +170,8 @@ public class Frm_CapNhatNhanVien extends JPanel implements ActionListener,MouseL
 		tableNhanVien = new JTable(modelNV);
 		tableNhanVien.setPreferredScrollableViewportSize(new Dimension(940, 570));
 		tableNhanVien.setRowHeight(30);
+        tableNhanVien.setEnabled(false);
+        tableNhanVien.setFocusable(false);
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -250,44 +252,69 @@ public class Frm_CapNhatNhanVien extends JPanel implements ActionListener,MouseL
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o.equals(them)) {
-			String maNV = maNgauNhien();
-			String tenNV = txtho.getText().trim();
-			String phai = nam.isSelected() ? "Nam" : nu.isSelected() ? "Nữ" : "";
-			int tuoi = Integer.parseInt(txtTuoi.getText().trim());
-			String soDienThoai = txtsdt.getText().trim();
-			NhanVien nv = new NhanVien(maNV, tenNV, phai, tuoi, soDienThoai);
+		    String maNV = maNgauNhien();
+		    String tenNV = txtho.getText().trim();
+		    String phai = nam.isSelected() ? "Nam" : nu.isSelected() ? "Nữ" : "";		
+		    int tuoi;
+		    try {
+		        tuoi = Integer.parseInt(txtTuoi.getText().trim());
+		        if (tuoi < 18 || tuoi > 60) {
+		            JOptionPane.showMessageDialog(this, "Tuổi phải nằm trong khoảng từ 18 đến 60");
+		            return;
+		        }
+		    } catch (NumberFormatException ex) {
+		        JOptionPane.showMessageDialog(this, "Tuổi phải là số");
+		        return;
+		    }
 
-			try {
-			    nv_dao.themNhanVien(nv);
+		    String soDienThoai = txtsdt.getText().trim();
+		    if (!soDienThoai.matches("\\d{10,11}")) {
+		        JOptionPane.showMessageDialog(this, "Số điện thoại không hợp lệ");
+		        return;
+		    }
+		    NhanVien nv = new NhanVien(maNV, tenNV, phai, tuoi, soDienThoai);
 
-			    modelNV.addRow(new Object[] { nv.getMaNV(), nv.getHoTenNV(),nv.getPhai(),
-			        nv.getTuoi(), nv.getSdt()
-			    });
-			} catch (Exception e2) {
-			    e2.printStackTrace(); 
-			    JOptionPane.showMessageDialog(this, "Trùng mã");
-			}
-		}if (o.equals(luu)) {
+		    try {
+		        nv_dao.themNhanVien(nv);
+
+		        modelNV.addRow(new Object[] { nv.getMaNV(), nv.getHoTenNV(),nv.getPhai(),
+		            nv.getTuoi(), nv.getSdt()
+		        });
+		    } catch (Exception e2) {
+		        e2.printStackTrace(); 
+		        JOptionPane.showMessageDialog(this, "Trùng mã");
+		    }
+		}
+			if (o.equals(luu)) {
 		    int r = tableNhanVien.getSelectedRow();
 		    if (r != -1) {
 		        String maNV = (String) modelNV.getValueAt(r, 0);
 		        String tenNV = txtho.getText().trim();
 		        String phai = nam.isSelected() ? "Nam" : "Nữ";
-		        int tuoi = 0;
-		        try {
-		            tuoi = Integer.parseInt(txtTuoi.getText().trim());
-		        } catch (NumberFormatException e1) {
-		            e1.printStackTrace();
-		        }
-		        String sdt = txtsdt.getText().trim();
-		        NhanVien nv = new NhanVien(maNV, tenNV, phai, tuoi, sdt);
+		        int tuoi;
+			    try {
+			        tuoi = Integer.parseInt(txtTuoi.getText().trim());
+			        if (tuoi < 18 || tuoi > 60) {
+			            JOptionPane.showMessageDialog(this, "Tuổi phải nằm trong khoảng từ 18 đến 60");
+			            return;
+			        }
+			    } catch (NumberFormatException ex) {
+			        JOptionPane.showMessageDialog(this, "Tuổi phải là số");
+			        return;
+			    }
+			    String soDienThoai = txtsdt.getText().trim();
+			    if (!soDienThoai.matches("\\d{10,11}")) {
+			        JOptionPane.showMessageDialog(this, "Số điện thoại không hợp lệ");
+			        return;
+			    }
+		        NhanVien nv = new NhanVien(maNV, tenNV, phai, tuoi, soDienThoai);
 		        
 		        String ten = (String) modelNV.getValueAt(r, 1);
 		        String Phai = (String) modelNV.getValueAt(r, 2);
 		        int Tuoi = (int) modelNV.getValueAt(r, 3);
 		        String Sdt = (String) modelNV.getValueAt(r, 4);
 		        
-		        if (!tenNV.equals(ten) || !phai.equals(Phai) || tuoi != Tuoi || !sdt.equals(Sdt)) {
+		        if (!tenNV.equals(ten) || !phai.equals(Phai) || tuoi != Tuoi || !soDienThoai.equals(Sdt)) {
 		            try {
 		                nv_dao.capNhatNhanVien(nv);
 		                modelNV.setValueAt(nv.getHoTenNV(), r, 1); 

@@ -88,6 +88,18 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
         spnngayThang = new JSpinner(dateModel);
         spnngayThang.setEditor(new JSpinner.DateEditor(spnngayThang, "dd/MM/yyyy"));
         spnngayThang.setFont(new Font("Arial", Font.BOLD, 20));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date selectedDate = (Date) spnngayThang.getValue();
+        Date currentDate = new Date(); // Current date
+
+        try {
+            selectedDate = dateFormat.parse(dateFormat.format(selectedDate));
+            currentDate = dateFormat.parse(dateFormat.format(currentDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        spnngayThang.setEnabled(!selectedDate.before(currentDate));
         pnlngayThang.add(spnngayThang, BorderLayout.CENTER);
         pnlN.add(pnlngayThang);
 

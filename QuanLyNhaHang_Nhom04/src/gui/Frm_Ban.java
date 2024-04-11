@@ -119,8 +119,10 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 		for (KhuVuc kv : listKV) {
 			cmbkhuVuc.addItem(kv.getTenKhuVuc());
 		}
-        cmbkhuVuc.setSelectedItem("Chọn khu vực");
+		cmbkhuVuc.revalidate();
+		cmbkhuVuc.repaint();
         cmbPhong = new JComboBox<String>();
+        cmbPhong.setEditable(false);
 		ArrayList<Phong> listPhong = phongdao.layThongTin() ;
 		for (Phong p : listPhong) {
 			cmbPhong.addItem(p.getTenPhong());
@@ -255,9 +257,16 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 		Object o = e.getSource();
 	  	
 		if (o.equals(btnthem)) {
-		    String maBan = maNgauNhien();
+		    String maBan = maTangDan();
 		    String soBan = txttenBan.getText();
-		    int soGhe = Integer.parseInt(txtsoGhe.getText().trim());
+		    int soGhe;
+		    try {
+		        soGhe = Integer.parseInt(txtsoGhe.getText().trim());
+		    } catch (NumberFormatException ex) {
+		        JOptionPane.showMessageDialog(this, "Vui lòng nhập số");
+		        return;
+		    }
+
 		    String khuVuc = String.valueOf(cmbkhuVuc.getSelectedItem());
 		    String phong = String.valueOf(cmbPhong.getSelectedItem());
 
@@ -319,7 +328,13 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
             	// Lấy dữ liệu sau khi thay đổi
                 String maBan = (String) modelBan.getValueAt(r, 0);
                 String tenBan = txttenBan.getText().trim();
-                int soGhe = Integer.parseInt(txtsoGhe.getText().trim());
+                int soGhe;
+    		    try {
+    		        soGhe = Integer.parseInt(txtsoGhe.getText().trim());
+    		    } catch (NumberFormatException ex) {
+    		        JOptionPane.showMessageDialog(this, "Vui lòng nhập số");
+    		        return;
+    		    }
                 String khuVuc = String.valueOf(cmbkhuVuc.getSelectedItem()).trim();
                 String phong = String.valueOf(cmbPhong.getSelectedItem());
 
@@ -376,11 +391,15 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 	    }
 	    return null;
 	}
-	private String maNgauNhien() {
-        Random rd = new Random();
-        int ma = rd.nextInt(1000);
-        return String.format("B%03d", ma); 
-    }
+	private int count = 0;
+
+	private String maTangDan() {
+	    String ma = bandao.layMaBanMoiNhat();
+	 // Lấy phần số của mã bàn (bỏ đi ký tự "B") và tăng giá trị lên 1
+	    count = Integer.parseInt(ma.substring(1)) + 1; 
+	    return String.format("B%03d", count);
+	}
+
 
 	@Override
 	public void mouseClicked(MouseEvent e) {

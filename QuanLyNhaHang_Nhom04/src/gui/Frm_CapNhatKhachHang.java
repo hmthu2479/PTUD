@@ -171,6 +171,7 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 		tableKhachHang = new JTable(modelKH);
 		tableKhachHang.setPreferredScrollableViewportSize(new Dimension(940, 570));
 		tableKhachHang.setRowHeight(30);
+
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -254,16 +255,20 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 			String tenKH = txthoTen.getText();
 			String phai = nam.isSelected()?"Nam" : nu.isSelected()?"Nữ":"";
 			String diaChi = txtdiaChi.getText();
-			String soDienThoai = txtsdt.getText();
+			String soDienThoai = txtsdt.getText().trim();
+		    if (!soDienThoai.matches("\\d{10,11}")) {
+		        JOptionPane.showMessageDialog(this, "Số điện thoại không hợp lệ");
+		        return;
+		    }
 			KhachHang kh = new KhachHang(maKH,tenKH,phai,soDienThoai,diaChi);
-
 			try {
 			    kh_dao.themKhachHang(kh);
 
 			    modelKH.addRow(new Object[] { kh.getMaKH(), kh.getTenKH(),kh.getPhai().trim(),
 			    		 kh.getSdt(),kh.getDiaChi()
 			    });
-			    JOptionPane.showMessageDialog(this, "Thêm thành công");
+			    xoaRong();
+			    JOptionPane.showMessageDialog(this, "Thêm thành công");		   
 			} catch (Exception e2) {
 			    e2.printStackTrace(); 
 			    JOptionPane.showMessageDialog(this, "Trùng mã");
@@ -277,6 +282,10 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 		        String tenKH = txthoTen.getText().trim();
 		        String phai = nam.isSelected() ? "Nam" : "Nữ";
 		        String sdt = txtsdt.getText().trim();
+			    if (!sdt.matches("\\d{10,11}")) {
+			        JOptionPane.showMessageDialog(this, "Số điện thoại không hợp lệ");
+			        return;
+			    }
 		        String diaChi = txtdiaChi.getText().trim();
 		        
 		        if (!tenKH.equals(modelKH.getValueAt(r, 1)) || !phai.equals(modelKH.getValueAt(r, 2)) || !sdt.equals(modelKH.getValueAt(r, 3)) || !diaChi.equals(modelKH.getValueAt(r, 4))) {
@@ -288,17 +297,7 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 		                modelKH.setValueAt(kh.getPhai(), r, 2);    
 		                modelKH.setValueAt(kh.getSdt(), r, 3);  
 		                modelKH.setValueAt(kh.getDiaChi(), r, 4);
-		                
-		                txthoTen.setText("");
-		                nam.setSelected(false);
-		                nu.setSelected(false);
-		                txtdiaChi.setText("");
-		                txtsdt.setText("");
-		                
-		                ButtonGroup gr = new ButtonGroup();
-		                gr.add(nam);
-		                gr.add(nu);
-		                gr.clearSelection();
+		                xoaRong();
 		                
 		                JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
 		            } catch (Exception e2) {
@@ -322,17 +321,9 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 		        kh_dao.xoaKhachHang(maKH);
 		    }
 		}
+		
 		if(o.equals(xoaTrang)) {
-			txthoTen.setText("");
-			nam.setSelected(false);
-			nu.setSelected(false);
-			txtdiaChi.setText("");
-			txtsdt.setText("");
-			//đặt lại phương thức xóa trắng
-    		ButtonGroup gr = new ButtonGroup();
-			gr.add(nam);
-			gr.add(nu);
-			gr.clearSelection();
+			xoaRong();
 		}
 		
 		if (o.equals(tim)) {
@@ -349,6 +340,18 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
             }
         }
 	}
+	private void xoaRong() {
+	    txthoTen.setText("");
+	    nam.setSelected(false);
+	    nu.setSelected(false);
+	    txtdiaChi.setText("");
+	    txtsdt.setText("");
+	    ButtonGroup gr = new ButtonGroup();
+	    gr.add(nam);
+	    gr.add(nu);
+	    gr.clearSelection();
+	}
+
 	private String maNgauNhien() {
         Random rd = new Random();
         int ma = rd.nextInt(1000);
