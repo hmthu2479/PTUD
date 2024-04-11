@@ -30,6 +30,21 @@ public class NhanVienDAO {
         }
         return dsNhanVien;
     }
+    public String layMaMoiNhat() {
+	    String ma = null;
+	    try {
+	        Connection connection = ConnectDB.getInstance().getConnection();
+	        Statement statement = connection.createStatement();
+	        ResultSet resultSet = statement.executeQuery("SELECT MAX(maNV) AS ma FROM NhanVien");
+	        if (resultSet.next()) {
+	            ma = resultSet.getString("ma");
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return ma;
+	}
     //thêm nhân viên
     public boolean themNhanVien(NhanVien nhanVien){
         ConnectDB.getInstance();

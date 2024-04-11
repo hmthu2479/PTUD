@@ -133,7 +133,7 @@ public class Frm_KhuVuc extends JDialog implements ActionListener,MouseListener{
 			// TODO Auto-generated method stub
 			Object o = e.getSource();
 			if (o.equals(btnthem)){
-				String maKV = maNgauNhien();
+				String maKV = maTangDan();
 				String tenKV = txttenKV.getText();
 				KhuVuc kv = new KhuVuc(maKV, tenKV);
 				try {
@@ -151,8 +151,12 @@ public class Frm_KhuVuc extends JDialog implements ActionListener,MouseListener{
 			    int r = table.getSelectedRow();
 			    if (r != -1) {
 			        String maKV = (String) modelKV.getValueAt(r, 0);
-			        modelKV.removeRow(r);
-			        kv_dao.xoaKhuVuc(maKV);
+			        
+			        int rs = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa khu vực này?");
+			        if (rs == JOptionPane.YES_OPTION) {
+			            modelKV.removeRow(r);
+			            kv_dao.xoaKhuVuc(maKV);
+			        }
 			    }
 			}
 		
@@ -180,11 +184,16 @@ public class Frm_KhuVuc extends JDialog implements ActionListener,MouseListener{
 				modelKV.addRow(new Object [] {kv.getMaKhuVuc(),kv.getTenKhuVuc()});
 			}
 		}
-		private String maNgauNhien() {
-	        Random rd = new Random();
-	        int ma = rd.nextInt(100);
-	        return String.format("KV%02d", ma); 
-	    }
+		
+		private int count = 0;
+
+		private String maTangDan() {
+		    String ma = kv_dao.layMaMoiNhat();
+		 // Lấy phần số của mã bàn (bỏ đi ký tự "KV") và tăng giá trị lên 1
+		    count = Integer.parseInt(ma.substring(2)) + 1; 
+		    return String.format("KV%02d", count);
+		}
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			// TODO Auto-generated method stub

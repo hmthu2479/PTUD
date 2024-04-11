@@ -353,7 +353,7 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
 	        } 
 	        String khuVuc = String.valueOf(cmbkhuVuc.getSelectedItem());
 	        String khachHang = String.valueOf(cmbkhachHang.getSelectedItem());
-	        String ma = maNgauNhien();
+	        String ma = maTangDan();
 	        String nhanVien = String.valueOf(cmbnhanVien.getSelectedItem());
 	        String tenBan = String.valueOf(cmbban.getSelectedItem());
 	        String tenPhong = String.valueOf(cmbPhong.getSelectedItem());
@@ -396,8 +396,12 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
 	        int r = table.getSelectedRow();
 	        if (r != -1) {
 	            String maPhieu = (String) modelPhieu.getValueAt(r, 0);
-	            modelPhieu.removeRow(r);
-	            phieu_dao.xoaPhieu(maPhieu);
+	            
+	            int rs = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa phiếu này?");
+	            if (rs == JOptionPane.YES_OPTION) {
+	                modelPhieu.removeRow(r);
+	                phieu_dao.xoaPhieu(maPhieu);
+	            }
 	        }
 	    }
 	    if (o.equals(btnTim)) {
@@ -542,11 +546,15 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
 	    }
 	    return null;
 	}
-	private String maNgauNhien() {
-        Random rd = new Random();
-        int ma = rd.nextInt(10000);
-        return String.format("PH%04d", ma); 
-    }
+	private int count = 0;
+
+	private String maTangDan() {
+	    String ma = phieu_dao.layMaMoiNhat();
+	 // Lấy phần số của mã bàn (bỏ đi ký tự "PH") và tăng giá trị lên 1
+	    count = Integer.parseInt(ma.substring(2)) + 1; 
+	    return String.format("PH%03d", count);
+	}
+
 
 	private void capNhatCmbTheoKhuVuc(String chonKV) {
 	    cmbPhong.removeAllItems();

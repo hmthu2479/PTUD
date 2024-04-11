@@ -294,14 +294,18 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 	    	modelBan.setRowCount(0);
 	    	docDuLieuDBVaoTable();
 	    }
-        if (o.equals(btnxoa)) {
-            int r = table.getSelectedRow();
-            if (r != -1) {
-                String maBan = (String) modelBan.getValueAt(r, 0);
-                modelBan.removeRow(r);
-                bandao.xoaBan(maBan);
-            }
-        }
+	    if (o.equals(btnxoa)) {
+	        int r = table.getSelectedRow();
+	        if (r != -1) {
+	            String maBan = (String) modelBan.getValueAt(r, 0);
+	            
+	            int rs = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa bàn này?");
+	            if (rs == JOptionPane.YES_OPTION) {
+	                modelBan.removeRow(r);
+	                bandao.xoaBan(maBan);
+	            }
+	        }
+	    }
         
         if (o.equals(btntim)) {
             String tenBan = txttim.getText();

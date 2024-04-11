@@ -60,7 +60,21 @@ public class PhieuDatBanDAO {
 	    return dsPhieuDB;
 	}
 
+	public String layMaMoiNhat() {
+	    String ma = null;
+	    try {
+	        Connection connection = ConnectDB.getInstance().getConnection();
+	        Statement statement = connection.createStatement();
+	        ResultSet resultSet = statement.executeQuery("SELECT MAX(maPhieuDatBan) AS ma FROM PhieuDatBan");
+	        if (resultSet.next()) {
+	            ma = resultSet.getString("ma");
+	        }
 
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return ma;
+	}
   //thêm phiếu
 	public boolean themPhieu(PhieuDatBan phieu, String ngayDat) {
 	    ConnectDB.getInstance();

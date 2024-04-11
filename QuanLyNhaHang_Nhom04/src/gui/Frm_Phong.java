@@ -58,6 +58,7 @@ public class Frm_Phong extends JDialog implements ActionListener, MouseListener 
 	private PhongDAO phong_dao;
 	private JComboBox<String> cmbkhuVuc;
 	private JButton btnluu;
+	private JButton btnLamMoi;
 
     public Frm_Phong() {
     	try {
@@ -117,6 +118,8 @@ public class Frm_Phong extends JDialog implements ActionListener, MouseListener 
         txttenPhong.setFont(new Font("Tahoma", Font.BOLD, 15));
         btnthem = new JButton("Thêm");
         btnthem.setFont(new Font("Tahoma", Font.BOLD, 16));
+        btnLamMoi = new JButton("Làm mới");
+        btnLamMoi.setFont(new Font("Tahoma", Font.BOLD, 16));
         pnlButton1.add(lbltenPhong);
         pnlButton1.add(Box.createHorizontalStrut(3));
         pnlButton1.add(txttenPhong);
@@ -124,6 +127,8 @@ public class Frm_Phong extends JDialog implements ActionListener, MouseListener 
         pnlButton1.add(cmbkhuVuc);
         pnlButton1.add(Box.createHorizontalStrut(12));
         pnlButton1.add(btnthem);
+        pnlButton1.add(Box.createHorizontalStrut(16));
+        pnlButton1.add(btnLamMoi);
         
         JPanel pnlButton2 = new JPanel();
         pnlButton2.setBorder(BorderFactory.createEmptyBorder(8, 0, 0, 0));
@@ -185,7 +190,7 @@ public class Frm_Phong extends JDialog implements ActionListener, MouseListener 
     	Object o = e.getSource();
     	  	
     	if (o.equals(btnthem)) {
-    	    String maPhong = maNgauNhien();
+    	    String maPhong = maTangDan();
     	    String tenPhong = txttenPhong.getText().trim();
     	    String khuVuc = String.valueOf(cmbkhuVuc.getSelectedItem());
     	    int soGhe = 0;
@@ -208,14 +213,18 @@ public class Frm_Phong extends JDialog implements ActionListener, MouseListener 
     	   }
 
 
-        if (o.equals(btnxoa)) {
-            int r = table.getSelectedRow();
-            if (r != -1) {
-                String maPhong = (String) modelPhong.getValueAt(r, 0);
-                modelPhong.removeRow(r);
-                phong_dao.xoaPhong(maPhong);
-            }
-        }
+    	if (o.equals(btnxoa)) {
+    	    int r = table.getSelectedRow();
+    	    if (r != -1) {
+    	        String maPhong = (String) modelPhong.getValueAt(r, 0);
+    	        
+    	        int rs = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa ?");
+    	        if (rs == JOptionPane.YES_OPTION) {
+    	            modelPhong.removeRow(r);
+    	            phong_dao.xoaPhong(maPhong);
+    	        }
+    	    }
+    	}
         
         if (o.equals(btntim)) {
             String tenPhong = txttim.getText();
@@ -264,15 +273,23 @@ public class Frm_Phong extends JDialog implements ActionListener, MouseListener 
             }
         }
 
-
+        if(o.equals(btnLamMoi)) {
+        	modelPhong.setRowCount(0);
+	    	docDuLieuDBVaoTable();
+        }
 
 
 }
-	private String maNgauNhien() {
-        Random rd = new Random();
-        int ma = rd.nextInt(1000);
-        return String.format("P%03d", ma); 
-    }
+    
+    private int count = 0;
+
+	private String maTangDan() {
+	    String ma = phong_dao.layMaMoiNhat();
+	 // Lấy phần số của mã bàn (bỏ đi ký tự "P") và tăng giá trị lên 1
+	    count = Integer.parseInt(ma.substring(1)) + 1; 
+	    return String.format("P%03d", count);
+	}
+
 	public void docDuLieuDBVaoTable() {
 		
 		List<Phong> listPhong = phong_dao.layThongTin();

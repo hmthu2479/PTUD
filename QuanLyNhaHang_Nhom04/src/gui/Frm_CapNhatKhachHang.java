@@ -251,7 +251,7 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o.equals(them)) {
-			String maKH = maNgauNhien();
+			String maKH = maTangDan();
 			String tenKH = txthoTen.getText();
 			String phai = nam.isSelected()?"Nam" : nu.isSelected()?"Nữ":"";
 			String diaChi = txtdiaChi.getText();
@@ -317,8 +317,12 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 		    int r = tableKhachHang.getSelectedRow();
 		    if (r != -1) {
 		        String maKH = (String) modelKH.getValueAt(r, 0);
-		        modelKH.removeRow(r);
-		        kh_dao.xoaKhachHang(maKH);
+		        
+		        int rs = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa khách hàng này?");
+		        if (rs == JOptionPane.YES_OPTION) {
+		            modelKH.removeRow(r);
+		            kh_dao.xoaKhachHang(maKH);
+		        }
 		    }
 		}
 		
@@ -352,11 +356,16 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 	    gr.clearSelection();
 	}
 
-	private String maNgauNhien() {
-        Random rd = new Random();
-        int ma = rd.nextInt(1000);
-        return String.format("KH%03d", ma); 
-    }
+	private int count = 0;
+
+	private String maTangDan() {
+	    String ma = kh_dao.layMaMoiNhat();
+	 // Lấy phần số của mã bàn (bỏ đi ký tự "KH") và tăng giá trị lên 1
+	    count = Integer.parseInt(ma.substring(2)) + 1; 
+	    return String.format("KH%03d", count);
+	}
+
+
 	public void docDuLieuDBVaoTable() {
 
 	    List<KhachHang> listKH = kh_dao.layThongTin();

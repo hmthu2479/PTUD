@@ -30,6 +30,21 @@ public class KhachHangDAO {
         }
         return dsKH;
     }
+    public String layMaMoiNhat() {
+	    String ma = null;
+	    try {
+	        Connection connection = ConnectDB.getInstance().getConnection();
+	        Statement statement = connection.createStatement();
+	        ResultSet resultSet = statement.executeQuery("SELECT MAX(maKH) AS ma FROM KhachHang");
+	        if (resultSet.next()) {
+	            ma = resultSet.getString("ma");
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return ma;
+	}
     //thêm Khách hàng
     public boolean themKhachHang(KhachHang khachHang){
         ConnectDB.getInstance();

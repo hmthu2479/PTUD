@@ -170,8 +170,7 @@ public class Frm_CapNhatNhanVien extends JPanel implements ActionListener,MouseL
 		tableNhanVien = new JTable(modelNV);
 		tableNhanVien.setPreferredScrollableViewportSize(new Dimension(940, 570));
 		tableNhanVien.setRowHeight(30);
-        tableNhanVien.setEnabled(false);
-        tableNhanVien.setFocusable(false);
+
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -252,7 +251,7 @@ public class Frm_CapNhatNhanVien extends JPanel implements ActionListener,MouseL
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o.equals(them)) {
-		    String maNV = maNgauNhien();
+		    String maNV = maTangDan();
 		    String tenNV = txtho.getText().trim();
 		    String phai = nam.isSelected() ? "Nam" : nu.isSelected() ? "Nữ" : "";		
 		    int tuoi;
@@ -342,17 +341,19 @@ public class Frm_CapNhatNhanVien extends JPanel implements ActionListener,MouseL
 		        JOptionPane.showMessageDialog(this, "Vui lòng chọn một hàng để cập nhật");
 		    }
 		}
-
-
 		
-		if (o.equals(xoa)) {
-		    int r = tableNhanVien.getSelectedRow();
-		    if (r != -1) {
-		        String maNV = (String) modelNV.getValueAt(r, 0);
-		        modelNV.removeRow(r);
-		        nv_dao.xoaNhanVien(maNV);
-		    }
-		}
+			if (o.equals(xoa)) {
+			    int r = tableNhanVien.getSelectedRow();
+			    if (r != -1) {
+			        String maNV = (String) modelNV.getValueAt(r, 0);
+			        
+			        int rs = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa nhân viên này?");
+			        if (rs == JOptionPane.YES_OPTION) {
+			            modelNV.removeRow(r);
+			            nv_dao.xoaNhanVien(maNV);
+			        }
+			    }
+			}
 		if(o.equals(xoaTrang)) {
 			txtho.setText("");
 			nam.setSelected(false);
@@ -382,11 +383,16 @@ public class Frm_CapNhatNhanVien extends JPanel implements ActionListener,MouseL
         }
 	}
      
-	private String maNgauNhien() {
-        Random rd = new Random();
-        int ma = rd.nextInt(1000);
-        return String.format("NV%03d", ma); 
-    }
+	private int count = 0;
+
+	private String maTangDan() {
+	    String ma = nv_dao.layMaMoiNhat();
+	 // Lấy phần số của mã bàn (bỏ đi ký tự "NV") và tăng giá trị lên 1
+	    count = Integer.parseInt(ma.substring(2)) + 1; 
+	    return String.format("NV%03d", count);
+	}
+
+
 	public void docDuLieuDBVaoTable() {
 		List<NhanVien> listNV = nv_dao.layThongTin();
 		for (NhanVien nv : listNV ) {

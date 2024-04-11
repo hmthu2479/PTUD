@@ -86,7 +86,21 @@ public class PhongDAO {
 		}
 
 
+	 public String layMaMoiNhat() {
+		    String ma = null;
+		    try {
+		        Connection connection = ConnectDB.getInstance().getConnection();
+		        Statement statement = connection.createStatement();
+		        ResultSet resultSet = statement.executeQuery("SELECT MAX(maPhong) AS ma FROM Phong");
+		        if (resultSet.next()) {
+		            ma = resultSet.getString("ma");
+		        }
 
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+		    return ma;
+		}
     public boolean themPhong(Phong phong) {
         try {
             Connection con = ConnectDB.getInstance().getConnection();
