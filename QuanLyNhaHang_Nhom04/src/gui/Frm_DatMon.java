@@ -1,9 +1,6 @@
 package gui;
-
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,38 +14,20 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
-
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 
 public class Frm_DatMon extends JPanel implements ActionListener {
-    private static final long serialVersionUID = 1L;
-    private JTextField txtMaMon, txtTenMon, txtDonGia;
-    private DefaultTableModel model;
-    private JButton btnThem, btnTim, btnXoa, btnSua, btnLamMoi;
-    private JSpinner spinner;
-    private JComboBox<String> cbxLoaiMon, cbxKhuVuc, cbxBan, cbxPhong;
-	private JTable table1;
-
+	private static final long serialVersionUID = 1L;
+	private JTextField txtMaMon, txtTenMon, txtDonGia, txtsoLuong, txtTongTien;
+	private DefaultTableModel model;
+	private JButton btnThem, btnTim, btnXoa, btnSua, btnLamMoi,btnThanhToan,btnThoat;
+	private JComboBox<String> cmbLoaiMon, cmbKhuVuc, cmbBan, cmbPhong;
+	private JTable table;
+	
 
 	public Frm_DatMon() {
-		txtMaMon = new JTextField();
-        txtTenMon = new JTextField();
-        txtDonGia = new JTextField();
-        cbxLoaiMon = new JComboBox<String>();
-        cbxKhuVuc = new JComboBox<String>();
-        cbxBan = new JComboBox<String>();
-        cbxPhong = new JComboBox<String>();
-        SpinnerNumberModel numberModel = new SpinnerNumberModel();
-        spinner = new JSpinner(numberModel);
-        setMaximumSize(new Dimension(1500, 1030));
-        setMinimumSize(new Dimension(1500, 1030));
-        setPreferredSize(new Dimension(1500, 1030));
-
-        setLayout(null);
+		
+		setLayout(null);
 		// Tiêu đề
 		JPanel panelTitle = new JPanel();
 		panelTitle.setBackground(new Color(0, 206, 209));
@@ -58,12 +37,11 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		lblTitLe.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitLe.setFont(new Font("Arial", Font.BOLD, 35));
 		lblTitLe.setForeground(Color.RED);
-
 		panelTitle.add(lblTitLe);
 		panelTitle.setBounds(0, 42, 1540, 60);
-
 		add(panelTitle);
 
+		// Khung thông tin món ăn
 		JPanel panelThongTin = new JPanel();
 		panelThongTin.setBackground(new Color(0, 128, 128));
 		panelThongTin.setBorder(new LineBorder(new Color(0, 0, 0), 3));
@@ -76,18 +54,19 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		panel.setBorder(new LineBorder(new Color(0, 0, 0), 3));
 		panel.setBounds(0, 0, 180, 35);
 		panelThongTin.add(panel);
-		// Nhập thông tin
+
 		JLabel lbl_titlle_panel_1 = new JLabel("Thông tin món");
 		panel.add(lbl_titlle_panel_1);
 		lbl_titlle_panel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_titlle_panel_1.setFont(new Font("Arial", Font.BOLD, 16));
+
 		// Mã Món
 		JLabel lblMaMon = new JLabel("Mã Món:");
 		lblMaMon.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblMaMon.setBounds(804, 125, 100, 40);
 		panelThongTin.add(lblMaMon);
-		// Ô nhập liệu cho mã món
 
+		txtMaMon = new JTextField();
 		txtMaMon.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtMaMon.setBounds(900, 125, 200, 40);
 		panelThongTin.add(txtMaMon);
@@ -95,11 +74,13 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 
 		// Nhãn "Tên Món"
 		JLabel lblTenMon = new JLabel("Tên Món:");
+
 		lblTenMon.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblTenMon.setBounds(804, 75, 100, 40);
 		panelThongTin.add(lblTenMon);
 
 		// Ô nhập liệu cho tên móns
+		txtTenMon = new JTextField();
 		txtTenMon.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtTenMon.setBounds(900, 75, 200, 40);
 		panelThongTin.add(txtTenMon);
@@ -111,6 +92,7 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		lblDonGia.setBounds(1152, 125, 100, 40);
 		panelThongTin.add(lblDonGia);
 
+		txtDonGia = new JTextField();
 		txtDonGia.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtDonGia.setBounds(1260, 125, 200, 40);
 		panelThongTin.add(txtDonGia);
@@ -121,17 +103,16 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		lblLoaiMon.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblLoaiMon.setBounds(451, 125, 86, 40);
 		panelThongTin.add(lblLoaiMon);
-		
-		
-		cbxLoaiMon.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		cbxLoaiMon.setEditable(false);
-		cbxLoaiMon.setBounds(535, 75, 200, 40);
-		cbxLoaiMon.addItem("Món Nướng");
-		cbxLoaiMon.addItem("Món Lẩu");
-		cbxLoaiMon.addItem("Món tráng miệng");
-		cbxLoaiMon.addItem("Thức uống");
 
-		panelThongTin.add(cbxLoaiMon);
+		cmbLoaiMon = new JComboBox<>();
+		cmbLoaiMon.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		cmbLoaiMon.setEditable(false);
+		cmbLoaiMon.setBounds(528, 125, 200, 40);
+		cmbLoaiMon.addItem("Món Nướng");
+		cmbLoaiMon.addItem("Món Lẩu");
+		cmbLoaiMon.addItem("Món tráng miệng");
+		cmbLoaiMon.addItem("Thức uống");
+		panelThongTin.add(cmbLoaiMon);
 
 		// Khu Vực
 		JLabel lblKhuVuc = new JLabel("Khu Vực:");
@@ -139,13 +120,14 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		lblKhuVuc.setBounds(90, 70, 86, 40);
 		panelThongTin.add(lblKhuVuc);
 
-		cbxKhuVuc.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		cbxKhuVuc.setEditable(false);
-		cbxKhuVuc.setBounds(200, 76, 200, 39);
-		cbxKhuVuc.addItem("Khu vực 1");
-		cbxKhuVuc.addItem("Khu vực 2");
-		cbxKhuVuc.addItem("Khu vực VIP");
-		panelThongTin.add(cbxKhuVuc);
+		cmbKhuVuc = new JComboBox<>();
+		cmbKhuVuc.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		cmbKhuVuc.setEditable(false);
+		cmbKhuVuc.setBounds(200, 76, 200, 39);
+		cmbKhuVuc.addItem("Khu vực 1");
+		cmbKhuVuc.addItem("Khu vực 2");
+		cmbKhuVuc.addItem("Khu vực VIP");
+		panelThongTin.add(cmbKhuVuc);
 
 		// Bàn
 		JLabel lblBan = new JLabel("Bàn:");
@@ -153,12 +135,11 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		lblBan.setBounds(462, 75, 86, 40);
 		panelThongTin.add(lblBan);
 
-
-		cbxBan.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		cbxBan.setEditable(false);
-		cbxBan.setBounds(200, 121, 200, 39);
-
-
+		cmbBan = new JComboBox<>();
+		cmbBan.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		cmbBan.setEditable(false);
+		cmbBan.setBounds(528, 76, 200, 39);
+		panelThongTin.add(cmbBan);
 
 		//Phòng
 		JLabel lblPhong = new JLabel("Phòng:");
@@ -166,252 +147,294 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		lblPhong.setBounds(90, 125, 86, 40);
 		panelThongTin.add(lblPhong);
 
-		cbxPhong.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		cbxPhong.setEditable(false);
-		cbxPhong.setBounds(535, 125, 200, 40);
-		cbxPhong.addItem("Phòng 1");
-		cbxPhong.addItem("Phòng 2");
-		cbxPhong.addItem("Phòng 3");
-		panelThongTin.add(cbxPhong);
+		cmbPhong = new JComboBox<>();
+		cmbPhong.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		cmbPhong.setEditable(false);
+		cmbPhong.setBounds(200, 125, 200, 40);
+		cmbPhong.addItem("Phòng 1");
+		cmbPhong.addItem("Phòng 2");
+		cmbPhong.addItem("Phòng 3");
+		panelThongTin.add(cmbPhong);
+
 		// Thêm các lựa chọn cho danh sách bàn theo khu vực
-		if (cbxKhuVuc.getSelectedItem().equals("Khu vực 1")) {
-			cbxBan.addItem("Bàn 1");
-			cbxBan.addItem("Bàn 2");
-			cbxBan.addItem("Bàn 3");
-		} else if (cbxKhuVuc.getSelectedItem().equals("Khu vực 2")) {
-			cbxBan.addItem("Bàn 4");
-			cbxBan.addItem("Bàn 5");
-			cbxBan.addItem("Bàn 6");
-		} else if (cbxKhuVuc.getSelectedItem().equals("Khu vực VIP")) {
-			cbxBan.addItem("Bàn VIP 1");
-			cbxBan.addItem("Bàn VIP 2");
-			cbxBan.addItem("Bàn VIP 3");
-		}
-		panelThongTin.add(cbxBan);
+		cmbKhuVuc.addActionListener(e -> {
+			if (cmbKhuVuc.getSelectedItem().equals("Khu vực 1")) {
+				cmbBan.removeAllItems();
+				cmbBan.addItem("Bàn 1");
+				cmbBan.addItem("Bàn 2");
+				cmbBan.addItem("Bàn 3");
+			} else if (cmbKhuVuc.getSelectedItem().equals("Khu vực 2")) {
+				cmbBan.removeAllItems();
+				cmbBan.addItem("Bàn 4");
+				cmbBan.addItem("Bàn 5");
+				cmbBan.addItem("Bàn 6");
+			} else if (cmbKhuVuc.getSelectedItem().equals("Khu vực VIP")) {
+				cmbBan.removeAllItems();
+				cmbBan.addItem("Bàn VIP 1");
+				cmbBan.addItem("Bàn VIP 2");
+				cmbBan.addItem("Bàn VIP 3");
+			}
+		});
+
 		// Số lượng
-
-		spinner.setBounds(1262, 88, 30, 20);
-		panelThongTin.add(spinner);
-
 		JLabel lblSoLuong = new JLabel("Số lượng:");
 		lblSoLuong.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblSoLuong.setBounds(1152, 75, 100, 40);
 		panelThongTin.add(lblSoLuong);
 
-		// Nút tìm kiếm
+		txtsoLuong = new JTextField();
+		txtsoLuong.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txtsoLuong.setColumns(10);
+		txtsoLuong.setBounds(1260, 75, 200, 40);
+		panelThongTin.add(txtsoLuong);
+
+		// Sự kiện
 		btnTim = new JButton("Tìm kiếm");
 		btnTim.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnTim.setBounds(561, 175, 200, 50);
+		btnTim.setBounds(657, 175, 200, 50);
 		panelThongTin.add(btnTim);
+
 		// Nút thêm
 		btnThem = new JButton("Thêm");
 		btnThem.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnThem.setBounds(36, 175, 200, 50);
+		btnThem.setBounds(100, 175, 200, 50);
 		panelThongTin.add(btnThem);
+
 		// Nút xóa
 		btnXoa = new JButton("Xóa");
 		btnXoa.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnXoa.setBounds(298, 176, 200, 50);
+		btnXoa.setBounds(375, 175, 200, 50);
 		panelThongTin.add(btnXoa);
+
 		// Nút làm mới
 		btnLamMoi = new JButton("Làm mới");
 		btnLamMoi.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnLamMoi.setBounds(1107, 175, 200, 50);
+		btnLamMoi.setBounds(1270, 175, 200, 50);
 		panelThongTin.add(btnLamMoi);
+
 		// Nút cập nhật
 		btnSua = new JButton("Cập nhật");
 		btnSua.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnSua.setBounds(842, 175, 200, 50);
+		btnSua.setBounds(976, 175, 200, 50);
 		panelThongTin.add(btnSua);
 
+		// Thêm sự kiện cho các nút
 		btnTim.addActionListener(this);
 		btnThem.addActionListener(this);
 		btnSua.addActionListener(this);
 		btnXoa.addActionListener(this);
 		btnLamMoi.addActionListener(this);
 
+		// Khung bảng dữ liệu
 		JScrollPane scrollPane_2 = new JScrollPane();
 		scrollPane_2.setBounds(10, 373, 1057, 427);
 		add(scrollPane_2);
-		String[] Header1 = {"Khu Vực","Phòng", "Bàn", "Mã Món", "Tên Món", "Đơn Giá", "Số Lượng ", "Loại Món"};
-		model = new DefaultTableModel(Header1, 0);
-		JTable table1 = new JTable(model);
-		table1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		table1.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 16));
-		scrollPane_2.setViewportView(table1);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(new Color(0, 128, 128));
-		panel_1.setBorder(new LineBorder(new Color(0, 0, 0), 3));
-		panel_1.setBounds(1067, 373, 463, 427);
-		add(panel_1);
-		panel_1.setLayout(null);
 
-		JPanel panel_2 = new JPanel();
-		panel_2.setBorder(new LineBorder(new Color(0, 0, 0), 3));
-		panel_2.setBounds(-36, -11, 154, 43);
-		panel_1.add(panel_2);
-		panel_2.setLayout(null);
+		String[] Header = {"Khu Vực", "Phòng", "Bàn", "Mã Món", "Tên Món", "Loại Món","Đơn Giá", "Số Lượng"};
+		model = new DefaultTableModel(Header, 0);
+		table = new JTable(model);
+		table.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 16));
+		scrollPane_2.setViewportView(table);
 
-		JLabel lbl_titlle_panel_1_1 = new JLabel("Thanh toán");
-		lbl_titlle_panel_1_1.setBounds(37, 11, 117, 33);
-		panel_2.add(lbl_titlle_panel_1_1);
-		lbl_titlle_panel_1_1.setBackground(new Color(0, 128, 128));
-		lbl_titlle_panel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_titlle_panel_1_1.setFont(new Font("Arial", Font.BOLD, 16));
+		// Khung thanh toán
+		JPanel panelThanhToan = new JPanel();
+		panelThanhToan.setBackground(new Color(255, 255, 204));
+		panelThanhToan.setBorder(new LineBorder(new Color(0, 0, 0), 3));
+		panelThanhToan.setBounds(1067, 373, 473, 427);
+		add(panelThanhToan);
+		panelThanhToan.setLayout(null);
 
-		JLabel lblNhanVienThanhToan = new JLabel("Nhân viên thanh toán");
-		lblNhanVienThanhToan.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNhanVienThanhToan.setBounds(34, 53, 194, 40);
-		panel_1.add(lblNhanVienThanhToan);
+		// Nhãn "Thành toán"
+		JLabel lblThanhToan = new JLabel("Thanh Toán");
+		lblThanhToan.setFont(new Font("Tahoma", Font.BOLD, 30));
+		lblThanhToan.setBounds(179, 21, 193, 60);
+		panelThanhToan.add(lblThanhToan);
 
-		JComboBox<String> cbxDanhMuc_1 = new JComboBox<String>();
-		cbxDanhMuc_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		cbxDanhMuc_1.setEditable(false);
-		cbxDanhMuc_1.setBounds(34, 92, 425, 39);
-		panel_1.add(cbxDanhMuc_1);
+		// Nhãn "Tổng tiền"
+		JLabel lblTongTien = new JLabel("Tổng tiền:");
+		lblTongTien.setForeground(Color.RED);
+		lblTongTien.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblTongTien.setBounds(10, 129, 100, 30);
+		panelThanhToan.add(lblTongTien);
 
-		JPanel panel_3 = new JPanel();
-		panel_3.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panel_3.setBounds(34, 161, 115, 43);
-		panel_1.add(panel_3);
-		panel_3.setLayout(null);
+		// Ô nhập liệu tổng tiền
+		txtTongTien = new JTextField();
+		txtTongTien.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txtTongTien.setEditable(false);
+		txtTongTien.setBounds(119, 121, 344, 49);
+		panelThanhToan.add(txtTongTien);
+		txtTongTien.setColumns(10);
 
-		JLabel lbl_titlle_panel_1_1_1 = new JLabel("Tổng tiền");
-		lbl_titlle_panel_1_1_1.setVerticalAlignment(SwingConstants.TOP);
-		lbl_titlle_panel_1_1_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_titlle_panel_1_1_1.setFont(new Font("Arial", Font.BOLD, 16));
-		lbl_titlle_panel_1_1_1.setBounds(0, 10, 110, 19);
-		panel_3.add(lbl_titlle_panel_1_1_1);
-
-
-		JButton btnDatDon = new JButton("Đặt đơn");
-		btnDatDon.setForeground(new Color(0, 0, 0));
-		btnDatDon.setBackground(new Color(0, 255, 255));
-		btnDatDon.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnDatDon.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnDatDon.setBounds(34, 215, 145, 50);
-		panel_1.add(btnDatDon);
-
+		// Nút thanh toán
 		JButton btnThanhToan = new JButton("Thanh toán");
-		btnThanhToan.setBackground(new Color(255, 128, 0));
-		btnThanhToan.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnThanhToan.setBounds(288, 215, 145, 50);
-		panel_1.add(btnThanhToan);
+		btnThanhToan.setForeground(new Color(0, 139, 139));
+		btnThanhToan.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnThanhToan.setBounds(39, 240, 152, 60);
+		panelThanhToan.add(btnThanhToan);
 
-		JButton btnHuy = new JButton("Hủy");
-		btnHuy.setBackground(new Color(255, 0, 0));
-		btnHuy.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnHuy.setBounds(164, 276, 145, 50);
-		panel_1.add(btnHuy);
-		
-		
-		
-		
-		btnThem.addActionListener(this);
-        btnXoa.addActionListener(this);
-        btnSua.addActionListener(this);
-        btnTim.addActionListener(this);
-        btnLamMoi.addActionListener(this);
+		// Nút thoát
+		JButton btnThoat = new JButton("Thoát");
+		btnThoat.setForeground(new Color(255, 0, 0));
+		btnThoat.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnThoat.setBounds(311, 240, 152, 60);
+		panelThanhToan.add(btnThoat);
 
+		// Thêm sự kiện cho các nút
+		btnThanhToan.addActionListener(this);
+		btnThoat.addActionListener(this);
+
+		
+		// Hiển thị giao diện
+		setVisible(true);
 	}
 
-	 @Override
-	 public void actionPerformed(ActionEvent e) {
-	        if (e.getSource() == btnThem) {
-	            themMonAn();
-	        } else if (e.getSource() == btnXoa) {
-	            xoaMonAn();
-	        } else if (e.getSource() == btnSua) {
-	            capNhatMonAn();
-	        } else if (e.getSource() == btnTim) {
-	            timKiemMonAn();
-	        } else if (e.getSource() == btnLamMoi) {
-	            lamMoiActions();
-	        }
-	    }
+	// Xử lý sự kiện cho các nút
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object source = e.getSource();
 
-	    private void themMonAn() {
-	        try {
-	            String maMon = txtMaMon.getText();
-	            String tenMon = txtTenMon.getText();
-	            double donGia = Double.parseDouble(txtDonGia.getText());
-	            String loaiMon = (String) cbxLoaiMon.getSelectedItem();
-	            int soLuong = (int) spinner.getValue();
+		// Nút thêm
+		if (source == btnThem) {
+			try {
+				String maMon = txtMaMon.getText().trim();
+				String tenMon = txtTenMon.getText().trim();
+				String donGiaString = txtDonGia.getText().trim();
+				String soLuongString = txtsoLuong.getText().trim();
 
-	            if (maMon.isEmpty() || tenMon.isEmpty()) {
-	                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin món.", "Thông báo",
-	                        JOptionPane.WARNING_MESSAGE);
-	                return;
-	            }
+				if (maMon.isEmpty() || tenMon.isEmpty() || donGiaString.isEmpty() || soLuongString.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin món ăn!");
+					return;
+				}
 
-	            // Your logic for adding a new item to the list and updating the table model...
+				double donGia = Double.parseDouble(donGiaString);
+				int soLuong = Integer.parseInt(soLuongString);
 
-	            lamMoiActions();
-	        } catch (NumberFormatException | HeadlessException ex) {
-	            JOptionPane.showMessageDialog(this, "Dữ liệu không hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-	        }
-	    }
-	    private void xoaMonAn() {
-	        int selectedRow = table1.getSelectedRow();
-	        if (selectedRow != -1) {
-	            // Xóa hàng được chọn từ bảng
-	            model.removeRow(selectedRow);
-	        } else {
-	            JOptionPane.showMessageDialog(this, "Vui lòng chọn một hàng để xóa.", "Thông báo",
-	                    JOptionPane.WARNING_MESSAGE);
-	        }
-	    }
+				// Thêm dữ liệu vào bảng
+				model.addRow(new Object[]{cmbKhuVuc.getSelectedItem(), cmbPhong.getSelectedItem(), cmbBan.getSelectedItem(), maMon, tenMon,cmbLoaiMon.getSelectedItem(), donGia, soLuong});
 
-	    private void capNhatMonAn() {
-	        int selectedRow = table1.getSelectedRow();
-	        if (selectedRow != -1) {
-	            String maMon = txtMaMon.getText();
-	            String tenMon = txtTenMon.getText();
-	            double donGia = Double.parseDouble(txtDonGia.getText());
-	            String loaiMon = (String) cbxLoaiMon.getSelectedItem();
-	            int soLuong = (int) spinner.getValue();
+				// Cập nhật tổng tiền
+				capNhatTongTien();
 
-	            // Cập nhật thông tin món vào hàng được chọn trong bảng
-	            model.setValueAt(maMon, selectedRow, 0);
-	            model.setValueAt(tenMon, selectedRow, 1);
-	            model.setValueAt(donGia, selectedRow, 2);
-	            model.setValueAt(soLuong, selectedRow, 3);
-	            model.setValueAt(loaiMon, selectedRow, 4);
-	        } else {
-	            JOptionPane.showMessageDialog(this, "Vui lòng chọn một hàng để cập nhật.", "Thông báo",
-	                    JOptionPane.WARNING_MESSAGE);
-	        }
-	    }
+				// Xóa dữ liệu trong các ô nhập liệu
+				txtMaMon.setText("");
+				txtTenMon.setText("");
+				txtDonGia.setText("");
+				txtsoLuong.setText("");
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(null, "Đơn giá và số lượng phải là số!");
+			}
+		}
 
-	    private void timKiemMonAn() {
-	        String keyword = JOptionPane.showInputDialog(this, "Nhập từ khóa tìm kiếm:", "Tìm kiếm món ăn",
-	                JOptionPane.PLAIN_MESSAGE);
-	        if (keyword != null && !keyword.isEmpty()) {
-	            for (int row = 0; row < model.getRowCount(); row++) {
-	                String tenMon = (String) model.getValueAt(row, 1);
-	                if (tenMon.toLowerCase().contains(keyword.toLowerCase())) {
-	                    table1.getSelectionModel().setSelectionInterval(row, row);
-	                    table1.scrollRectToVisible(table1.getCellRect(row, 0, true));
-	                    return;
-	                }
-	            }
-	            JOptionPane.showMessageDialog(this, "Không tìm thấy món ăn phù hợp.", "Thông báo",
-	                    JOptionPane.INFORMATION_MESSAGE);
-	        }
-	    }
+		// Nút tìm kiếm
+		if (source == btnTim) {
+			// TODO: Implement search functionality
+		}
 
-	    private void lamMoiActions() {
-	        txtMaMon.setText("");
-	        txtTenMon.setText("");
-	        txtDonGia.setText("");
-	        cbxLoaiMon.setSelectedIndex(0);
-	        spinner.setValue(0);
-	    }
+		if (source == btnSua) {
+			// Get the selected row index from the table
+			int selectedRow = table.getSelectedRow();
+
+			// Check if a row is selected
+			if (selectedRow >= 0) {
+				// Get the values from the selected row
+				String khuVuc = (String) model.getValueAt(selectedRow, 0);
+				String phong = (String) model.getValueAt(selectedRow, 1);
+				String ban = (String) model.getValueAt(selectedRow, 2);
+				String maMon = (String) model.getValueAt(selectedRow, 3);
+				String tenMon = (String) model.getValueAt(selectedRow, 4);
+				String loaiMon = (String) model.getValueAt(selectedRow, 5);
+				double donGia = (double) model.getValueAt(selectedRow, 6);
+				int soLuong = (int) model.getValueAt(selectedRow, 7);
+
+
+				// Update the table with the edited values
+				model.setValueAt(khuVuc, selectedRow, 0);
+				model.setValueAt(phong, selectedRow, 1);
+				model.setValueAt(ban, selectedRow, 2);
+				model.setValueAt(maMon, selectedRow, 3);
+				model.setValueAt(tenMon, selectedRow, 4);
+				model.setValueAt(loaiMon, selectedRow, 5);
+				model.setValueAt(donGia, selectedRow, 6);
+				model.setValueAt(soLuong, selectedRow, 7);
+
+				// Recalculate the total price
+				capNhatTongTien();
+			} else {
+				JOptionPane.showMessageDialog(null, "Vui lòng chọn một dòng để sửa!");
+			}
+		}
+		// Nút xóa
+		if (source == btnXoa) {
+			// Get the selected row indices from the table
+			int[] selectedRows = table.getSelectedRows();
+
+			// Check if at least one row is selected
+			if (selectedRows.length > 0) {
+				// Confirm the deletion with the user
+				int confirm = JOptionPane.showConfirmDialog(null, "Bạn có muốn xóa các dòng đã chọn?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+
+				if (confirm == JOptionPane.YES_OPTION) {
+					// Remove the selected rows from the table
+					for (int i = selectedRows.length - 1; i >= 0; i--) {
+						model.removeRow(selectedRows[i]);
+					}
+
+					// Recalculate the total price
+					capNhatTongTien();
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Vui lòng chọn một hoặc nhiều dòng để xóa!");
+			}
+		}
+
+		// Nút làm mới
+		if (source == btnLamMoi) {
+			// Xóa tất cả dữ liệu khỏi bảng
+			model.setRowCount(0);
+
+			// Cập nhật tổng tiền thành 0
+			txtTongTien.setText("0");
+
+			// Xóa dữ liệu trong các ô nhập liệu
+			txtMaMon.setText("");
+			txtTenMon.setText("");
+			txtDonGia.setText("");
+			txtsoLuong.setText("");
+		}
+
+		// Nút thanh toán
+		if (source == btnThanhToan) {
+			// TODO: Implement payment functionality
+		}
+
+
+
+		// Nút thoát
+		if (source == btnThoat) {
+			if (JOptionPane.showConfirmDialog(null, "Bạn có muốn thoát chương trình?", "Thông báo", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+			}
+		}
 	}
+
+	// Cập nhật tổng tiền
+	public void capNhatTongTien() {
+		double tongTien = 0;
+		for (int i = 0; i < model.getRowCount(); i++) {
+			double donGia = (double) model.getValueAt(i, 6);
+			int soLuong = (int) model.getValueAt(i, 7);
+			tongTien += donGia * soLuong;
+		}
+
+		txtTongTien.setText(String.format("%.2f", tongTien));
+	}
+
+
+	// Get the table model
+	public DefaultTableModel getModel() {
+		return model;
+	}
+}
 
 
 
