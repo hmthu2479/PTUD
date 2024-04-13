@@ -84,7 +84,7 @@ public class PhieuDatBanDAO {
 	    String SQL = "INSERT INTO PhieuDatBan (maPhieuDatBan, maKhuVuc, maPhong, maBan, soNguoi, ngayDat, ngayLap, gioDat, maKH, maNV) VALUES (?,?,?,?,?,?,?,?,?,?)";
 	    int n = 0;
 	    try {
-	        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+	        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 	        Date date = formatter.parse(ngayDat);
 	        statement = con.prepareStatement(SQL);
 	        statement.setString(1, phieu.getMaPhieu());
@@ -131,7 +131,7 @@ public class PhieuDatBanDAO {
         PreparedStatement statement = null;
         int n = 0;
         try {
-        	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             Date date = formatter.parse(ngayDat);
             String SQL = "UPDATE PhieuDatBan " +
                     "SET maKhuVuc = (SELECT maKhuVuc FROM KhuVuc WHERE tenKhuVuc = ?), " +

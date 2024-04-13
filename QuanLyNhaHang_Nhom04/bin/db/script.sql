@@ -102,7 +102,8 @@ CREATE TABLE dbo.PhieuDatBan(
     FOREIGN KEY (maKH) REFERENCES dbo.KhachHang(maKH),
     FOREIGN KEY (maNV) REFERENCES dbo.NhanVien(maNV)
 )
-
+INSERT INTO dbo.PhieuDatBan (maPhieuDatBan, maKhuVuc, maPhong, maBan, soNguoi, ngayDat, ngayLap, gioDat, maKH, maNV)
+VALUES ('PH001', 'KV01', 'P001', 'B001', 4, '2024-04-12', '2024-04-11', '10:00 AM', 'KH001', 'NV001');
 
 CREATE TABLE dbo.ChiTietPhieuDatBan(
     maPhieuDatBan nvarchar(10) NOT NULL,

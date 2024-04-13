@@ -135,33 +135,44 @@ public class FrmTimKiemKhachHang extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();	
-		if (o.equals(tim)) {
-            String tenKH = txtNhap.getText();
-            ListSelectionModel timKH = tableKhachHang.getSelectionModel();
-            timKH.clearSelection(); 
-            for (int i = 0; i < modelKH.getRowCount(); i++) {
-                if (modelKH.getValueAt(i, 1).toString().contains(tenKH)) {
-                	timKH.addSelectionInterval(i, i); 
-                }
-            }
-            if (timKH.isSelectionEmpty()) {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng");
-            }
-        }
-		if (o.equals(tim1)) {
-            String sdtKH = txtNhap1.getText();
-            List<Integer> timKH = new ArrayList<>();
-            for (int i = 0; i < modelKH.getRowCount(); i++) {
-                if (modelKH.getValueAt(i, 3).toString().contains(sdtKH)) {
-                	timKH.add(i);
-                }
-            }
-            if (!timKH.isEmpty()) {
-                tableKhachHang.setRowSelectionInterval(timKH.get(0), timKH.get(timKH.size() - 1));
-            } else {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng");
-            }
-        }
+		 if (o.equals(tim)) {
+	        String tim = txtNhap.getText();
+	        List<KhachHang> list = kh_dao.layThongTin();
+	        //Lấy model của bảng hiện tại
+	        DefaultTableModel model = (DefaultTableModel) tableKhachHang.getModel();
+	        model.setRowCount(0);
+
+	        // Duyệt qua từng Bàn trong danh sách
+	        for (KhachHang kh : list) {
+	            if (kh.getTenKH().contains(tim)) { 
+	                //Thêm dòng mới vào bảng với thông tin của Bàn đó
+	                model.addRow(new Object[]{kh.getMaKH(), kh.getTenKH(),kh.getPhai(),kh.getSdt(),kh.getDiaChi()});
+	            }
+	        }
+
+	        if (model.getRowCount() == 0) {
+	            JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng");
+	        }
+	    }
+		 else if (o.equals(tim1)) {
+		        String tim = txtNhap1.getText();
+		        List<KhachHang> list = kh_dao.layThongTin();
+		        //Lấy model của bảng hiện tại
+		        DefaultTableModel model = (DefaultTableModel) tableKhachHang.getModel();
+		        model.setRowCount(0);
+
+		        // Duyệt qua từng Bàn trong danh sách
+		        for (KhachHang kh : list) {
+		            if (kh.getSdt().contains(tim)) { 
+		                //Thêm dòng mới vào bảng với thông tin của Bàn đó
+		                model.addRow(new Object[]{kh.getMaKH(), kh.getTenKH(),kh.getPhai(),kh.getSdt(),kh.getDiaChi()});
+		            }
+		        }
+
+		        if (model.getRowCount() == 0) {
+		            JOptionPane.showMessageDialog(this, "Không tìm thấy bàn");
+		        }
+		    }
 	}
 
 	public void docDuLieuDBVaoTable() {

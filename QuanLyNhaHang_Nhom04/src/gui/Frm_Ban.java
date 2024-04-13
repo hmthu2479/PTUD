@@ -62,7 +62,7 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 	private BanDAO bandao;
 	private JLabel lblsoGhe;
 	private JTextField txtsoGhe;
-	private JButton btnluu;
+	private JButton btnSua;
 	private JComboBox<String> cmbPhong;
 	private JLabel lblkhuVuc;
 	private JLabel lblphong;
@@ -187,8 +187,8 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
         btnxoa.setFont(new Font("Tahoma", Font.BOLD, 16));
         btnxoaRong = new JButton("Xóa rỗng");
         btnxoaRong.setFont(new Font("Tahoma", Font.BOLD, 16));
-        btnluu = new JButton("Lưu");
-        btnluu.setFont(new Font("Tahoma", Font.BOLD, 16));
+        btnSua = new JButton("Sửa");
+        btnSua.setFont(new Font("Tahoma", Font.BOLD, 16));
         btnlamMoi = new JButton("Làm mới");
         btnlamMoi.setFont(new Font("Tahoma", Font.BOLD, 16));
         
@@ -198,7 +198,7 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
         pnlButton2.add(Box.createHorizontalStrut(12));
         pnlButton2.add(btnxoa);
         pnlButton2.add(btnxoaRong);
-        pnlButton2.add(btnluu);
+        pnlButton2.add(btnSua);
         pnlButton2.add(Box.createHorizontalStrut(12));
         pnlButton2.add(btnlamMoi);
 
@@ -231,7 +231,7 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
         btnthem.addActionListener(this);
         btnxoa.addActionListener(this);
         btntim.addActionListener(this);
-        btnluu.addActionListener(this);
+        btnSua.addActionListener(this);
         btnxoaRong.addActionListener(this);
         btnlamMoi.addActionListener(this);
         table.addMouseListener(this);
@@ -307,26 +307,32 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 	        }
 	    }
         
-        if (o.equals(btntim)) {
-            String tenBan = txttim.getText();
-            ListSelectionModel timBan = table.getSelectionModel();
-            timBan.clearSelection(); 
-            for (int i = 0; i < modelBan.getRowCount(); i++) {
-                if (modelBan.getValueAt(i, 1).toString().contains(tenBan)) {
-                	timBan.addSelectionInterval(i, i); 
-                }
-            }
-            if (timBan.isSelectionEmpty()) {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy bàn");
-            }
-        }
+	    else if (o.equals(btntim)) {
+	        String tenBan = txttim.getText();
+	        List<Ban> list = bandao.layThongTin();
+	        //Lấy model của bảng hiện tại
+	        DefaultTableModel model = (DefaultTableModel) table.getModel();
+	        model.setRowCount(0);
+
+	        // Duyệt qua từng Bàn trong danh sách
+	        for (Ban ban : list) {
+	            if (ban.getSoBan().contains(tenBan)) { 
+	                //Thêm dòng mới vào bảng với thông tin của Bàn đó
+	                model.addRow(new Object[]{ban.getMaBan(), ban.getSoBan(), ban.getSoGhe(), ban.getKhuVuc().getMaKhuVuc(), ban.getPhong().getMaPhong()});
+	            }
+	        }
+
+	        if (model.getRowCount() == 0) {
+	            JOptionPane.showMessageDialog(this, "Không tìm thấy bàn");
+	        }
+	    }
 
 
     
         if(o.equals(btnxoaRong)) {
         	xoaRong();
         }
-        if (e.getSource() == btnluu) {
+        if (e.getSource() == btnSua) {
             int r = table.getSelectedRow();
             if (r != -1) { 
             	// Lấy dữ liệu sau khi thay đổi
@@ -358,7 +364,7 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
                         modelBan.setValueAt(phong, r, 4);
                         xoaRong();
 
-                        JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu thành công");
+                        JOptionPane.showMessageDialog(this, "Dữ liệu đã được sửa thành công");
                     } catch (Exception e2) {
                         e2.printStackTrace(); 
                         JOptionPane.showMessageDialog(this, "Lỗi khi lưu dữ liệu vào cơ sở dữ liệu");

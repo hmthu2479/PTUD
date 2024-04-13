@@ -145,33 +145,45 @@ public class Frm_TimKiemNhanVien extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();	
 		if (o.equals(tim)) {
-            String tenNV = txtNhap.getText();
-            List<Integer> timNV = new ArrayList<>();
-            for (int i = 0; i < modelNV.getRowCount(); i++) {
-                if (modelNV.getValueAt(i, 1).toString().contains(tenNV)) {
-                	timNV.add(i);
-                }
-            }
-            if (!timNV.isEmpty()) {
-                tableNhanVien.setRowSelectionInterval(timNV.get(0), timNV.get(timNV.size() - 1));
-            } else {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên");
-            }
-        }
+	        String tim = txtNhap.getText();
+	        List<NhanVien> list = nv_dao.layThongTin();
+	        //Lấy model của bảng hiện tại
+	        DefaultTableModel model = (DefaultTableModel) tableNhanVien.getModel();
+	        model.setRowCount(0);
+
+	        // Duyệt qua từng Bàn trong danh sách
+	        for (NhanVien nv : list) {
+	            if (nv.getHoTenNV().contains(tim)) { 
+	                //Thêm dòng mới vào bảng với thông tin của Bàn đó
+	                model.addRow(new Object[]{nv.getMaNV(), nv.getHoTenNV(),nv.getPhai(),
+	    		            nv.getTuoi(), nv.getSdt()});
+	            }
+	        }
+
+	        if (model.getRowCount() == 0) {
+	            JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên");
+	        }
+	    }
 		if (o.equals(tim1)) {
-            String sdtNV = txtNhap1.getText();
-            List<Integer> timNV = new ArrayList<>();
-            for (int i = 0; i < modelNV.getRowCount(); i++) {
-                if (modelNV.getValueAt(i, 4).toString().contains(sdtNV)) {
-                	timNV.add(i);
-                }
-            }
-            if (!timNV.isEmpty()) {
-                tableNhanVien.setRowSelectionInterval(timNV.get(0), timNV.get(timNV.size() - 1));
-            } else {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên");
-            }
-        }
+	        String tim = txtNhap1.getText();
+	        List<NhanVien> list = nv_dao.layThongTin();
+	        //Lấy model của bảng hiện tại
+	        DefaultTableModel model = (DefaultTableModel) tableNhanVien.getModel();
+	        model.setRowCount(0);
+
+	        // Duyệt qua từng Bàn trong danh sách
+	        for (NhanVien nv : list) {
+	            if (nv.getSdt().contains(tim)) { 
+	                //Thêm dòng mới vào bảng với thông tin của Bàn đó
+	                model.addRow(new Object[]{nv.getMaNV(), nv.getHoTenNV(),nv.getPhai(),
+	    		            nv.getTuoi(), nv.getSdt()});
+	            }
+	        }
+
+	        if (model.getRowCount() == 0) {
+	            JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên");
+	        }
+	    }
 	}
 
 	public void docDuLieuDBVaoTable() {

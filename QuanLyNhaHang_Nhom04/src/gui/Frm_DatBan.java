@@ -51,9 +51,9 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
 	private JComboBox<String> cmbkhachHang;
 	private KhachHangDAO kh_dao;
 	private JComboBox<String> cmbPhong;
-	private JButton btnChonMon;
-	private JButton btnLuu;
+	private JButton btnSua;
 	private JButton btnLamMoi;
+	private JLabel lblTitle;
 
     public Frm_DatBan() {
     	try {
@@ -75,8 +75,17 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
         JPanel mainPanel = new JPanel(new BorderLayout(15, 5));
         mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
         mainPanel.setBackground(new Color(160, 210, 180));
+        JPanel pnlTitle = new JPanel();
+        lblTitle = new JLabel("ĐẶT BÀN");
+        lblTitle.setFont(new Font("Arial", Font.BOLD, 35));
+        lblTitle.setForeground(Color.DARK_GRAY);
+        pnlTitle.add(lblTitle);
+        pnlTitle.setBackground(new Color(160, 210, 180)); 
+        pnlTitle.setPreferredSize(new Dimension(50, 50));
 
-        JPanel pnlN = new JPanel(new GridLayout(3, 4, 0, 10));
+        mainPanel.add(pnlTitle, BorderLayout.NORTH);
+
+        JPanel pnlN = new JPanel(new GridLayout(3, 4, 0, 8));
         pnlN.setBackground(new Color(160, 210, 180)); 
         pnlN.setBorder(new EmptyBorder(5, 0, 10, 0));
 
@@ -287,18 +296,18 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
         pnlN.add(pnlbtn);
         pnlN.add(pnlbtn1);
         
-        JPanel pnlbtnLuu = new JPanel(new GridLayout(1, 2,10,0));
-        pnlbtnLuu.setBackground(new Color(160, 210, 180));
-        pnlbtnLuu.setBorder(new EmptyBorder(30, 30, 0, 180));
-        btnLuu = new JButton("Lưu");
+        JPanel pnlbtnSua = new JPanel(new GridLayout(1, 2,10,0));
+        pnlbtnSua.setBackground(new Color(160, 210, 180));
+        pnlbtnSua.setBorder(new EmptyBorder(30, 30, 0, 180));
+        btnSua = new JButton("Sửa");
         Font btnFont = new Font("Arial", Font.BOLD, 17); 
-        btnLuu.setFont(btnFont);
-        pnlbtnLuu.add(btnLuu);
-        pnlN.add(pnlbtnLuu);
-        mainPanel.add(pnlN, BorderLayout.NORTH);
+        btnSua.setFont(btnFont);
+        pnlbtnSua.add(btnSua);
+        pnlN.add(pnlbtnSua);
+        mainPanel.add(pnlN, BorderLayout.CENTER);
         add(mainPanel);
 
-        JPanel rightPanel = new JPanel(new BorderLayout());
+        JPanel pnlTable = new JPanel(new BorderLayout());
 
         // Table
         String[] columnNames = {"Mã", "Khu vực","Phòng", "Số bàn", "SL","Ngày đặt","Ngày lập","Giờ đặt","Khách hàng", "Nhân viên"};
@@ -320,17 +329,17 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        rightPanel.add(tableScrollPane, BorderLayout.CENTER);
-        rightPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-
-        mainPanel.add(rightPanel, BorderLayout.CENTER);
+        pnlTable.add(tableScrollPane, BorderLayout.CENTER);
+        pnlTable.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        pnlTable.setPreferredSize(new Dimension(50, 430));
+        mainPanel.add(pnlTable, BorderLayout.SOUTH);
             
                 
         btnThem.addActionListener(this );
         btnXoa.addActionListener(this);
         btnxoaRong.addActionListener(this);
         btnTim.addActionListener(this);
-        btnLuu.addActionListener(this);
+        btnSua.addActionListener(this);
         btnLamMoi.addActionListener(this);
         table.addMouseListener(this);
         docDuLieuDBVaoTable();
@@ -342,7 +351,7 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
 	    Object o = e.getSource();
 	    if (o.equals(btnThem)) {
 	        Date selectedDate = (Date) spnngayThang.getValue();
-	        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+	        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 	        String ngayDat = formatter.format(selectedDate);
 	        String gio = String.valueOf(cmbgioDat.getSelectedItem());
 	        int soLuong = (int) cmbsoLuongNguoi.getSelectedItem();
@@ -381,6 +390,7 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
 	            if (phieu_dao.themPhieu(p,ngayDat)) {
 	                modelPhieu.addRow(new Object[]{p.getMaPhieu(), kv.getTenKhuVuc(), ph.getTenPhong(), ban.getSoBan(), p.getSoLuongNguoi(),
 	                        p.getNgayDat(), p.getNgayLap(), p.getGioDat().trim(), kh.getTenKH(), nv.getHoTenNV()});
+	                xoaRong();
 	                JOptionPane.showMessageDialog(null, "Thêm thành công");
 	            } else {
 	                JOptionPane.showMessageDialog(null, "Trùng mã", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -405,29 +415,34 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
 	        }
 	    }
 	    if (o.equals(btnTim)) {
-            String tenKH = txtTim.getText();
-            List<Integer> timKH = new ArrayList<>();
-            for (int i = 0; i < modelPhieu.getRowCount(); i++) {
-                if (modelPhieu.getValueAt(i, 8).toString().contains(tenKH)) {
-                	timKH.add(i);
-                }
-            }
-            if (!timKH.isEmpty()) {
-                table.setRowSelectionInterval(timKH.get(0), timKH.get(timKH.size() - 1));
-                txtTim.setText("");
-            } else {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng ");
-            }
-        }
+	        String tim = txtTim.getText();
+	        List<PhieuDatBan> list = phieu_dao.layThongTin();
+	        //Lấy model của bảng hiện tại
+	        DefaultTableModel model = (DefaultTableModel) table.getModel();
+	        model.setRowCount(0);
+
+	        // Duyệt qua từng Bàn trong danh sách
+	        for (PhieuDatBan p : list) {
+	            if (p.getKhachHang().getMaKH().contains(tim)) { 
+	                //Thêm dòng mới vào bảng với thông tin của Bàn đó
+	                model.addRow(new Object[]{p.getMaPhieu(), p.getKhuVuc().getMaKhuVuc(), p.getPhong().getMaPhong(), p.getTenBan().getMaBan(), p.getSoLuongNguoi(),
+	                        p.getNgayDat(), p.getNgayLap(), p.getGioDat().trim(),p.getKhachHang().getMaKH(), p.getNhanVien().getMaNV()});
+	            }
+	        }
+
+	        if (model.getRowCount() == 0) {
+	            JOptionPane.showMessageDialog(this, "Không tìm thấy phiếu");
+	        }
+	    }
 
 	    if (o.equals(btnxoaRong)) {
 	    	xoaRong();
 	    }
-	    if (o.equals(btnLuu)) {
+	    if (o.equals(btnSua)) {
 	        int r = table.getSelectedRow(); 
 	        if (r != -1) {
 	            Date selectedDate = (Date) spnngayThang.getValue();
-	            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+	            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 	            String ngayDat = formatter.format(selectedDate);
 	            String gio = String.valueOf(cmbgioDat.getSelectedItem());
 	            int soLuong = (int) cmbsoLuongNguoi.getSelectedItem();

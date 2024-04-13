@@ -41,7 +41,9 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
 import connectDB.ConnectDB;
+import dao.BanDAO;
 import dao.KhachHangDAO;
+import entity.Ban;
 import entity.KhachHang;
 
 public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, MouseListener {
@@ -62,7 +64,7 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 	private JButton them;
 	private JButton xoaTrang;
 	private JButton xoa;
-	private JButton luu;
+	private JButton sua;
 	private JPanel jpN;
 	private JLabel phai;
 	private DefaultTableModel modelKH;
@@ -226,13 +228,13 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 		bPhai.add(Box.createHorizontalStrut(10));
 		bPhai.add(xoa = new JButton("Xóa"));
 		bPhai.add(Box.createHorizontalStrut(10));
-		bPhai.add(luu = new JButton("Lưu"));
+		bPhai.add(sua = new JButton("Sửa"));
 
 		bPhai.add(Box.createHorizontalGlue());
 			them.setFont(textFieldFont);
 			xoaTrang.setFont(textFieldFont);
 			xoa.setFont(textFieldFont);
-			luu.setFont(textFieldFont);
+			sua.setFont(textFieldFont);
 		add(jpS,BorderLayout.SOUTH);
 	
 	
@@ -240,7 +242,7 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 		them.addActionListener(this);
 		xoa.addActionListener(this);
 		tim.addActionListener(this);
-		luu.addActionListener(this);
+		sua.addActionListener(this);
 		tableKhachHang.addMouseListener(this);
 		docDuLieuDBVaoTable();
 		setVisible(true);
@@ -275,7 +277,7 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 			    return;
 			}
 		}
-		if (o.equals(luu)) {
+		if (o.equals(sua)) {
 		    int r = tableKhachHang.getSelectedRow();
 		    if (r != -1) {
 		        String maKH = (String) modelKH.getValueAt(r, 0);
@@ -330,19 +332,25 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 			xoaRong();
 		}
 		
-		if (o.equals(tim)) {
-            String tenKH = txtNhap.getText();
-            ListSelectionModel timKH = tableKhachHang.getSelectionModel();
-            timKH.clearSelection(); 
-            for (int i = 0; i < modelKH.getRowCount(); i++) {
-                if (modelKH.getValueAt(i, 1).toString().contains(tenKH)) {
-                	timKH.addSelectionInterval(i, i); 
-                }
-            }
-            if (timKH.isSelectionEmpty()) {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng");
-            }
-        }
+		 else if (o.equals(tim)) {
+		        String tim = txtNhap.getText();
+		        List<KhachHang> list = kh_dao.layThongTin();
+		        //Lấy model của bảng hiện tại
+		        DefaultTableModel model = (DefaultTableModel) tableKhachHang.getModel();
+		        model.setRowCount(0);
+
+		        // Duyệt qua từng Bàn trong danh sách
+		        for (KhachHang kh : list) {
+		            if (kh.getTenKH().contains(tim)) { 
+		                //Thêm dòng mới vào bảng với thông tin của Bàn đó
+		                model.addRow(new Object[]{kh.getMaKH(), kh.getTenKH(),kh.getPhai(),kh.getSdt(),kh.getDiaChi()});
+		            }
+		        }
+
+		        if (model.getRowCount() == 0) {
+		            JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng");
+		        }
+		    }
 	}
 	private void xoaRong() {
 	    txthoTen.setText("");
