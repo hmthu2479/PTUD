@@ -42,16 +42,16 @@ import entity.NhanVien;
 
 public class Frm_TimKiemNhanVien extends JPanel implements ActionListener {
     private JPanel jpS;
-    private JTextField txtNhap;
-    private JButton tim;
+    private JTextField txtTim;
+    private JButton btnTim;
     private DefaultTableModel modelNV;
     private JTable tableNhanVien;
     private NhanVienDAO nv_dao;
     private JLabel lbNhap;
     private JLabel lbTitle;
-	private JTextField txtNhap1;
+	private JTextField txtTim1;
 	private JLabel lbNhap1;
-	private JButton tim1;
+	private JButton btnTim1;
 	private JLabel lbHoac;
 
     public Frm_TimKiemNhanVien() {
@@ -108,35 +108,35 @@ public class Frm_TimKiemNhanVien extends JPanel implements ActionListener {
 
         lbNhap = new JLabel("Nhập tên cần tìm: ");
         lbNhap.setFont(new Font("Arial", Font.BOLD, 20)); 
-        txtNhap = new JTextField(8);
-        txtNhap.setFont(new Font("Arial", Font.PLAIN, 20)); 
-        tim = new JButton("Tìm");
-        tim.setFont(new Font("Arial", Font.BOLD, 20)); 
+        txtTim = new JTextField(8);
+        txtTim.setFont(new Font("Arial", Font.PLAIN, 20)); 
+        btnTim = new JButton("Tìm");
+        btnTim.setFont(new Font("Arial", Font.BOLD, 20)); 
         lbHoac = new JLabel("Hoặc");
         lbHoac.setFont(new Font("Arial", Font.BOLD, 20)); 
         lbNhap1 = new JLabel("Nhập số điện thoại cần tìm: ");
         lbNhap1.setFont(new Font("Arial", Font.BOLD, 20)); 
-        txtNhap1 = new JTextField(8);
-        txtNhap1.setFont(new Font("Arial", Font.PLAIN, 20)); 
-        tim1 = new JButton("Tìm");
-        tim1.setFont(new Font("Arial", Font.BOLD, 20)); 
+        txtTim1 = new JTextField(8);
+        txtTim1.setFont(new Font("Arial", Font.PLAIN, 20)); 
+        btnTim1 = new JButton("Tìm");
+        btnTim1.setFont(new Font("Arial", Font.BOLD, 20)); 
 
         jpS.add(lbNhap);
-        jpS.add(txtNhap);
+        jpS.add(txtTim);
         jpS.add(Box.createHorizontalStrut(10));
-        jpS.add(tim);
+        jpS.add(btnTim);
         jpS.add(Box.createHorizontalStrut(15));
         jpS.add(lbHoac);
         jpS.add(Box.createHorizontalStrut(15));
         jpS.add(lbNhap1);
-        jpS.add(txtNhap1);
+        jpS.add(txtTim1);
         jpS.add(Box.createHorizontalStrut(10));
-        jpS.add(tim1);
+        jpS.add(btnTim1);
 
         add(jpS);
 
-        tim.addActionListener(this);
-        tim1.addActionListener(this);
+        btnTim.addActionListener(this);
+        btnTim1.addActionListener(this);
         docDuLieuDBVaoTable();
         setVisible(true);
     }
@@ -144,8 +144,8 @@ public class Frm_TimKiemNhanVien extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();	
-		if (o.equals(tim)) {
-	        String tim = txtNhap.getText();
+		if (o.equals(btnTim)) {
+	        String tim = txtTim.getText();
 	        List<NhanVien> list = nv_dao.layThongTin();
 	        //Lấy model của bảng hiện tại
 	        DefaultTableModel model = (DefaultTableModel) tableNhanVien.getModel();
@@ -164,8 +164,8 @@ public class Frm_TimKiemNhanVien extends JPanel implements ActionListener {
 	            JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên");
 	        }
 	    }
-		if (o.equals(tim1)) {
-	        String tim = txtNhap1.getText();
+		if (o.equals(btnTim1)) {
+	        String tim = txtTim1.getText();
 	        List<NhanVien> list = nv_dao.layThongTin();
 	        //Lấy model của bảng hiện tại
 	        DefaultTableModel model = (DefaultTableModel) tableNhanVien.getModel();

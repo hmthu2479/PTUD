@@ -55,7 +55,7 @@ CREATE TABLE dbo.KhachHang(
     tenKH nvarchar(50) NULL,
     phai nchar(10) NULL,
     SDT nvarchar(20) NULL,
-    diaChi nvarchar(10) NULL,
+    diaChi nvarchar(100) NULL,
     PRIMARY KEY CLUSTERED (maKH)
 )
 

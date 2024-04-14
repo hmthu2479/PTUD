@@ -38,16 +38,16 @@ import entity.KhachHang;
 
 public class FrmTimKiemKhachHang extends JPanel implements ActionListener {
     private JPanel jpS;
-    private JTextField txtNhap;
-    private JButton tim;
+    private JTextField txtTim;
+    private JButton btnTim;
     private DefaultTableModel modelKH;
     private JTable tableKhachHang;
     private JLabel lbNhap;
     private JLabel lbTitle;
 	private KhachHangDAO kh_dao;
 	private JLabel lbNhap1;
-	private JTextField txtNhap1;
-	private JButton tim1;
+	private JTextField txtTim1;
+	private JButton btnTim1;
 
     public FrmTimKiemKhachHang() {
         try {
@@ -103,31 +103,31 @@ public class FrmTimKiemKhachHang extends JPanel implements ActionListener {
 
         lbNhap = new JLabel("Nhập tên cần tìm: ");
         lbNhap.setFont(new Font("Arial", Font.BOLD, 20)); 
-        txtNhap = new JTextField(8);
-        txtNhap.setFont(new Font("Arial", Font.PLAIN, 20)); 
-        tim = new JButton("Tìm");
-        tim.setFont(new Font("Arial", Font.BOLD, 20)); 
+        txtTim = new JTextField(8);
+        txtTim.setFont(new Font("Arial", Font.PLAIN, 20)); 
+        btnTim = new JButton("Tìm");
+        btnTim.setFont(new Font("Arial", Font.BOLD, 20)); 
         lbNhap1 = new JLabel("Nhập số điện thoại cần tìm: ");
         lbNhap1.setFont(new Font("Arial", Font.BOLD, 20)); 
-        txtNhap1 = new JTextField(8);
-        txtNhap1.setFont(new Font("Arial", Font.PLAIN, 20)); 
-        tim1 = new JButton("Tìm");
-        tim1.setFont(new Font("Arial", Font.BOLD, 20)); 
+        txtTim1 = new JTextField(8);
+        txtTim1.setFont(new Font("Arial", Font.PLAIN, 20)); 
+        btnTim1 = new JButton("Tìm");
+        btnTim1.setFont(new Font("Arial", Font.BOLD, 20)); 
 
         jpS.add(lbNhap);
-        jpS.add(txtNhap);
+        jpS.add(txtTim);
         jpS.add(Box.createHorizontalStrut(10));
-        jpS.add(tim);
+        jpS.add(btnTim);
         jpS.add(Box.createHorizontalStrut(35));
         jpS.add(lbNhap1);
-        jpS.add(txtNhap1);
+        jpS.add(txtTim1);
         jpS.add(Box.createHorizontalStrut(10));
-        jpS.add(tim1);
+        jpS.add(btnTim1);
 
         add(jpS);
 
-        tim.addActionListener(this);
-        tim1.addActionListener(this);
+        btnTim.addActionListener(this);
+        btnTim1.addActionListener(this);
         docDuLieuDBVaoTable();
         setVisible(true);
     }
@@ -135,8 +135,8 @@ public class FrmTimKiemKhachHang extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();	
-		 if (o.equals(tim)) {
-	        String tim = txtNhap.getText();
+		 if (o.equals(btnTim)) {
+	        String tim = txtTim.getText();
 	        List<KhachHang> list = kh_dao.layThongTin();
 	        //Lấy model của bảng hiện tại
 	        DefaultTableModel model = (DefaultTableModel) tableKhachHang.getModel();
@@ -146,7 +146,7 @@ public class FrmTimKiemKhachHang extends JPanel implements ActionListener {
 	        for (KhachHang kh : list) {
 	            if (kh.getTenKH().contains(tim)) { 
 	                //Thêm dòng mới vào bảng với thông tin của Bàn đó
-	                model.addRow(new Object[]{kh.getMaKH(), kh.getTenKH(),kh.getPhai(),kh.getSdt(),kh.getDiaChi()});
+	                model.addRow(new Object[]{kh.getMaKH(), kh.getTenKH(),kh.getPhai().trim(),kh.getSdt(),kh.getDiaChi()});
 	            }
 	        }
 
@@ -154,8 +154,8 @@ public class FrmTimKiemKhachHang extends JPanel implements ActionListener {
 	            JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng");
 	        }
 	    }
-		 else if (o.equals(tim1)) {
-		        String tim = txtNhap1.getText();
+		 else if (o.equals(btnTim1)) {
+		        String tim = txtTim1.getText();
 		        List<KhachHang> list = kh_dao.layThongTin();
 		        //Lấy model của bảng hiện tại
 		        DefaultTableModel model = (DefaultTableModel) tableKhachHang.getModel();
@@ -165,7 +165,7 @@ public class FrmTimKiemKhachHang extends JPanel implements ActionListener {
 		        for (KhachHang kh : list) {
 		            if (kh.getSdt().contains(tim)) { 
 		                //Thêm dòng mới vào bảng với thông tin của Bàn đó
-		                model.addRow(new Object[]{kh.getMaKH(), kh.getTenKH(),kh.getPhai(),kh.getSdt(),kh.getDiaChi()});
+		                model.addRow(new Object[]{kh.getMaKH(), kh.getTenKH(),kh.getPhai().trim(),kh.getSdt(),kh.getDiaChi()});
 		            }
 		        }
 

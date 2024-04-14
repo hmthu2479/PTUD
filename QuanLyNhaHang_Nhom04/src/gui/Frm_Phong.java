@@ -104,11 +104,13 @@ public class Frm_Phong extends JDialog implements ActionListener, MouseListener 
 
         cmbkhuVuc = new JComboBox<String>();
         cmbkhuVuc.setEditable(false);	
-        cmbkhuVuc.removeAllItems();
+		cmbkhuVuc.revalidate();
+		cmbkhuVuc.repaint();
 		ArrayList<KhuVuc> listKV = kv_dao.layThongTin() ;
 		for (KhuVuc kv : listKV) {
 			cmbkhuVuc.addItem(kv.getTenKhuVuc());
 		}
+		
 		cmbkhuVuc.setFont(new Font("Tahoma", Font.BOLD, 15));
         pnlButton1.add(Box.createHorizontalStrut(6));
         lbltenPhong = new JLabel("Nhập tên phòng: ");

@@ -55,17 +55,17 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 	private JLabel lbsdt;
 	private JTextField txtsdt;
 	private JRadioButton nu;
-	private JPanel jpS;
+	private JPanel pnlS;
 	private JPanel bTrai;
 	private JPanel bPhai;
-	private JLabel lbNhap;
-	private JTextField txtNhap;
-	private JButton tim;
-	private JButton them;
-	private JButton xoaTrang;
-	private JButton xoa;
-	private JButton sua;
-	private JPanel jpN;
+	private JLabel lbTim;
+	private JTextField txtTim;
+	private JButton btnTim;
+	private JButton btnThem;
+	private JButton btnXoaTrang;
+	private JButton btnXoa;
+	private JButton btnSua;
+	private JPanel pnlW;
 	private JLabel phai;
 	private DefaultTableModel modelKH;
 	private JTable tableKhachHang;
@@ -83,10 +83,10 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 		
 		setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 		setBackground(new Color(204, 235, 150)); 
-		jpN = new JPanel();
-		jpN.setLayout(new BoxLayout(jpN, BoxLayout.Y_AXIS));
-		jpN.setPreferredSize(new Dimension(520, 602));
-		jpN.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+		pnlW = new JPanel();
+		pnlW.setLayout(new BoxLayout(pnlW, BoxLayout.Y_AXIS));
+		pnlW.setPreferredSize(new Dimension(520, 602));
+		pnlW.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
         Color lightBlue = new Color(173, 216, 230); // Light blue colorS
 		lbtitle = new JLabel("THÔNG TIN KHÁCH HÀNG");
@@ -143,15 +143,15 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 
 		lbtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		jpN.add(Box.createVerticalGlue()); 
-		jpN.add(lbtitle);
-		jpN.add(Box.createVerticalStrut(10)); 
-		jpN.add(jpFields);
-		jpN.add(Box.createVerticalStrut(10)); 
-		jpN.add(jpPhai);
-		jpN.add(Box.createVerticalGlue());
+		pnlW.add(Box.createVerticalGlue()); 
+		pnlW.add(lbtitle);
+		pnlW.add(Box.createVerticalStrut(10)); 
+		pnlW.add(jpFields);
+		pnlW.add(Box.createVerticalStrut(10)); 
+		pnlW.add(jpPhai);
+		pnlW.add(Box.createVerticalGlue());
 
-		add(jpN, BorderLayout.WEST);
+		add(pnlW, BorderLayout.WEST);
 		JPanel emptyPanel = new JPanel();
 		emptyPanel.setPreferredSize(new Dimension(15, 490));
 		emptyPanel.setBackground(new Color(204, 235, 150)); 
@@ -200,49 +200,49 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 		
 				
 				
-		jpS = new JPanel();
-		jpS.setBorder(new EmptyBorder(10, 0, 0, 0));
-		jpS.add(bTrai = new JPanel());
+		pnlS = new JPanel();
+		pnlS.setBorder(new EmptyBorder(10, 0, 0, 0));
+		pnlS.add(bTrai = new JPanel());
                 
 		bTrai.setLayout(new BoxLayout(bTrai, BoxLayout.X_AXIS));
 		bTrai.setBackground(new Color(204, 235, 150));
-			bTrai.add(lbNhap = new JLabel("Nhập tên cần tìm: "));
-			bTrai.add(txtNhap = new JTextField(15));
-			txtNhap.setFont(new Font("Arial", Font.BOLD, 16));
-			bTrai.add(tim = new JButton("Tìm"));
-			lbNhap.setFont(textFieldFont);
+			bTrai.add(lbTim = new JLabel("Nhập tên cần tìm: "));
+			bTrai.add(txtTim = new JTextField(15));
+			txtTim.setFont(new Font("Arial", Font.BOLD, 16));
+			bTrai.add(btnTim = new JButton("Tìm"));
+			lbTim.setFont(textFieldFont);
 			txthoTen.setFont(textFieldFont);
-			tim.setFont(textFieldFont);
+			btnTim.setFont(textFieldFont);
 			
 				
-		jpS.add(bPhai = new JPanel());
-		jpS.setBackground(new Color(204, 235, 150));
+		pnlS.add(bPhai = new JPanel());
+		pnlS.setBackground(new Color(204, 235, 150));
 		bPhai.setLayout(new BoxLayout(bPhai, BoxLayout.X_AXIS));
 		bPhai.setBackground(new Color(204, 235, 150));
 		bPhai.setLayout(new BoxLayout(bPhai, BoxLayout.X_AXIS));
 
 		bPhai.add(Box.createHorizontalStrut(30));
-		bPhai.add(them = new JButton("Thêm"));
+		bPhai.add(btnThem = new JButton("Thêm"));
 		bPhai.add(Box.createHorizontalStrut(10));
-		bPhai.add(xoaTrang = new JButton("Xóa trắng"));
+		bPhai.add(btnXoaTrang = new JButton("Xóa trắng"));
 		bPhai.add(Box.createHorizontalStrut(10));
-		bPhai.add(xoa = new JButton("Xóa"));
+		bPhai.add(btnXoa = new JButton("Xóa"));
 		bPhai.add(Box.createHorizontalStrut(10));
-		bPhai.add(sua = new JButton("Sửa"));
+		bPhai.add(btnSua = new JButton("Sửa"));
 
 		bPhai.add(Box.createHorizontalGlue());
-			them.setFont(textFieldFont);
-			xoaTrang.setFont(textFieldFont);
-			xoa.setFont(textFieldFont);
-			sua.setFont(textFieldFont);
-		add(jpS,BorderLayout.SOUTH);
+			btnThem.setFont(textFieldFont);
+			btnXoaTrang.setFont(textFieldFont);
+			btnXoa.setFont(textFieldFont);
+			btnSua.setFont(textFieldFont);
+		add(pnlS,BorderLayout.SOUTH);
 	
 	
-		xoaTrang.addActionListener(this);
-		them.addActionListener(this);
-		xoa.addActionListener(this);
-		tim.addActionListener(this);
-		sua.addActionListener(this);
+		btnXoaTrang.addActionListener(this);
+		btnThem.addActionListener(this);
+		btnXoa.addActionListener(this);
+		btnTim.addActionListener(this);
+		btnSua.addActionListener(this);
 		tableKhachHang.addMouseListener(this);
 		docDuLieuDBVaoTable();
 		setVisible(true);
@@ -252,7 +252,7 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
-		if (o.equals(them)) {
+		if (o.equals(btnThem)) {
 			String maKH = maTangDan();
 			String tenKH = txthoTen.getText();
 			String phai = nam.isSelected()?"Nam" : nu.isSelected()?"Nữ":"";
@@ -277,7 +277,7 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 			    return;
 			}
 		}
-		if (o.equals(sua)) {
+		if (o.equals(btnSua)) {
 		    int r = tableKhachHang.getSelectedRow();
 		    if (r != -1) {
 		        String maKH = (String) modelKH.getValueAt(r, 0);
@@ -315,7 +315,7 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 		}
 
 		
-		if (o.equals(xoa)) {
+		if (o.equals(btnXoa)) {
 		    int r = tableKhachHang.getSelectedRow();
 		    if (r != -1) {
 		        String maKH = (String) modelKH.getValueAt(r, 0);
@@ -328,12 +328,12 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 		    }
 		}
 		
-		if(o.equals(xoaTrang)) {
+		if(o.equals(btnXoaTrang)) {
 			xoaRong();
 		}
 		
-		 else if (o.equals(tim)) {
-		        String tim = txtNhap.getText();
+		 else if (o.equals(btnTim)) {
+		        String tim = txtTim.getText();
 		        List<KhachHang> list = kh_dao.layThongTin();
 		        //Lấy model của bảng hiện tại
 		        DefaultTableModel model = (DefaultTableModel) tableKhachHang.getModel();
@@ -343,7 +343,7 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 		        for (KhachHang kh : list) {
 		            if (kh.getTenKH().contains(tim)) { 
 		                //Thêm dòng mới vào bảng với thông tin của Bàn đó
-		                model.addRow(new Object[]{kh.getMaKH(), kh.getTenKH(),kh.getPhai(),kh.getSdt(),kh.getDiaChi()});
+		                model.addRow(new Object[]{kh.getMaKH(), kh.getTenKH(),kh.getPhai().trim(),kh.getSdt(),kh.getDiaChi()});
 		            }
 		        }
 
