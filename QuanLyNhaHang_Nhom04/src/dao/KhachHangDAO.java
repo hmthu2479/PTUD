@@ -103,6 +103,37 @@ public class KhachHangDAO {
         }
         return n>0;
     }
+    public KhachHang TimKhachHang(String id) {
+		KhachHang kh = new KhachHang();
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+
+			String sql = "select * from KhachHang where maKH=?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, id);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+
+				String maKH = rs.getString(1);
+                String tenKH = rs.getString(2);
+                String diaChi = rs.getString(5);
+                String soDienThoai = rs.getString(4);
+                String phai = rs.getString(3);
+                kh = new KhachHang(maKH,tenKH,phai,soDienThoai,diaChi);
+
+			}
+
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+
+		} 
+		return kh;
+	}
+
+
 
 
 }

@@ -186,4 +186,35 @@ public class MonDAO {
 		}
 		return n > 0;
 	}
+	public Mon TimMon(String idMon) {
+	    Mon mon = null;
+	    try {
+	        ConnectDB.getInstance().connect();
+	        Connection con = ConnectDB.getConnection();
+	        String SQL = "SELECT * FROM Mon WHERE maMon = ?";
+	        PreparedStatement statement = con.prepareStatement(SQL);
+	        statement.setString(1, idMon);
+	        ResultSet rs = statement.executeQuery();
+	        if (rs.next()) {
+	        	String maMon = rs.getString("maMon");
+				String tenMon = rs.getString("tenMon");
+				double donGia = rs.getDouble("donGia");
+				String loaiMon = rs.getString("loaiMon");
+				int soLuong = rs.getInt("soLuong");
+				String soBan = rs.getString("soBan");
+				String tenKhuVuc = rs.getString("tenKhuVuc");
+				String tenPhong = rs.getString("tenPhong");
+				double tongTien = rs.getDouble("tongTien");
+				KhuVuc khuVuc = new KhuVuc(tenKhuVuc);
+				Phong phong = new Phong(tenPhong);
+				Ban ban = new Ban(soBan);
+				mon = new Mon(khuVuc, phong, ban, maMon, tenMon, loaiMon, donGia, soLuong, tongTien);
+				
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return mon;
+	}
+
 }

@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -160,38 +162,37 @@ public class Frm_ThongKe extends JPanel implements ActionListener {
     }
 
     public void docDuLieuHD() {
+        NumberFormat vn = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         ArrayList<HoaDon> dsHD = hd_dao.getAllHoaDon();
-        model.setRowCount(0); // Clear previous data in the table
-        
+        model.setRowCount(0);
+
         for (HoaDon hd : dsHD) {
-            ArrayList<entity.KhuVuc> kv = khuvuc_dao.layThongTin();
-            NhanVien nv = nv_dao.timNhanVien(hd.getNhanVien().getMaNV());
-            KhachHang kh = kh_dao.timKhachHang(hd.getKhachHang().getMaKH());
-            
+            NhanVien nv = nv_dao.TimNhanVien(hd.getNhanVien().getMaNV());
+            KhachHang kh = kh_dao.TimKhachHang(hd.getKhachHang().getMaKH());
+            KhuVuc kv = khuvuc_dao.layThongTin(String.valueOf(hd.getKhuVuc().getMaKhuVuc()));
+
             ArrayList<ChiTietHoaDon> dsCT = cthd_dao.TimHoaDon(hd.getMaHoaDon());
             double tong = 0;
             for (ChiTietHoaDon ct : dsCT) {
-                Mon mon = mon_dao.timMon(ct.getMon().getMaMon());
+                Mon mon = mon_dao.TimMon(ct.getMon().getMaMon());
                 tong += ct.getThanhTien();
             }
             String formattedTong = vn.format(tong) + " VND";
-            
-            // Add a row to the table with invoice details
+
             model.addRow(new Object[]{
                 hd.getMaHoaDon(),
-                hd.getKhuVuc().getMaKhuVuc(),
+                kv.getMaKhuVuc(), 
                 hd.getPhong().getMaPhong(),
                 hd.getBanAn().getMaBan(),
                 nv.getMaNV(),
                 hd.getNgayLap(),
                 kh.getTenKH(),
-                hd.getBanAn(),
+                hd.getBanAn().getSoBan(),
                 formattedTong
             });
         }
     }
 
-    
     @Override
     public void actionPerformed(ActionEvent e) {
     	Object o = e.getSource();

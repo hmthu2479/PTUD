@@ -5,6 +5,7 @@ import entity.NhanVien;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class NhanVienDAO {
     //lấy danh sách nhân viên
@@ -107,6 +108,32 @@ public class NhanVienDAO {
         }
         return n>0;
     }
+    public NhanVien TimNhanVien(String id) {
+		NhanVien nv = new NhanVien();
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
 
+			String sql = "select * from NhanVien where maNV=?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, id);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maNV = rs.getString(1).trim();
+                String tenNV = rs.getString(2).trim();
+                String phai = rs.getString(3).trim();
+                int tuoi = rs.getInt(4);
+                String soDienThoai = rs.getString(5).trim();
+                nv = new NhanVien(maNV,tenNV,phai,tuoi,soDienThoai);
+			}
+
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+
+		} 
+		return nv;
+	}
 }
 
