@@ -108,6 +108,11 @@ public class Mon {
 	}
 
 	
+	public Mon(String ma) {
+		// TODO Auto-generated constructor stub
+		this.maMon = ma;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(maMon);

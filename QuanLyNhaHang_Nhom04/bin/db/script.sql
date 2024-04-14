@@ -55,7 +55,7 @@ CREATE TABLE dbo.KhachHang(
     tenKH nvarchar(50) NULL,
     phai nchar(10) NULL,
     SDT nvarchar(20) NULL,
-    diaChi nvarchar(10) NULL,
+    diaChi nvarchar(100) NULL,
     PRIMARY KEY CLUSTERED (maKH)
 )
 
@@ -68,9 +68,24 @@ CREATE TABLE dbo.Mon(
     maMon nvarchar(10) NOT NULL PRIMARY KEY,
     tenMon nvarchar(50) NULL,
     donGia float NULL,
-    soLuongMonConTrongKho int NULL,
-    loaiMon nvarchar(50) NULL
+    loaiMon nvarchar(50) NULL,
+    soLuong int NULL, 
+    maBan nvarchar(30) NULL,
+    maPhong nvarchar(10) NULL,
+    maKhuVuc nvarchar(10) NULL,
+    FOREIGN KEY (maBan) REFERENCES dbo.Ban(maBan),
+    FOREIGN KEY (maPhong) REFERENCES dbo.Phong(maPhong),
+    FOREIGN KEY (maKhuVuc) REFERENCES dbo.KhuVuc(maKhuVuc)
 )
+
+INSERT INTO dbo.Mon (maMon, tenMon, donGia, soLuong, loaiMon)
+VALUES 
+    ('M001', N'Cơm gà', 50000, 20, N'Món nướng'),
+    ('M002', N'Phở bò', 45000, 15, N'Món lẩu'),
+    ('M003', N'Bún bò', 40000, 18, N'Món lẩu'),
+    ('M004', N'String', 20000, 25, N'Thức uống'),
+    ('M005', N'Trà tắc', 30000, 30, N'Thức uống');
+
 
 CREATE TABLE dbo.NhanVien(
     maNV nvarchar(10) NOT NULL PRIMARY KEY,
@@ -103,7 +118,7 @@ CREATE TABLE dbo.PhieuDatBan(
     FOREIGN KEY (maNV) REFERENCES dbo.NhanVien(maNV)
 )
 INSERT INTO dbo.PhieuDatBan (maPhieuDatBan, maKhuVuc, maPhong, maBan, soNguoi, ngayDat, ngayLap, gioDat, maKH, maNV)
-VALUES ('PH001', 'KV01', 'P001', 'B001', 4, '2024-04-12', '2024-04-11', '10:00 AM', 'KH001', 'NV001');
+VALUES ('PH001', 'KV01', 'P001', 'B001', 4, '2024-04-12', '2024-04-11', '10:00', 'KH001', 'NV001');
 
 CREATE TABLE dbo.ChiTietPhieuDatBan(
     maPhieuDatBan nvarchar(10) NOT NULL,
@@ -116,7 +131,14 @@ CREATE TABLE dbo.ChiTietPhieuDatBan(
 )
 CREATE TABLE dbo.HoaDon(
     maHoaDon nvarchar(10) NOT NULL,
+	tongTien float NULL,
+	khuVuc nvarchar(50) NULL,
+	phong nvarchar(50) NULL,
+	banAn nvarchar(50) NULL,
+	tenNhanVien nvarchar(50) NULL,
     ngayLap date NULL,
+	ngayDat date NULL,
+	tenKH nvarchar(50) NULL,
     maKH nvarchar(10) NULL,
     maPhieuDatBan nvarchar(10) NULL,
     maNV nvarchar(10) NULL,
@@ -129,6 +151,7 @@ CREATE TABLE dbo.HoaDon(
 CREATE TABLE dbo.ChiTietHoaDon(
     maHoaDon nvarchar(10) NOT NULL,
     maMon nvarchar(10) NULL,
+	tenMon nvarchar(50) NULL,
     soLuongMon int NULL,
     donGia float NULL,
     thanhTien float NULL,
