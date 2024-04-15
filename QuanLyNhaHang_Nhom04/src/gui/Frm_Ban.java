@@ -310,19 +310,17 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 	    else if (o.equals(btntim)) {
 	        String tenBan = txttim.getText();
 	        List<Ban> list = bandao.layThongTin();
-	        //Lấy model của bảng hiện tại
-	        DefaultTableModel model = (DefaultTableModel) table.getModel();
-	        model.setRowCount(0);
+	        modelBan.setRowCount(0);
 
 	        // Duyệt qua từng Bàn trong danh sách
 	        for (Ban ban : list) {
 	            if (ban.getSoBan().contains(tenBan)) { 
 	                //Thêm dòng mới vào bảng với thông tin của Bàn đó
-	                model.addRow(new Object[]{ban.getMaBan(), ban.getSoBan(), ban.getSoGhe(), ban.getKhuVuc().getMaKhuVuc(), ban.getPhong().getMaPhong()});
+	                modelBan.addRow(new Object[]{ban.getMaBan(), ban.getSoBan(), ban.getSoGhe(), ban.getKhuVuc().getMaKhuVuc(), ban.getPhong().getMaPhong()});
 	            }
 	        }
 
-	        if (model.getRowCount() == 0) {
+	        if (modelBan.getRowCount() == 0) {
 	            JOptionPane.showMessageDialog(this, "Không tìm thấy bàn");
 	        }
 	    }

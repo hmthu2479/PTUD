@@ -232,17 +232,15 @@ public class Frm_Phong extends JDialog implements ActionListener, MouseListener 
     	else if (o.equals(btntim)) {
     	    String tenPhong = txttim.getText(); 
     	    List<Phong> list = phong_dao.layThongTin(); 
-
-    	    DefaultTableModel model = (DefaultTableModel) table.getModel();
-    	    model.setRowCount(0); 
+    	    modelPhong.setRowCount(0); 
 
     	    for (Phong phong : list) {
     	        if (phong.getTenPhong().contains(tenPhong)) { 
-    	            model.addRow(new Object[]{phong.getMaPhong(), phong.getTenPhong(),phong.getKhuVuc().getMaKhuVuc(), phong.getSoGhe()});
+    	            modelPhong.addRow(new Object[]{phong.getMaPhong(), phong.getTenPhong(),phong.getKhuVuc().getMaKhuVuc(), phong.getSoGhe()});
     	        }
     	    }
 
-    	    if (model.getRowCount() == 0) {
+    	    if (modelPhong.getRowCount() == 0) {
     	        JOptionPane.showMessageDialog(this, "Không tìm thấy phòng"); 
     	    }
     	}

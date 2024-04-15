@@ -417,20 +417,18 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
 	    if (o.equals(btnTim)) {
 	        String tim = txtTim.getText();
 	        List<PhieuDatBan> list = phieu_dao.layThongTin();
-	        //Lấy model của bảng hiện tại
-	        DefaultTableModel model = (DefaultTableModel) table.getModel();
-	        model.setRowCount(0);
+	        modelPhieu.setRowCount(0);
 
 	        // Duyệt qua từng Bàn trong danh sách
 	        for (PhieuDatBan p : list) {
 	            if (p.getKhachHang().getMaKH().contains(tim)) { 
 	                //Thêm dòng mới vào bảng với thông tin của Bàn đó
-	                model.addRow(new Object[]{p.getMaPhieu(), p.getKhuVuc().getMaKhuVuc(), p.getPhong().getMaPhong(), p.getTenBan().getMaBan(), p.getSoLuongNguoi(),
+	                modelPhieu.addRow(new Object[]{p.getMaPhieu(), p.getKhuVuc().getMaKhuVuc(), p.getPhong().getMaPhong(), p.getTenBan().getMaBan(), p.getSoLuongNguoi(),
 	                        p.getNgayDat(), p.getNgayLap(), p.getGioDat().trim(),p.getKhachHang().getMaKH(), p.getNhanVien().getMaNV()});
 	            }
 	        }
 
-	        if (model.getRowCount() == 0) {
+	        if (modelPhieu.getRowCount() == 0) {
 	            JOptionPane.showMessageDialog(this, "Không tìm thấy phiếu");
 	        }
 	    }
@@ -446,6 +444,11 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
 	            String ngayDat = formatter.format(selectedDate);
 	            String gio = String.valueOf(cmbgioDat.getSelectedItem());
 	            int soLuong = (int) cmbsoLuongNguoi.getSelectedItem();
+	            int soGhe = soLuongGheBanDaChon();
+		        if (soLuong > soGhe) {
+		            JOptionPane.showMessageDialog(null, "Vượt quá số lượng, vui lòng chọn bàn khác !!! ", "Error", JOptionPane.ERROR_MESSAGE);
+		            return;
+		        } 
 	            String ma = (String) modelPhieu.getValueAt(r, 0);
 	            String khuVuc = String.valueOf(cmbkhuVuc.getSelectedItem());
 	            String khachHang = String.valueOf(cmbkhachHang.getSelectedItem());

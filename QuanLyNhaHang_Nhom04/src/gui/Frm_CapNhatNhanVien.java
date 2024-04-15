@@ -371,20 +371,18 @@ public class Frm_CapNhatNhanVien extends JPanel implements ActionListener,MouseL
 		if (o.equals(btnTim)) {
 	        String tim = txtTim.getText();
 	        List<NhanVien> list = nv_dao.layThongTin();
-	        //Lấy model của bảng hiện tại
-	        DefaultTableModel model = (DefaultTableModel) tableNhanVien.getModel();
-	        model.setRowCount(0);
+	        modelNV.setRowCount(0);
 
 	        // Duyệt qua từng Bàn trong danh sách
 	        for (NhanVien nv : list) {
 	            if (nv.getHoTenNV().contains(tim)) { 
 	                //Thêm dòng mới vào bảng với thông tin của Bàn đó
-	                model.addRow(new Object[]{nv.getMaNV(), nv.getHoTenNV(),nv.getPhai(),
+	                modelNV.addRow(new Object[]{nv.getMaNV(), nv.getHoTenNV(),nv.getPhai(),
 	    		            nv.getTuoi(), nv.getSdt()});
 	            }
 	        }
 
-	        if (model.getRowCount() == 0) {
+	        if (modelNV.getRowCount() == 0) {
 	            JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên");
 	        }
 	    }

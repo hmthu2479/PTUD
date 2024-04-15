@@ -131,12 +131,12 @@ public class Frm_ThongKe extends JPanel implements ActionListener {
         
         JLabel lblNewLabel_2 = new JLabel("Mã hóa đơn:");
         lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 24));
-        lblNewLabel_2.setBounds(332, 45, 157, 43);
+        lblNewLabel_2.setBounds(432, 45, 157, 43);
         panel.add(lblNewLabel_2);
         
         textField = new JTextField();
         textField.setFont(new Font("Times New Roman", Font.PLAIN, 17));
-        textField.setBounds(499, 50, 247, 35);
+        textField.setBounds(609, 50, 307, 35);
         panel.add(textField);
         textField.setColumns(10);
         
@@ -146,7 +146,7 @@ public class Frm_ThongKe extends JPanel implements ActionListener {
         	public void actionPerformed(ActionEvent e) {
         	}
         });
-        btnNewButton_1.setBounds(1116, 47, 106, 38);
+        btnNewButton_1.setBounds(956, 47, 106, 38);
         panel.add(btnNewButton_1);
         
         

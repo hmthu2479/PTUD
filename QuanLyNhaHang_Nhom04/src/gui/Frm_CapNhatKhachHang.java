@@ -335,19 +335,17 @@ public class Frm_CapNhatKhachHang extends JPanel implements ActionListener, Mous
 		 else if (o.equals(btnTim)) {
 		        String tim = txtTim.getText();
 		        List<KhachHang> list = kh_dao.layThongTin();
-		        //Lấy model của bảng hiện tại
-		        DefaultTableModel model = (DefaultTableModel) tableKhachHang.getModel();
-		        model.setRowCount(0);
+		        modelKH.setRowCount(0);
 
 		        // Duyệt qua từng Bàn trong danh sách
 		        for (KhachHang kh : list) {
 		            if (kh.getTenKH().contains(tim)) { 
 		                //Thêm dòng mới vào bảng với thông tin của Bàn đó
-		                model.addRow(new Object[]{kh.getMaKH(), kh.getTenKH(),kh.getPhai().trim(),kh.getSdt(),kh.getDiaChi()});
+		                modelKH.addRow(new Object[]{kh.getMaKH(), kh.getTenKH(),kh.getPhai().trim(),kh.getSdt(),kh.getDiaChi()});
 		            }
 		        }
 
-		        if (model.getRowCount() == 0) {
+		        if (modelKH.getRowCount() == 0) {
 		            JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng");
 		        }
 		    }
