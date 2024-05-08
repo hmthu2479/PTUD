@@ -20,7 +20,7 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JTextField txtMaMon, txtTenMon, txtDonGia, txtsoLuong, txtTongTien;
 	private DefaultTableModel model;
-	private JButton btnThem, btnTim, btnXoa, btnSua, btnLamMoi,btnThanhToan,btnThoat;
+	private JButton btnThem, btnTim, btnXoa, btnSua, btnLamMoi,btnTaoDon,btnDatDon;
 	private JComboBox<String> cmbLoaiMon, cmbKhuVuc, cmbBan, cmbPhong;
 	private JTable table;
 	
@@ -60,17 +60,6 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		lbl_titlle_panel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_titlle_panel_1.setFont(new Font("Arial", Font.BOLD, 16));
 
-		// Mã Món
-		JLabel lblMaMon = new JLabel("Mã Món:");
-		lblMaMon.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblMaMon.setBounds(804, 125, 100, 40);
-		panelThongTin.add(lblMaMon);
-
-		txtMaMon = new JTextField();
-		txtMaMon.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		txtMaMon.setBounds(900, 125, 200, 40);
-		panelThongTin.add(txtMaMon);
-		txtMaMon.setColumns(10);
 
 		// Nhãn "Tên Món"
 		JLabel lblTenMon = new JLabel("Tên Món:");
@@ -89,12 +78,12 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		// Đơn giá
 		JLabel lblDonGia = new JLabel("Đơn giá:");
 		lblDonGia.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblDonGia.setBounds(1152, 125, 100, 40);
+		lblDonGia.setBounds(807, 125, 100, 40);
 		panelThongTin.add(lblDonGia);
 
 		txtDonGia = new JTextField();
 		txtDonGia.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		txtDonGia.setBounds(1260, 125, 200, 40);
+		txtDonGia.setBounds(900, 125, 200, 40);
 		panelThongTin.add(txtDonGia);
 		txtDonGia.setColumns(10);
 
@@ -230,59 +219,59 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		scrollPane_2.setBounds(10, 373, 1057, 427);
 		add(scrollPane_2);
 
-		String[] Header = {"Khu Vực", "Phòng", "Bàn", "Mã Món", "Tên Món", "Loại Món","Đơn Giá", "Số Lượng"};
+		String[] Header = {"Khu Vực", "Phòng", "Bàn", "Tên Món", "Loại Món","Đơn Giá", "Số Lượng"};
 		model = new DefaultTableModel(Header, 0);
 		table = new JTable(model);
 		table.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		table.getTableHeader().setFont(new Font("Tahoma", Font.PLAIN, 16));
 		scrollPane_2.setViewportView(table);
 
-		// Khung thanh toán
-		JPanel panelThanhToan = new JPanel();
-		panelThanhToan.setBackground(new Color(255, 255, 204));
-		panelThanhToan.setBorder(new LineBorder(new Color(0, 0, 0), 3));
-		panelThanhToan.setBounds(1067, 373, 473, 427);
-		add(panelThanhToan);
-		panelThanhToan.setLayout(null);
+		// Khung tạo đơn
+		JPanel panelTaoDon = new JPanel();
+		panelTaoDon.setBackground(new Color(255, 255, 204));
+		panelTaoDon.setBorder(new LineBorder(new Color(0, 0, 0), 3));
+		panelTaoDon.setBounds(1067, 373, 473, 427);
+		add(panelTaoDon);
+		panelTaoDon.setLayout(null);
 
-		// Nhãn "Thành toán"
-		JLabel lblThanhToan = new JLabel("Thanh Toán");
+		// Nhãn "Tạo đơn"
+		JLabel lblThanhToan = new JLabel("Tạo đơn");
 		lblThanhToan.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblThanhToan.setBounds(179, 21, 193, 60);
-		panelThanhToan.add(lblThanhToan);
+		panelTaoDon.add(lblThanhToan);
 
 		// Nhãn "Tổng tiền"
 		JLabel lblTongTien = new JLabel("Tổng tiền:");
 		lblTongTien.setForeground(Color.RED);
 		lblTongTien.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblTongTien.setBounds(10, 129, 100, 30);
-		panelThanhToan.add(lblTongTien);
+		panelTaoDon.add(lblTongTien);
 
 		// Ô nhập liệu tổng tiền
 		txtTongTien = new JTextField();
 		txtTongTien.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtTongTien.setEditable(false);
 		txtTongTien.setBounds(119, 121, 344, 49);
-		panelThanhToan.add(txtTongTien);
+		panelTaoDon.add(txtTongTien);
 		txtTongTien.setColumns(10);
 
-		// Nút thanh toán
-		JButton btnThanhToan = new JButton("Thanh toán");
-		btnThanhToan.setForeground(new Color(0, 139, 139));
-		btnThanhToan.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnThanhToan.setBounds(39, 240, 152, 60);
-		panelThanhToan.add(btnThanhToan);
+		// Nút tạo đơn
+		JButton btnTaoDon = new JButton("Tạo Đơn");
+		btnTaoDon.setForeground(new Color(0, 139, 139));
+		btnTaoDon.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnTaoDon.setBounds(39, 240, 152, 60);
+		panelTaoDon.add(btnTaoDon);
 
-		// Nút thoát
-		JButton btnThoat = new JButton("Thoát");
-		btnThoat.setForeground(new Color(255, 0, 0));
-		btnThoat.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnThoat.setBounds(311, 240, 152, 60);
-		panelThanhToan.add(btnThoat);
+		// Nút đặt đơn
+		JButton btnDatDon = new JButton("Đặt đơn");
+		btnDatDon.setForeground(new Color(255, 0, 0));
+		btnDatDon.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnDatDon.setBounds(311, 240, 152, 60);
+		panelTaoDon.add(btnDatDon);
 
 		// Thêm sự kiện cho các nút
-		btnThanhToan.addActionListener(this);
-		btnThoat.addActionListener(this);
+		btnTaoDon.addActionListener(this);
+		btnDatDon.addActionListener(this);
 
 		
 		// Hiển thị giao diện
@@ -404,17 +393,13 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		}
 
 		// Nút thanh toán
-		if (source == btnThanhToan) {
+		if (source == btnTaoDon) {
 			// TODO: Implement payment functionality
 		}
 
 
 
-		// Nút thoát
-		if (source == btnThoat) {
-			if (JOptionPane.showConfirmDialog(null, "Bạn có muốn thoát chương trình?", "Thông báo", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-			}
-		}
+		
 	}
 
 	// Cập nhật tổng tiền

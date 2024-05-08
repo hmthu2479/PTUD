@@ -6,7 +6,11 @@ GO
 
 USE [QuanLyNhaHang]
 GO
-
+CREATE TABLE Foods (
+    MaMonAn VARCHAR(50),
+    TenMonAn VARCHAR(100),
+    LoaiMonAn VARCHAR(50)
+);
 CREATE TABLE dbo.KhuVuc(
     maKhuVuc nvarchar(10) NOT NULL PRIMARY KEY,
     tenKhuVuc nvarchar(30) NULL

@@ -13,7 +13,7 @@ public class CapNhatMonDAO {
 
     public static void themMonAnVaoDatabase(String maMonAn, String tenMonAn, String loaiMonAn) {
         try (Connection conn = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD)) {
-            String sql = "INSERT INTO Foods (MaMonAn, TenMonAn, LoaiMonAn) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO MonAn (MaMonAn, TenMonAn, LoaiMonAn) VALUES (?, ?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, maMonAn);
                 pstmt.setString(2, tenMonAn);
@@ -26,7 +26,7 @@ public class CapNhatMonDAO {
     }
     public static void themMonNuocVaoDatabase(String maMonNuoc, String tenMonNuoc, String loaiMonNuoc) {
         try (Connection conn = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD)) {
-            String sql = "INSERT INTO Foods (MaMonAn, TenMonAn, LoaiMonAn) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO MonAn (MaMonAn, TenMonAn, LoaiMonAn) VALUES (?, ?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, maMonNuoc);
                 pstmt.setString(2, tenMonNuoc);

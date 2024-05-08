@@ -89,7 +89,11 @@ public class PhieuDatBanDAO {
 	        statement = con.prepareStatement(SQL);
 	        statement.setString(1, phieu.getMaPhieu());
 	        statement.setString(2, phieu.getKhuVuc().getMaKhuVuc());
-	        statement.setString(3, phieu.getPhong().getMaPhong());
+	        if (phieu.getPhong() != null) {
+	            statement.setString(3, phieu.getPhong().getMaPhong());
+	        } else {
+	            statement.setNull(3, Types.VARCHAR);
+	        }
 	        statement.setString(4, phieu.getTenBan().getMaBan().trim());
 	        statement.setInt(5, phieu.getSoLuongNguoi());
 	        statement.setDate(6, new java.sql.Date(date.getTime()));

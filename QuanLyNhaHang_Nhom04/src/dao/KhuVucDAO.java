@@ -97,6 +97,23 @@ public class KhuVucDAO {
         return n > 0;
     }
 
+    public KhuVuc timKhuVuc(String maKhuVuc) {
+        KhuVuc khuVuc = null;
+        try {
+            Connection con = ConnectDB.getInstance().getConnection();
+            String SQL = "SELECT * FROM KhuVuc WHERE maKhuVuc = ?";
+            PreparedStatement statement = con.prepareStatement(SQL);
+            statement.setString(1, maKhuVuc);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                String tenKhuVuc = rs.getString("tenKhuVuc");
+                khuVuc = new KhuVuc(maKhuVuc, tenKhuVuc);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return khuVuc;
+    }
 
 }
 

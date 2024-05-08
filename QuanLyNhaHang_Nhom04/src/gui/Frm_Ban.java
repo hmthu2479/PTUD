@@ -115,6 +115,7 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 
         cmbkhuVuc = new JComboBox<String>();
         cmbkhuVuc.setEditable(false);	
+        cmbkhuVuc.addItem("Chọn khu vực");
 		ArrayList<KhuVuc> listKV = kvdao.layThongTin() ;
 		for (KhuVuc kv : listKV) {
 			cmbkhuVuc.addItem(kv.getTenKhuVuc());
@@ -131,12 +132,14 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 		    public void actionPerformed(ActionEvent e) {
 		        String chonKhuVuc = (String) cmbkhuVuc.getSelectedItem();
 		        cmbPhong.removeAllItems();
+		        cmbPhong.addItem("Chọn phòng");
 		        ArrayList<Phong> chonPhongTuKV = phongdao.layThongTinPhongTheoKhuVuc(chonKhuVuc);
 		        for (Phong p : chonPhongTuKV) {
 		            cmbPhong.addItem(p.getTenPhong());
 		        }
 		    }
 		});
+		
 
 		cmbkhuVuc.setFont(new Font("Tahoma", Font.BOLD, 15));
 		cmbPhong.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -255,7 +258,7 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
-	  	
+	  			
 		if (o.equals(btnthem)) {
 		    String maBan = maTangDan();
 		    String soBan = txttenBan.getText();
@@ -276,20 +279,26 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 		    ArrayList<Phong> dsPhong = phongDao.layThongTin();
 		    
 		    KhuVuc kv = timTenKhuVuc(dsKV, khuVuc);
-		    Phong ph = timTenPhong(dsPhong, phong);
-		    
+		    Phong ph = null;
+
+		    if (!phong.equals("Chon phong")) {
+		        Phong phongObject = timTenPhong(dsPhong, phong);
+		        if (phongObject != null) {
+		            ph = phongObject;
+		        }
+		    }
 		    if (kv != null) {
 		        Ban b = new Ban(maBan, soBan, soGhe, kv, ph);
 		        if (bandao.themBan(b)) {
-		            modelBan.addRow(new Object[]{b.getMaBan(), b.getSoBan(), b.getSoGhe(), kv.getTenKhuVuc(), ph.getTenPhong()});
+		            modelBan.addRow(new Object[]{b.getMaBan(), b.getSoBan(), b.getSoGhe(), kv.getTenKhuVuc(), ph != null ? ph.getTenPhong() : null});
 		            JOptionPane.showMessageDialog(this, "Thêm thành công");
 		            xoaRong();
 		        } else {
 		            JOptionPane.showMessageDialog(null, "Trùng mã", "Lỗi", JOptionPane.ERROR_MESSAGE);
 		        }
 		    } 
+		}	
 
-	    }	
 	    if(o.equals(btnlamMoi)) {
 	    	modelBan.setRowCount(0);
 	    	docDuLieuDBVaoTable();
@@ -353,13 +362,13 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
                 String p = (String) modelBan.getValueAt(r, 4);
 
                 
-                if (!tenBan.equals(ban) || soGhe != ghe || !khuVuc.equals(kv) || !phong.equals(p)) {
+                if (!tenBan.equals(ban) || soGhe != ghe || !khuVuc.equals(kv) || phong != null && !phong.equals(p)) {
                     try {
                         bandao.capNhatThongTinBan(maBan, tenBan, soGhe, khuVuc, phong);
                         modelBan.setValueAt(tenBan, r, 1);
                         modelBan.setValueAt(soGhe, r, 2);
                         modelBan.setValueAt(khuVuc, r, 3);
-                        modelBan.setValueAt(phong, r, 4);
+                        modelBan.setValueAt(phong == null ? phong : "", r, 4);
                         xoaRong();
 
                         JOptionPane.showMessageDialog(this, "Dữ liệu đã được sửa thành công");
@@ -411,13 +420,19 @@ public class Frm_Ban extends JDialog implements ActionListener,MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		 int row = table.getSelectedRow();
-		    txttenBan.setText(modelBan.getValueAt(row, 1).toString());
-		    txtsoGhe.setText(modelBan.getValueAt(row, 2).toString());
-		    cmbkhuVuc.setSelectedItem(modelBan.getValueAt(row, 3).toString());
-		    cmbPhong.setSelectedItem(modelBan.getValueAt(row, 4).toString());
+	    int row = table.getSelectedRow();
+	    txttenBan.setText(modelBan.getValueAt(row, 1).toString());
+	    txtsoGhe.setText(modelBan.getValueAt(row, 2).toString());
+	    cmbkhuVuc.setSelectedItem(modelBan.getValueAt(row, 3).toString());
+
+	    Object phongObj = modelBan.getValueAt(row, 4);
+	    if (phongObj != null) {
+	        cmbPhong.setSelectedItem(phongObj.toString());
+	    } else {
+	        cmbPhong.setSelectedIndex(0);
+	    }
 	}
+
 
 
 	@Override
