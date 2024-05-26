@@ -1,4 +1,8 @@
-/gui/
+/connectDB/
 /dao/
+/db/
 /entity/
-/other/
+/gui/
+/img/
+/lib/
+/timKiem/

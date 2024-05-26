@@ -29,14 +29,14 @@ public class PhieuDatBanDAO {
 	                "INNER JOIN KhachHang kh ON phieu.maKH = kh.maKH " +
 	                "INNER JOIN NhanVien nv ON phieu.maNV = nv.maNV " + 
 	                "INNER JOIN Ban b ON phieu.maBan = b.maBan " +
-	                "INNER JOIN Phong p ON phieu.maPhong = p.maPhong";
+	                "LEFT JOIN Phong p ON phieu.maPhong = p.maPhong";
 
 	        Statement statement = con.createStatement();
 	        ResultSet rs = statement.executeQuery(SQL);
 	        while (rs.next()){
 	            String maPhieu = rs.getString(1);
 	            String tenKhuVuc = rs.getString(2);
-	            String tenPhong = rs.getString(3).trim();
+	            String tenPhong = rs.getString(3);
 	            String soBan = rs.getString(4).trim();
 	            int soLuongNguoi = rs.getInt(5);
 	            String ngayDat = rs.getString(6);
@@ -70,7 +70,7 @@ public class PhieuDatBanDAO {
 	                + "INNER JOIN KhachHang kh ON phieu.maKH = kh.maKH "
 	                + "INNER JOIN NhanVien nv ON phieu.maNV = nv.maNV "
 	                + "INNER JOIN Ban b ON phieu.maBan = b.maBan "
-	                + "INNER JOIN Phong p ON phieu.maPhong = p.maPhong "
+	                + "LEFT JOIN Phong p ON phieu.maPhong = p.maPhong "
 	                + "WHERE kh.tenKH = ?";
 
 	        PreparedStatement statement = con.prepareStatement(SQL);
@@ -79,7 +79,7 @@ public class PhieuDatBanDAO {
 	        while (rs.next()) {
 	            String maPhieu = rs.getString(1);
 	            String tenKhuVuc = rs.getString(2);
-	            String tenPhong = rs.getString(3).trim();
+	            String tenPhong = rs.getString(3);
 	            String soBan = rs.getString(4).trim();
 	            int soLuongNguoi = rs.getInt(5);
 	            String ngayDat = rs.getString(6);

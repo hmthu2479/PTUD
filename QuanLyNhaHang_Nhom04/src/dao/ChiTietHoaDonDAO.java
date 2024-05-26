@@ -68,23 +68,19 @@ public class ChiTietHoaDonDAO{
 			statement.setString(1, id);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
-				HoaDon hd = new HoaDon(rs.getString(1));
-                Mon mon = new Mon(rs.getString(2));
-                double thanhtien = rs.getDouble(3);
-                ChiTietHoaDon ct = new ChiTietHoaDon(hd, mon, thanhtien);
+                HoaDon hd = new HoaDon(rs.getString(1));
+                String mon = rs.getString(2);
+                int soLuong = rs.getInt(3);
+                double donGia = rs.getDouble(4);
+                double thanhtien = rs.getDouble(5);
+                ChiTietHoaDon ct = new ChiTietHoaDon(hd, mon,soLuong,donGia,thanhtien);
                 ds.add(ct);
-			}
+            }
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 
-		} finally {
-			try {
-				statement.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 		return ds;
 	}
 }

@@ -54,7 +54,6 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
 	private JButton btnSua;
 	private JButton btnLamMoi;
 	private JLabel lblTitle;
-	private JButton btnChonMon;
 
     public Frm_DatBan() {
     	try {
@@ -296,15 +295,11 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
         
         JPanel pnlbtnSua = new JPanel(new GridLayout(1, 2,20,0));
         pnlbtnSua.setBackground(new Color(160, 210, 180));
-        pnlbtnSua.setBorder(new EmptyBorder(30, 20, 0, 20));
+        pnlbtnSua.setBorder(new EmptyBorder(30, 20, 0, 190));
         btnSua = new JButton("Sửa");
         Font btnFont = new Font("Arial", Font.BOLD, 17); 
         btnSua.setFont(btnFont);
         pnlbtnSua.add(btnSua);
-        btnChonMon = new JButton("Chọn món");
-        btnChonMon.setFont(new Font("Arial", Font.BOLD, 19));
-        pnlbtnSua.add(btnChonMon);
-        pnlN.add(pnlbtnSua);
         pnlN.add(pnlbtnSua);
         mainPanel.add(pnlN, BorderLayout.CENTER);
         add(mainPanel);
