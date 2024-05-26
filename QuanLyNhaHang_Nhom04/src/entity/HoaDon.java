@@ -14,7 +14,7 @@ public class HoaDon {
     private KhachHang khachHang;
     private Date ngayDat;
 
-
+    
 	public HoaDon(String maHoaDon, double tongTien, KhuVuc khuVuc, Phong phong, Ban banAn, NhanVien nhanVien,
 			Date ngayLap, KhachHang khachHang, Date ngayDat) {
 		super();
@@ -29,9 +29,12 @@ public class HoaDon {
 		this.ngayDat = ngayDat;
 	}
 
+
 	public HoaDon(String mahd) {
 		this.maHoaDon=mahd;
 	}
+
+
 
 	public String getMaHoaDon() {
 		return maHoaDon;

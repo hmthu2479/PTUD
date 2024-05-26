@@ -1,36 +1,49 @@
 package gui;
 
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
-import java.awt.Font;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.DefaultComboBoxModel;
+
+import connectDB.ConnectDB;
+import entity.MonAn;
+import dao.MonAnDao;
+
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.List;
+import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class Frm_CapNhatMonAn extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    private JTextField textField;
+    private JTextField txtMa;
     private JTable table;
     private JComboBox<String> comboBox;
-    private JTextField textField_1;
+    private JTextField txtTenMon;
+	private JTextField txtDonGia;
+	private MonAnDao ma_dao;
+	private DefaultTableModel model;
 
     /**
      * Create the panel.
      */
     public Frm_CapNhatMonAn() {
-        setBorder(new EmptyBorder(5, 5, 5, 5));
+		try {
+			ConnectDB.getInstance().connect();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ma_dao = new MonAnDao();
         setLayout(null);
 
         JLabel lblNewLabel = new JLabel("Thông tin món ăn");
@@ -48,70 +61,76 @@ public class Frm_CapNhatMonAn extends JPanel {
         separator.setBounds(485, 84, 15, 409);
         add(separator);
 
-        JLabel lblNewLabel_1 = new JLabel("Mã món:");
+        JLabel lblNewLabel_1 = new JLabel("Mã món ăn:");
         lblNewLabel_1.setFont(new Font("Times New Roman", Font.BOLD, 27));
         lblNewLabel_1.setBounds(10, 119, 190, 38);
         add(lblNewLabel_1);
-
-        JLabel lblNewLabel_1_1 = new JLabel("Tên món:");
-        lblNewLabel_1_1.setFont(new Font("Times New Roman", Font.BOLD, 27));
-        lblNewLabel_1_1.setBounds(10, 235, 190, 38);
-        add(lblNewLabel_1_1);
-
-        JLabel lblNewLabel_1_2 = new JLabel("Loại món:");
+        
+        JLabel lblNewLabel_1_2 = new JLabel("Loại món ăn:");
         lblNewLabel_1_2.setFont(new Font("Times New Roman", Font.BOLD, 27));
         lblNewLabel_1_2.setBounds(10, 363, 190, 38);
         add(lblNewLabel_1_2);
 
-        textField = new JTextField();
-        textField.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-        textField.setBounds(203, 119, 252, 34);
-        add(textField);
-        textField.setColumns(10);
+        JLabel lblNewLabel_1_1 = new JLabel("Tên món ăn:");
+        lblNewLabel_1_1.setFont(new Font("Times New Roman", Font.BOLD, 27));
+        lblNewLabel_1_1.setBounds(10, 235, 190, 38);
+        add(lblNewLabel_1_1);
 
-        comboBox = new JComboBox<>(new String[]{"Nước ngọt", "Nước ép", "Bia"});
-        comboBox.setModel(new DefaultComboBoxModel<>(new String[]{"Món nướng", "Món lẩu", "Món tráng miệng"}));
+        JLabel lblDonGia = new JLabel("Đơn giá:");
+        lblDonGia.setFont(new Font("Times New Roman", Font.BOLD, 27));
+        lblDonGia.setBounds(10, 463, 190, 38);
+        add(lblDonGia);
+
+        txtMa = new JTextField();
+        txtMa.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+        txtMa.setBounds(203, 119, 252, 34);
+        add(txtMa);
+        txtMa.setColumns(10);
+        
+
+        comboBox = new JComboBox<>(new String[]{"Món nước", "Cơm","Lẩu", "Món ăn khác"});
         comboBox.setFont(new Font("Times New Roman", Font.BOLD, 18));
-        comboBox.setSize(245, 39);
-        comboBox.setLocation(210, 362);
-
+        comboBox.setBounds(210, 362, 245, 39);
         add(comboBox);
 
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setBounds(499, 118, 535, 375);
         add(scrollPane);
 
-        table = new JTable();
-        table.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-        table.setModel(new DefaultTableModel(
-                new Object[][]{},
-                new String[]{
-                    "Mã món nước", "Tên món nước", "Loại món nước"
-                }
-        ));
+   
+        String[] columnNames = {"Mã món ăn", "Loại món ăn", "Tên món ăn", "Đơn giá"};
 
+        model = new DefaultTableModel(columnNames, 0);
+		table = new JTable(model);
         scrollPane.setViewportView(table);
 
         JButton btnNewButton = new JButton("Thêm");
         btnNewButton.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-        btnNewButton.setBounds(40, 429, 85, 38);
+        btnNewButton.setBounds(40, 529, 85, 38);
         add(btnNewButton);
 
         JButton btnXoa = new JButton("Xóa");
         btnXoa.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-        btnXoa.setBounds(185, 429, 85, 38);
+        btnXoa.setBounds(185, 529, 85, 38);
         add(btnXoa);
 
         JButton btnThoat = new JButton("Thoát");
         btnThoat.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-        btnThoat.setBounds(330, 429, 85, 38);
+        btnThoat.setBounds(330, 529, 85, 38);
         add(btnThoat);
 
-        textField_1 = new JTextField();
-        textField_1.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-        textField_1.setColumns(10);
-        textField_1.setBounds(203, 235, 252, 34);
-        add(textField_1);
+        txtTenMon = new JTextField();
+        txtTenMon.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+        txtTenMon.setColumns(10);
+        txtTenMon.setBounds(203, 235, 252, 34);
+        add(txtTenMon);
+        
+        txtDonGia = new JTextField();
+        txtDonGia.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+        txtDonGia.setColumns(10);
+        txtDonGia.setBounds(203, 465, 252, 34);
+        add(txtDonGia);
+
 
         btnNewButton.addActionListener(new ActionListener() {
             @Override
@@ -126,40 +145,53 @@ public class Frm_CapNhatMonAn extends JPanel {
                 deleteSelectedRow();
             }
         });
-
         btnThoat.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
         });
+        docDuLieuDBVaoTable();
     }
 
+    public void docDuLieuDBVaoTable() {
+	    List<MonAn> list = ma_dao.layThongTin();
+	    for (MonAn mon : list) {
+	        model.addRow(new Object[]{mon.getMaMonAn(), mon.getLoaiMonAn(),mon.getTenMonAn(),mon.getDonGia()});
+	    }
+	}
     private void addFood() {
-        String maMonAn = textField.getText();
-        String tenMonAn = textField_1.getText();
+        String maMonAn = txtMa.getText();
+        String tenMonAn = txtTenMon.getText();
         String loaiMon = (String) comboBox.getSelectedItem();
-
+        double donGia = Double.parseDouble(txtDonGia.getText()) ;
+        
+        MonAn mn = new MonAn(maMonAn, loaiMon, tenMonAn, donGia);
         if (!maMonAn.isEmpty() && !tenMonAn.isEmpty()) {
-            DefaultTableModel model = (DefaultTableModel) table.getModel();
-            model.addRow(new Object[]{maMonAn, tenMonAn, loaiMon});
-            // DatabaseConnector.themMonAnVaoDatabase(maMonAn, tenMonAn, loaiMon); // Thêm vào cơ sở dữ liệu
+            model.addRow(new Object[]{maMonAn, tenMonAn, loaiMon,donGia});
+            
+            ma_dao.themMonAn(mn) ;// Thêm vào cơ sở dữ liệu
             // Clear text fields after adding
-            textField.setText("");
-            textField_1.setText("");
+            txtMa.setText("");
+            txtTenMon.setText("");
+            txtDonGia.setText("");
             comboBox.setSelectedIndex(0);
         } else {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin món ăn.");
         }
     }
 
+    // Method to delete selected row from the table
     private void deleteSelectedRow() {
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow != -1) {
-            DefaultTableModel model = (DefaultTableModel) table.getModel();
-            model.removeRow(selectedRow);
-        } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn hàng để xóa.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+    	int r = table.getSelectedRow();
+        if (r != -1) {
+            String maMon = (String) model.getValueAt(r, 0);
+            
+            int rs = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa món này?");
+            if (rs == JOptionPane.YES_OPTION) {
+                model.removeRow(r);
+                ma_dao.xoaMonAn(maMon);
+            }
         }
     }
 }

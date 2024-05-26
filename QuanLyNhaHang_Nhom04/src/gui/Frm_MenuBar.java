@@ -20,6 +20,7 @@ import java.awt.event.MouseListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+
 import timKiem.FrmTimKiemKhachHang;
 import timKiem.Frm_TimKiemNhanVien;
 
@@ -36,6 +37,8 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
 	private Frm_TimKiemNhanVien timKiemNhanVien;
 	private FrmTimKiemKhachHang timKiemKhachHang;
 	private Frm_CapNhatMonNuoc capNhatMonNuoc;
+	private Frm_DanhSachHoaDon dsHoaDon;
+
 
     public Frm_MenuBar() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,7 +51,7 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
         JMenuItem mniCapNhatMonAn = new JMenuItem("Cập nhật món ăn");
         thucDon.add(mniCapNhatMonNuoc);
         thucDon.add(mniCapNhatMonAn);
-
+        
         JMenu ban = new JMenu("Bàn");
         JMenuItem mniCapNhatKV = new JMenuItem("Cập nhật khu vực");
         JMenuItem mniCapNhatP = new JMenuItem("Cập nhật phòng");
@@ -62,11 +65,13 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
         JMenuItem mniDatBan = new JMenuItem("Đặt bàn");
         JMenuItem mniCapNhatNhanVien = new JMenuItem("Cập nhật nhân viên");
         JMenuItem mniTimKiemNhanVien = new JMenuItem("Tìm kiếm nhân viên");
+        JMenuItem mniHoaDon = new JMenuItem("Danh sách hóa đơn");
         JMenuItem mniThongKe = new JMenuItem("Thống kê doanh thu");
         nhanVienMenu.add(mniDatMon);
         nhanVienMenu.add(mniDatBan);
         nhanVienMenu.add(mniCapNhatNhanVien);
         nhanVienMenu.add(mniTimKiemNhanVien);
+        nhanVienMenu.add(mniHoaDon);
         nhanVienMenu.add(mniThongKe);
 
 
@@ -83,6 +88,7 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
         menuBar.add(khachHangMenu);
 
         ActionListener menuActionListener = new ActionListener() {
+
 			@Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == mniDatBan) {
@@ -119,6 +125,10 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
                     timKiemKhachHang = new FrmTimKiemKhachHang();
                     setContentPane(timKiemKhachHang);
                 }
+                else if (e.getSource() == mniHoaDon) {
+                    dsHoaDon = new Frm_DanhSachHoaDon();
+                    setContentPane(dsHoaDon);
+                }
                 revalidate();
             }
         };
@@ -135,6 +145,7 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
         mniCapNhatBan.addActionListener(menuActionListener);
         mnicapNhatKhachHang.addActionListener(menuActionListener);
         mniTimKiem.addActionListener(menuActionListener);
+        mniHoaDon.addActionListener(menuActionListener);
         
         menuBar.setLayout(new FlowLayout(FlowLayout.CENTER)); 
         menuBar.setBorder(new EmptyBorder(7, 0, 0, 0));

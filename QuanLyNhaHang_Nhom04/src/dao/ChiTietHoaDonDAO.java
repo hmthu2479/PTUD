@@ -23,9 +23,11 @@ public class ChiTietHoaDonDAO{
 			ResultSet rs = statement.executeQuery(SQL);
 			while (rs.next()) {
                 HoaDon hd = new HoaDon(rs.getString(1));
-                Mon mon = new Mon(rs.getString(2));
-                double thanhtien = rs.getDouble(3);
-                ChiTietHoaDon ct = new ChiTietHoaDon(hd, mon, thanhtien);
+                String mon = rs.getString(2);
+                int soLuong = rs.getInt(3);
+                double donGia = rs.getDouble(4);
+                double thanhtien = rs.getDouble(5);
+                ChiTietHoaDon ct = new ChiTietHoaDon(hd, mon,soLuong,donGia,thanhtien);
                 dsChiTietHoaDon.add(ct);
             }
 		} catch (SQLException e) {
@@ -34,29 +36,22 @@ public class ChiTietHoaDonDAO{
 		return dsChiTietHoaDon;
 	}
 
-	public boolean themDonHang(ChiTietHoaDon ct) {
+	public boolean themDon(ChiTietHoaDon ct) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
-		String SQL = "INSERT INTO ChiTietHoaDon VALUES (?,?,?)";
+		String SQL = "INSERT INTO ChiTietHoaDon VALUES (?,?,?,?,?)";
 		int n = 0;
 		try {
 			statement = con.prepareStatement(SQL);
             statement.setString(1, ct.getHoaDon().getMaHoaDon());
-            statement.setString(2, ct.getMon().getTenMon());
-            statement.setInt(3, ct.getMon().getSoLuong());
-            statement.setDouble(4, ct.getMon().getDonGia());
+            statement.setString(2, ct.getMon());
+            statement.setInt(3, ct.getSoLuong());
+            statement.setDouble(4, ct.getDonGia());
             statement.setDouble(5, ct.getThanhTien());
             n = statement.executeUpdate();
         } catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				statement.close();
-			} catch (SQLException e) {
-				// TODO: handle exception
-				e.printStackTrace();
-			}
 		}
 		return n > 0;
 	}

@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -47,6 +48,34 @@ public class HoaDonDAO {
         }
         return hoaDonList;
     }
+	public List<HoaDon> findHoaDonWithNullMaKH() {
+	    List<HoaDon> hoaDonList = new ArrayList<>();
+	    ConnectDB.getInstance();
+	    Connection con = ConnectDB.getConnection();
+	    PreparedStatement statement = null;
+	    try {
+	        String SQL = "SELECT * FROM HoaDon WHERE maKH IS NULL";
+	        statement = con.prepareStatement(SQL);
+	        ResultSet rs = statement.executeQuery();
+	        while (rs.next()) {
+	            String maHoaDon = rs.getString(1);
+	            double tongTien = rs.getDouble(2);
+	            KhuVuc khuVuc = new KhuVuc(rs.getString(3));
+	            Phong phong = new Phong(rs.getString(4));
+	            Ban banAn = new Ban(rs.getString(5));
+	            NhanVien tenNhanVien = new NhanVien(rs.getString(6));
+	            Date ngayLap = rs.getDate(7);
+	            KhachHang tenKhachHang = null; // Set to null since maKH is null
+	            Date ngayDat = rs.getDate(9);
+
+	            HoaDon hoaDon = new HoaDon(maHoaDon, tongTien, khuVuc, phong, banAn, tenNhanVien, ngayLap, tenKhachHang, ngayDat);
+	            hoaDonList.add(hoaDon);
+	        }
+	    } catch (SQLException e) {
+	        throw new RuntimeException(e);
+	    }
+	    return hoaDonList;
+	}
 	public boolean themHoaDon(HoaDon hd){
         ConnectDB.getInstance();
         Connection con = ConnectDB.getConnection();
@@ -57,21 +86,47 @@ public class HoaDonDAO {
             statement = con.prepareStatement(sql);
             statement.setString(1,hd.getMaHoaDon());
             statement.setDouble(2,hd.getTongTien());
-            statement.setString(4,hd.getPhong().getMaPhong());
+            statement.setString(3,hd.getKhuVuc().getMaKhuVuc());
+	        if (hd.getPhong() != null) {
+	            statement.setString(4, hd.getPhong().getMaPhong());
+	        } else {
+	            statement.setNull(4, Types.VARCHAR);
+	        }
             statement.setString(5,hd.getBanAn().getMaBan());
             statement.setString(6,hd.getNhanVien().getMaNV());
-            statement.setString(7,hd.getKhachHang().getMaKH());
-            LocalDate ngayDat, ngayLap;
-            ngayDat= hd.getNgayDat().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            ngayLap= hd.getNgayLap().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            statement.setDate(8, java.sql.Date.valueOf(ngayDat));
-            statement.setDate(9, java.sql.Date.valueOf(ngayLap));
+            statement.setDate(7, new java.sql.Date(hd.getNgayLap().getTime()));
+	        if (hd.getKhachHang() != null) {
+	            statement.setString(8, hd.getKhachHang().getMaKH());
+	        } else {
+	            statement.setNull(8, Types.VARCHAR);
+	        }
+	         
+	        if (hd.getNgayDat() != null) {
+	            statement.setDate(9, new java.sql.Date(hd.getNgayDat().getTime()));
+	        } else {
+	            statement.setNull(9, Types.VARCHAR);
+	        } 
             n = statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return n>0;
     }
+	public String layMaMoiNhat() {
+	    String ma = null;
+	    try {
+	        Connection connection = ConnectDB.getInstance().getConnection();
+	        Statement statement = connection.createStatement();
+	        ResultSet resultSet = statement.executeQuery("SELECT MAX(maHoaDon) AS ma FROM HoaDon");
+	        if (resultSet.next()) {
+	            ma = resultSet.getString("ma");
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return ma;
+	}
 	public ArrayList<HoaDon> timHoaDon(String idHD){
         ArrayList<HoaDon> dsHoaDon = new ArrayList<HoaDon>();
         ConnectDB.getInstance();

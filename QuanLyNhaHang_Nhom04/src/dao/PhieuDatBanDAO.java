@@ -59,7 +59,50 @@ public class PhieuDatBanDAO {
 	    }
 	    return dsPhieuDB;
 	}
+	public ArrayList<PhieuDatBan> layPhieuTheoTenKH(String tenKH) {
+	    ArrayList<PhieuDatBan> dsPhieuDB = new ArrayList<>();
+	    try {
+	        ConnectDB.getInstance().connect();
+	        Connection con = ConnectDB.getConnection();
+	        String SQL = "SELECT phieu.maPhieuDatBan, k.tenKhuVuc, p.tenPhong, b.soBan, phieu.soNguoi, phieu.ngayDat, phieu.ngayLap, phieu.gioDat, kh.tenKH, nv.tenNV "
+	                + "FROM PhieuDatBan phieu "
+	                + "INNER JOIN KhuVuc k ON phieu.maKhuVuc = k.maKhuVuc "
+	                + "INNER JOIN KhachHang kh ON phieu.maKH = kh.maKH "
+	                + "INNER JOIN NhanVien nv ON phieu.maNV = nv.maNV "
+	                + "INNER JOIN Ban b ON phieu.maBan = b.maBan "
+	                + "INNER JOIN Phong p ON phieu.maPhong = p.maPhong "
+	                + "WHERE kh.tenKH = ?";
 
+	        PreparedStatement statement = con.prepareStatement(SQL);
+	        statement.setString(1, tenKH);
+	        ResultSet rs = statement.executeQuery();
+	        while (rs.next()) {
+	            String maPhieu = rs.getString(1);
+	            String tenKhuVuc = rs.getString(2);
+	            String tenPhong = rs.getString(3).trim();
+	            String soBan = rs.getString(4).trim();
+	            int soLuongNguoi = rs.getInt(5);
+	            String ngayDat = rs.getString(6);
+	            java.sql.Date ngayLapDate = rs.getDate(7);
+	            LocalDate ngayLap = ngayLapDate.toLocalDate();
+	            String gioDat = rs.getString(8).trim();
+	            String tenKhachHang = rs.getString(9);
+	            String tenNhanVien = rs.getString(10);
+
+	            KhuVuc khuVuc = new KhuVuc(tenKhuVuc);
+	            Ban ban = new Ban(soBan);
+	            NhanVien nv = new NhanVien(tenNhanVien);
+	            KhachHang kh = new KhachHang(tenKhachHang);
+	            Phong phong = new Phong(tenPhong);
+
+	            PhieuDatBan p = new PhieuDatBan(maPhieu, khuVuc, phong, ban, soLuongNguoi, ngayDat, ngayLap, gioDat, kh, nv);
+	            dsPhieuDB.add(p);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return dsPhieuDB;
+	}
 	public String layMaMoiNhat() {
 	    String ma = null;
 	    try {

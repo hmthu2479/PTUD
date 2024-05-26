@@ -1,99 +1,197 @@
 package gui;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import java.awt.Color;
 import java.awt.Font;
-import javax.swing.ImageIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Locale;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-public class Frm_DanhSachHoaDon extends JFrame {
+import dao.BanDAO;
+import dao.ChiTietHoaDonDAO;
+import dao.HoaDonDAO;
+import dao.KhachHangDAO;
+import dao.KhuVucDAO;
+import dao.NhanVienDAO;
+import dao.PhongDAO;
+import entity.ChiTietHoaDon;
+import entity.HoaDon;
+import entity.KhachHang;
+import entity.KhuVuc;
+import entity.Mon;
+import entity.NhanVien;
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private JTable table;
+public class Frm_DanhSachHoaDon extends JPanel implements ActionListener{
+	  private static final long serialVersionUID = 1L;
+	    private DefaultTableModel model;
+	    private JTable table;
+	    private JButton btnNewButton;
+	    private Frm_DanhSachHoaDon inhoadon;
+	    private JTable table_1;
+	    private JTextField textField;
+		private HoaDonDAO hd_dao;
+		private DefaultTableModel tablemodel;
+		private DefaultTableModel table_1_model;
+		private ArrayList<HoaDon> HoaDon;
+		private ChiTietHoaDonDAO cthd_dao;
+		private KhuVucDAO khuvuc_dao;
+		private ArrayList<KhuVuc> KhuVuc;
+		private PhongDAO phong_dao;
+		private NhanVienDAO nv_dao;
+		private BanDAO ban_dao;
+		private KhachHangDAO kh_dao;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Frm_DanhSachHoaDon frame = new Frm_DanhSachHoaDon();
-					frame.setVisible(true);
-					frame.setLocationRelativeTo(null);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the frame.
-	 */
-	public Frm_DanhSachHoaDon() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 758, 445);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+	    /**
+	     * Create the panel.
+	     */
+	    public Frm_DanhSachHoaDon() {
+	    	setSize(2050,1050);
+	    	setBackground(new Color(255, 128, 192));
+	        setBounds(100, 100, 1304, 750);
+	        setLayout(null);
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("Danh sách hóa đơn");
-		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 30));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(275, 34, 315, 48);
-		contentPane.add(lblNewLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon(getClass().getResource("/img/bill.png")));
-		lblNewLabel_1.setBounds(35, 11, 189, 133);
-		contentPane.add(lblNewLabel_1);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(0, 155, 742, 207);
-		contentPane.add(scrollPane);
-		
-		table = new JTable();
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-			},
-			new String[] {
-				"M\u00E3 h\u00F3a \u0111\u01A1n", "Ng\u00E0y l\u1EADp", "B\u00E0n \u0103n", "T\u1ED5ng ti\u1EC1n", "Kh\u00E1ch h\u00E0ng"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, String.class, String.class, String.class, String.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
-		scrollPane.setViewportView(table);
-		
-		JLabel lblNewLabel_2 = new JLabel("Ngày xuất hóa đơn: ");
-		lblNewLabel_2.setText("Ngày giờ hiện tại: " + java.time.LocalDateTime.now());
-		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		lblNewLabel_2.setBounds(270, 93, 344, 38);
-		contentPane.add(lblNewLabel_2);
+
+			phong_dao = new PhongDAO();
+			ban_dao = new BanDAO();
+			nv_dao = new NhanVienDAO();
+			kh_dao = new KhachHangDAO();
+	        hd_dao = new HoaDonDAO();
+	        cthd_dao = new ChiTietHoaDonDAO();
+	        khuvuc_dao = new KhuVucDAO();
+	        
+	        JScrollPane scrollPane = new JScrollPane();
+	        scrollPane.setBounds(0, 192, 1537, 179);
+	        add(scrollPane);
+
+	        Object[][] data = {};
+	        String[] hears ={"Mã hóa đơn", "Tổng tiền", "Khu vực", "Phòng", "Bàn ăn", "Nhân viên", "Ngày lập","Khách hàng ","Ngày đặt"};
+	        tablemodel = new DefaultTableModel(data, hears);
+	        table = new JTable(tablemodel);
+	        scrollPane.setViewportView(table);
+	        
+	        JLabel lblNewLabel = new JLabel("Danh sách hóa đơn");
+	        lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 32));
+	        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+	        lblNewLabel.setBounds(590, 11, 353, 38);
+	        add(lblNewLabel);
+	        
+	        JLabel lblChiTitHa = new JLabel("Chi tiết hóa đơn");
+	        lblChiTitHa.setHorizontalAlignment(SwingConstants.CENTER);
+	        lblChiTitHa.setFont(new Font("Times New Roman", Font.BOLD, 32));
+	        lblChiTitHa.setBounds(585, 382, 353, 38);
+	        add(lblChiTitHa);
+	        
+	        JScrollPane scrollPane_1 = new JScrollPane();
+	        scrollPane_1.setBounds(0, 431, 1950, 237);
+	        add(scrollPane_1);
+	        
+	        Object[][] table02_Data =  {};
+	        String[] table02_Columns = {
+	    		"Mã hóa đơn","Tên món","Số lượng", "Đơn giá", "Thành tiền"};
+	        
+	        
+	        table_1_model = new DefaultTableModel(table02_Data, table02_Columns);
+	        table_1 = new JTable(table_1_model);
+	        scrollPane_1.setViewportView(table_1);
+	        scrollPane_1.setViewportView(table_1);
+	        
+	        JPanel panel = new JPanel();
+	        panel.setBounds(0, 49, 2050, 125);
+	        add(panel);
+	        panel.setLayout(null);
+	        
+	        JPanel panel_1 = new JPanel();
+	        panel_1.setBackground(new Color(192, 192, 192));
+	        panel_1.setBounds(0, 0, 181, 49);
+	        panel.add(panel_1);
+	        panel_1.setLayout(null);
+	        
+	        JLabel lblNewLabel_1 = new JLabel("Tìm hóa đơn");
+	        lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+	        lblNewLabel_1.setFont(new Font("Times New Roman", Font.BOLD, 20));
+	        lblNewLabel_1.setBounds(10, 11, 161, 27);
+	        panel_1.add(lblNewLabel_1);
+	        
+	        JLabel lblNewLabel_2 = new JLabel("Mã hóa đơn:");
+	        lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 24));
+	        lblNewLabel_2.setBounds(432, 45, 157, 43);
+	        panel.add(lblNewLabel_2);
+	        
+	        textField = new JTextField();
+	        textField.setFont(new Font("Times New Roman", Font.PLAIN, 17));
+	        textField.setBounds(609, 50, 307, 35);
+	        panel.add(textField);
+	        textField.setColumns(10);
+	        
+	        JButton btnNewButton_1 = new JButton("Tìm");
+	        btnNewButton_1.setFont(new Font("Times New Roman", Font.BOLD, 23));
+	        btnNewButton_1.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent e) {
+	        	}
+	        });
+	        btnNewButton_1.setBounds(956, 47, 106, 38);
+	        panel.add(btnNewButton_1);
+	        
+	        
+	                        
+	        btnNewButton = new JButton("In hóa đơn");
+	        btnNewButton.setBounds(1166, 685, 138, 43);
+	        add(btnNewButton);
+	        btnNewButton.setBackground(new Color(135, 149, 248));
+	        btnNewButton.setForeground(new Color(0, 0, 0));
+	        btnNewButton.setFont(new Font("Times New Roman", Font.BOLD, 20));   
+	        
+	        btnNewButton.addActionListener(this);
+	    }
+
+	    public void docDuLieuHD() {
+	        NumberFormat vn = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+	        ArrayList<HoaDon> dsHD = hd_dao.getAllHoaDon();
+	        model.setRowCount(0);
+
+	        for (HoaDon hd : dsHD) {
+	            NhanVien nv = nv_dao.TimNhanVien(hd.getNhanVien().getMaNV());
+	            KhachHang kh = kh_dao.TimKhachHang(hd.getKhachHang().getMaKH());
+	            KhuVuc kv = khuvuc_dao.layThongTin(String.valueOf(hd.getKhuVuc().getMaKhuVuc()));
+
+	            ArrayList<ChiTietHoaDon> dsCT = cthd_dao.TimHoaDon(hd.getMaHoaDon());
+	            double tong = 0;
+	            for (ChiTietHoaDon ct : dsCT) {
+	                Mon mon = mon_dao.TimMon(ct.getMon().getMaMon());
+	                tong += ct.getThanhTien();
+	            }
+	            String formattedTong = vn.format(tong) + " VND";
+
+	            model.addRow(new Object[]{
+	                hd.getMaHoaDon(),
+	                kv.getMaKhuVuc(), 
+	                hd.getPhong().getMaPhong(),
+	                hd.getBanAn().getMaBan(),
+	                nv.getMaNV(),
+	                hd.getNgayLap(),
+	                kh.getTenKH(),
+	                hd.getBanAn().getSoBan(),
+	                formattedTong
+	            });
+	        }
+	    }
+
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+	    	Object o = e.getSource();
+	    	if(o.equals(btnNewButton)) {
+	    		new Frm_DanhSachHoaDon().setVisible(true);
+	    	}
 	}
 }

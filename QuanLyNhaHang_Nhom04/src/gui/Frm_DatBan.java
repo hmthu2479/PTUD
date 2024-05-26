@@ -222,7 +222,6 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
         cmbPhong.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	cmbPhong.addItem("Chọn phòng");
                 String chonPhong = (String) cmbPhong.getSelectedItem();
                 String chonKhuVuc = (String) cmbkhuVuc.getSelectedItem();
                 capNhatCmbBanTheoPhong(chonPhong, chonKhuVuc);
@@ -580,6 +579,7 @@ public class Frm_DatBan extends JPanel implements ActionListener,MouseListener{
 	private void capNhatCmbTheoKhuVuc(String chonKV) {
 	    cmbPhong.removeAllItems();
 	    cmbban.removeAllItems();
+	    cmbPhong.addItem("Chọn phòng");
 	    ArrayList<Phong> listPhong = phong_dao.layThongTinPhongTheoKhuVuc(chonKV);
 	    for (Phong phong : listPhong) { 
 	        cmbPhong.addItem(phong.getTenPhong());
