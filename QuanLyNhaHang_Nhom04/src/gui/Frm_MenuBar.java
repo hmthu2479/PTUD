@@ -28,7 +28,7 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
 	private Frm_DatMon datMon; 
     private Frm_DatBan datBan; 
     private Frm_CapNhatNhanVien nhanVien;
-    private Frm_ThongKe thongKe;
+//    private Frm_ThongKe thongKe;
     private Frm_CapNhatMonAn capNhatMonAn ;
     private Frm_KhuVuc khuVuc;
     private Frm_Phong phong;
@@ -38,6 +38,8 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
 	private FrmTimKiemKhachHang timKiemKhachHang;
 	private Frm_CapNhatMonNuoc capNhatMonNuoc;
 	private Frm_DanhSachHoaDon dsHoaDon;
+	private Frm_thongkebieudo thongKe;
+	private Frm_ThongKeTheoNgay thongKeTheoNgay;
 
 
     public Frm_MenuBar() {
@@ -116,7 +118,7 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
                     capNhatMonNuoc = new Frm_CapNhatMonNuoc();
                     setContentPane(capNhatMonNuoc);
                 }else if (e.getSource() == mniThongKe) {
-                    thongKe = new Frm_ThongKe();
+                    thongKe = new Frm_thongkebieudo();
                     setContentPane(thongKe);
                 } else if (e.getSource() == mnicapNhatKhachHang) {
                     capNhatKhachHang = new Frm_CapNhatKhachHang();
