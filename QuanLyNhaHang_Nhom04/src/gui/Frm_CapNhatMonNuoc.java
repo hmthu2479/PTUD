@@ -47,13 +47,13 @@ public class Frm_CapNhatMonNuoc extends JPanel {
         setLayout(null);
 
         JLabel lblNewLabel = new JLabel("Thông tin món nước");
-        lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 35));
-        lblNewLabel.setBounds(28, 38, 318, 71);
+        lblNewLabel.setFont(new Font("Arial", Font.BOLD, 35));
+        lblNewLabel.setBounds(58, 38, 368, 71);
         add(lblNewLabel);
 
         JLabel lblDanhSchMn = new JLabel("Danh sách món nước");
-        lblDanhSchMn.setFont(new Font("Times New Roman", Font.BOLD, 35));
-        lblDanhSchMn.setBounds(619, 38, 318, 71);
+        lblDanhSchMn.setFont(new Font("Arial", Font.BOLD, 35));
+        lblDanhSchMn.setBounds(819, 38, 398, 71);
         add(lblDanhSchMn);
 
         JSeparator separator = new JSeparator();
@@ -62,39 +62,39 @@ public class Frm_CapNhatMonNuoc extends JPanel {
         add(separator);
 
         JLabel lblNewLabel_1 = new JLabel("Mã món nước:");
-        lblNewLabel_1.setFont(new Font("Times New Roman", Font.BOLD, 27));
-        lblNewLabel_1.setBounds(10, 119, 190, 38);
+        lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 24));
+        lblNewLabel_1.setBounds(25, 119, 190, 38);
         add(lblNewLabel_1);
         
         JLabel lblNewLabel_1_2 = new JLabel("Loại món nước:");
-        lblNewLabel_1_2.setFont(new Font("Times New Roman", Font.BOLD, 27));
-        lblNewLabel_1_2.setBounds(10, 363, 190, 38);
+        lblNewLabel_1_2.setFont(new Font("Arial", Font.BOLD, 24));
+        lblNewLabel_1_2.setBounds(25, 363, 190, 38);
         add(lblNewLabel_1_2);
 
         JLabel lblNewLabel_1_1 = new JLabel("Tên món nước:");
-        lblNewLabel_1_1.setFont(new Font("Times New Roman", Font.BOLD, 27));
-        lblNewLabel_1_1.setBounds(10, 235, 190, 38);
+        lblNewLabel_1_1.setFont(new Font("Arial", Font.BOLD, 24));
+        lblNewLabel_1_1.setBounds(25, 235, 190, 38);
         add(lblNewLabel_1_1);
 
         JLabel lblDonGia = new JLabel("Đơn giá:");
-        lblDonGia.setFont(new Font("Times New Roman", Font.BOLD, 27));
-        lblDonGia.setBounds(10, 463, 190, 38);
+        lblDonGia.setFont(new Font("Arial", Font.BOLD, 24));
+        lblDonGia.setBounds(25, 463, 190, 38);
         add(lblDonGia);
 
         txtMa = new JTextField();
-        txtMa.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+        txtMa.setFont(new Font("Arial", Font.PLAIN, 16));
         txtMa.setBounds(203, 119, 252, 34);
         add(txtMa);
         txtMa.setColumns(10);
         
 
         comboBox = new JComboBox<>(new String[]{"Nước ngọt", "Bia", "Nước uống khác"});
-        comboBox.setFont(new Font("Times New Roman", Font.BOLD, 18));
+        comboBox.setFont(new Font("Arial", Font.BOLD, 18));
         comboBox.setBounds(210, 362, 245, 39);
         add(comboBox);
 
         JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(499, 118, 535, 375);
+        scrollPane.setBounds(529, 118, 935, 475);
         add(scrollPane);
 
    
@@ -102,31 +102,33 @@ public class Frm_CapNhatMonNuoc extends JPanel {
 
         model = new DefaultTableModel(columnNames, 0);
 		table = new JTable(model);
+		table.setFont(new Font("Arial", Font.PLAIN, 15));
+		table.setRowHeight(20);
         scrollPane.setViewportView(table);
 
         JButton btnNewButton = new JButton("Thêm");
-        btnNewButton.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+        btnNewButton.setFont(new Font("Arial", Font.BOLD, 15));
         btnNewButton.setBounds(40, 529, 85, 38);
         add(btnNewButton);
 
         JButton btnXoa = new JButton("Xóa");
-        btnXoa.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+        btnXoa.setFont(new Font("Arial", Font.BOLD, 15));
         btnXoa.setBounds(185, 529, 85, 38);
         add(btnXoa);
 
         JButton btnThoat = new JButton("Thoát");
-        btnThoat.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+        btnThoat.setFont(new Font("Arial", Font.BOLD, 15));
         btnThoat.setBounds(330, 529, 85, 38);
         add(btnThoat);
 
         txtTenMon = new JTextField();
-        txtTenMon.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+        txtTenMon.setFont(new Font("Arial", Font.PLAIN, 16));
         txtTenMon.setColumns(10);
         txtTenMon.setBounds(203, 235, 252, 34);
         add(txtTenMon);
         
         txtDonGia = new JTextField();
-        txtDonGia.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+        txtDonGia.setFont(new Font("Arial", Font.PLAIN, 16));
         txtDonGia.setColumns(10);
         txtDonGia.setBounds(203, 465, 252, 34);
         add(txtDonGia);

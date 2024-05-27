@@ -96,17 +96,17 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		JLabel lblTitLe = new JLabel("ĐẶT MÓN");
 		lblTitLe.setHorizontalTextPosition(SwingConstants.CENTER);
 		lblTitLe.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitLe.setFont(new Font("Arial", Font.BOLD, 35));
-		lblTitLe.setForeground(Color.RED);
+		lblTitLe.setFont(new Font("Tahoma", Font.BOLD, 35));
+		lblTitLe.setForeground(Color.DARK_GRAY);
 		panelTitle.add(lblTitLe);
-		panelTitle.setBounds(0, 42, 1540, 60);
+		panelTitle.setBounds(0, 0, 1540, 60);
 		add(panelTitle);
 
 		// Khung thông tin món ăn
 		JPanel panelThongTin = new JPanel();
 		panelThongTin.setBackground(new Color(0, 128, 128));
 		panelThongTin.setBorder(new LineBorder(new Color(0, 0, 0), 3));
-		panelThongTin.setBounds(0, 128, 1540, 235);
+		panelThongTin.setBounds(0, 68, 1540, 295);
 		add(panelThongTin);
 		panelThongTin.setLayout(null);
 
@@ -119,18 +119,18 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		JLabel lbl_titlle_panel_1 = new JLabel("Thông tin món");
 		panel.add(lbl_titlle_panel_1);
 		lbl_titlle_panel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_titlle_panel_1.setFont(new Font("Arial", Font.BOLD, 16));
+		lbl_titlle_panel_1.setFont(new Font("Tahoma", Font.BOLD, 16));
 
 		// Loại Món
 		JLabel lblLoaiMon = new JLabel("Loại Món:");
-		lblLoaiMon.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblLoaiMon.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblLoaiMon.setBounds(451, 125, 86, 40);
 		panelThongTin.add(lblLoaiMon);
 
 		cmbLoaiMon = new JComboBox<>();
 		cmbLoaiMon.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		cmbLoaiMon.setEditable(false);
-		cmbLoaiMon.setBounds(528, 125, 200, 40);
+		cmbLoaiMon.setBounds(558, 125, 200, 40);
 		cmbLoaiMon.addItem("Món Nước");
 		cmbLoaiMon.addItem("Lẩu");
 		cmbLoaiMon.addItem("Cơm");
@@ -144,7 +144,7 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		// Nhãn "Tên Món"
 		JLabel lblTenMon = new JLabel("Tên Món:");
 
-		lblTenMon.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblTenMon.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblTenMon.setBounds(804, 75, 100, 40);
 		panelThongTin.add(lblTenMon);
 
@@ -175,7 +175,7 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 
 		// Đơn giá
 		JLabel lblDonGia = new JLabel("Đơn giá:");
-		lblDonGia.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblDonGia.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblDonGia.setBounds(807, 125, 100, 40);
 		panelThongTin.add(lblDonGia);
 
@@ -191,7 +191,7 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 
 		// Khu Vực
 		JLabel lblKhuVuc = new JLabel("Khu Vực:");
-		lblKhuVuc.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblKhuVuc.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblKhuVuc.setBounds(90, 70, 86, 40);
 		panelThongTin.add(lblKhuVuc);
 
@@ -216,7 +216,7 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 
      // Bàn
         JLabel lblBan = new JLabel("Bàn:");
-        lblBan.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblBan.setFont(new Font("Tahoma", Font.BOLD, 16));
         lblBan.setBounds(90, 125, 86, 40);
         panelThongTin.add(lblBan);
 
@@ -234,13 +234,13 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 
 		//Phòng
 		JLabel lblPhong = new JLabel("Phòng:");
-		lblPhong.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblPhong.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblPhong.setBounds(462, 75, 86, 40);
 		panelThongTin.add(lblPhong);
 
 		cmbPhong = new JComboBox<String>();
 		cmbPhong.setEditable(false);
-		cmbPhong.setBounds(528, 76, 200, 39);
+		cmbPhong.setBounds(558, 76, 200, 39);
 		cmbPhong.setFont(new Font("Tahoma", Font.PLAIN, 16));
     	cmbPhong.addItem("Chọn phòng");
         ArrayList<Phong> listPhong = phong_dao.layThongTin();
@@ -262,7 +262,7 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 
 		//Nhân Viên
 		lblNhanVien = new JLabel("Nhân viên:");
-		lblNhanVien.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNhanVien.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblNhanVien.setBounds(1152, 125, 100, 40);
 		panelThongTin.add(lblNhanVien);
 
@@ -278,8 +278,8 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		
 		//Khách hàng
 		lblKhachHang = new JLabel("Khách hàng:");
-		lblKhachHang.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblKhachHang.setBounds(807, 175, 100, 40);
+		lblKhachHang.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblKhachHang.setBounds(787, 175, 110, 40);
 		panelThongTin.add(lblKhachHang);
 		lblKhachHang.setVisible(false);
 	
@@ -295,8 +295,8 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		
 
 		lblMaPhieu = new JLabel("Mã Phiếu ĐB:");
-		lblMaPhieu.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblMaPhieu.setBounds(1152, 175, 100, 40);
+		lblMaPhieu.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblMaPhieu.setBounds(1132, 175, 110, 40);
 		panelThongTin.add(lblMaPhieu);
 		lblMaPhieu.setVisible(false);
 		cmbMaPhieu = new JComboBox<String>();
@@ -321,7 +321,7 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		
 		// Số lượng
 		JLabel lblSoLuong = new JLabel("Số lượng:");
-		lblSoLuong.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblSoLuong.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblSoLuong.setBounds(1152, 75, 100, 40);
 		panelThongTin.add(lblSoLuong);
 
@@ -336,25 +336,25 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		// Nút thêm
 		btnThem = new JButton("Thêm");
 		btnThem.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnThem.setBounds(40, 180, 130, 45);
+		btnThem.setBounds(40, 230, 130, 45);
 		panelThongTin.add(btnThem);
 
 		// Nút xóa
 		btnXoa = new JButton("Xóa");
 		btnXoa.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnXoa.setBounds(205, 180, 130, 45);
+		btnXoa.setBounds(205, 230, 130, 45);
 		panelThongTin.add(btnXoa);
 
 		// Nút làm mới
 		btnLamMoi = new JButton("Làm mới");
 		btnLamMoi.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnLamMoi.setBounds(380, 180, 130, 45);
+		btnLamMoi.setBounds(380, 230, 130, 45);
 		panelThongTin.add(btnLamMoi);
 		
 		// Nút đặt trước
 		btnDatTruoc = new JButton("Đặt trước");
 		btnDatTruoc.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btnDatTruoc.setBounds(580, 180, 150, 45);
+		btnDatTruoc.setBounds(580, 230, 150, 45);
 		panelThongTin.add(btnDatTruoc);
 
 

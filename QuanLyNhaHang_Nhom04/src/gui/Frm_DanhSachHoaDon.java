@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableRowSorter;
 
 import com.toedter.calendar.JDateChooser;
@@ -87,7 +88,11 @@ public class Frm_DanhSachHoaDon extends JPanel implements ActionListener{
 			String[] header1 = {"Mã hóa đơn", "Tổng tiền", "Khu vực", "Phòng", "Bàn ăn", "Nhân viên", "Ngày lập","Khách hàng ","Ngày đặt"};
 			tablemodel = new DefaultTableModel(header1, 0);
 	        table = new JTable(tablemodel);
+	        JTableHeader tableHeader = table.getTableHeader();
+	        tableHeader.setFont(new Font("Arial", Font.BOLD, 20));
 	        scrollPane.setViewportView(table);
+	    	table.setFont(new Font("Arial", Font.PLAIN, 18));
+			table.setRowHeight(20);
 	        table.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -99,14 +104,14 @@ public class Frm_DanhSachHoaDon extends JPanel implements ActionListener{
 			});
 	        
 	        JLabel lblNewLabel = new JLabel("Danh sách hóa đơn");
-	        lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 32));
+	        lblNewLabel.setFont(new Font("Arial", Font.BOLD, 32));
 	        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 	        lblNewLabel.setBounds(590, 11, 353, 38);
 	        add(lblNewLabel);
 	        
 	        JLabel lblChiTitHa = new JLabel("Chi tiết hóa đơn");
 	        lblChiTitHa.setHorizontalAlignment(SwingConstants.CENTER);
-	        lblChiTitHa.setFont(new Font("Times New Roman", Font.BOLD, 32));
+	        lblChiTitHa.setFont(new Font("Arial", Font.BOLD, 32));
 	        lblChiTitHa.setBounds(585, 382, 353, 38);
 	        add(lblChiTitHa);
 	        
@@ -121,6 +126,10 @@ public class Frm_DanhSachHoaDon extends JPanel implements ActionListener{
 	        
 	        table_1 = new JTable(cthdModel);
 	        scrollPane_1.setViewportView(table_1);
+	        JTableHeader Header = table_1.getTableHeader();
+	        Header.setFont(new Font("Arial", Font.BOLD, 20));
+	        table_1.setFont(new Font("Arial", Font.PLAIN, 18));
+	        table_1.setRowHeight(20);
 	        
 	        JPanel panel = new JPanel();
 	        panel.setBounds(0, 49, 2050, 125);
@@ -135,19 +144,19 @@ public class Frm_DanhSachHoaDon extends JPanel implements ActionListener{
 	        
 	        JLabel lblNewLabel_1 = new JLabel("Tìm hóa đơn");
 	        lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-	        lblNewLabel_1.setFont(new Font("Times New Roman", Font.BOLD, 20));
+	        lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 20));
 	        lblNewLabel_1.setBounds(10, 11, 161, 27);
 	        panel_1.add(lblNewLabel_1);
 	        
 //	        
 	        btnTimHoaDon = new JButton("Tìm");
-	        btnTimHoaDon.setFont(new Font("Times New Roman", Font.BOLD, 23));
+	        btnTimHoaDon.setFont(new Font("Arial", Font.BOLD, 23));
 	        btnTimHoaDon.setBounds(956, 47, 106, 38);
 	        panel.add(btnTimHoaDon);
 	        
 			btnLamMoi = new JButton("Làm mới");
 			btnLamMoi.setBounds(1156, 47, 130, 38);
-			btnLamMoi.setFont(new Font("Times New Roman", Font.BOLD, 20));
+			btnLamMoi.setFont(new Font("Arial", Font.BOLD, 20));
 			panel.add(btnLamMoi);
 	        
 			JLabel lblNgayLap = new JLabel("Ngày Lập");
@@ -168,7 +177,7 @@ public class Frm_DanhSachHoaDon extends JPanel implements ActionListener{
 	        add(btnNewButton);
 	        btnNewButton.setBackground(new Color(135, 149, 248));
 	        btnNewButton.setForeground(new Color(0, 0, 0));
-	        btnNewButton.setFont(new Font("Times New Roman", Font.BOLD, 20));   
+	        btnNewButton.setFont(new Font("Arial", Font.BOLD, 20));   
 	        
 	        btnNewButton.addActionListener(this);
 	        btnLamMoi.addActionListener(this);
@@ -179,7 +188,6 @@ public class Frm_DanhSachHoaDon extends JPanel implements ActionListener{
 	    public void docDuLieuHD() {
 	        ArrayList<HoaDon> dsHD = hd_dao.getAllHoaDon();
 	        tablemodel.setRowCount(0);
-
 	        for (HoaDon hoaDon : dsHD) {
 	            tablemodel.addRow(new Object[] {
 	                    hoaDon.getMaHoaDon(),

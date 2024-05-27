@@ -39,7 +39,7 @@ public class HoaDonDAO {
                 String maHoaDon = resultSet.getString(1);
                 double tongTien = resultSet.getDouble(2);
                 KhuVuc khuVuc = new KhuVuc( resultSet.getString(3));
-                Phong phong = new Phong( resultSet.getString(4));
+                Phong phong = resultSet.getString(4) != null ? new Phong(resultSet.getString(4).trim()) : new Phong(null);
                 Ban banAn = new Ban( resultSet.getString(5));
                 NhanVien tenNhanVien = new NhanVien ( resultSet.getString(6));
                 Date ngayLap = resultSet.getDate(7);
