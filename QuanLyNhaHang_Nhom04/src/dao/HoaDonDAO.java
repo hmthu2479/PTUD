@@ -26,9 +26,15 @@ public class HoaDonDAO {
         try {
         	ConnectDB.getInstance().connect();
             Connection con = ConnectDB.getConnection();
-            String sql = "SELECT * FROM HoaDon";
+	        String SQL = "SELECT hd.maHoaDon, hd.tongTien, k.tenKhuVuc, p.tenPhong, b.soBan, nv.tenNV, hd.ngayLap, kh.tenKH, hd.ngayDat " +
+	                "FROM HoaDon hd " +
+	                "INNER JOIN KhuVuc k ON hd.maKhuVuc = k.maKhuVuc " +
+	                "LEFT JOIN KhachHang kh ON hd.maKH = kh.maKH " +
+	                "INNER JOIN NhanVien nv ON hd.maNV = nv.maNV " + 
+	                "INNER JOIN Ban b ON hd.maBan = b.maBan " +
+	                "LEFT JOIN Phong p ON hd.maPhong = p.maPhong";
             Statement statement = con.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSet resultSet = statement.executeQuery(SQL);
             while (resultSet.next()) {
                 String maHoaDon = resultSet.getString(1);
                 double tongTien = resultSet.getDouble(2);
@@ -48,34 +54,7 @@ public class HoaDonDAO {
         }
         return hoaDonList;
     }
-	public List<HoaDon> findHoaDonWithNullMaKH() {
-	    List<HoaDon> hoaDonList = new ArrayList<>();
-	    ConnectDB.getInstance();
-	    Connection con = ConnectDB.getConnection();
-	    PreparedStatement statement = null;
-	    try {
-	        String SQL = "SELECT * FROM HoaDon WHERE maKH IS NULL";
-	        statement = con.prepareStatement(SQL);
-	        ResultSet rs = statement.executeQuery();
-	        while (rs.next()) {
-	            String maHoaDon = rs.getString(1);
-	            double tongTien = rs.getDouble(2);
-	            KhuVuc khuVuc = new KhuVuc(rs.getString(3));
-	            Phong phong = new Phong(rs.getString(4));
-	            Ban banAn = new Ban(rs.getString(5));
-	            NhanVien tenNhanVien = new NhanVien(rs.getString(6));
-	            Date ngayLap = rs.getDate(7);
-	            KhachHang tenKhachHang = null; // Set to null since maKH is null
-	            Date ngayDat = rs.getDate(9);
 
-	            HoaDon hoaDon = new HoaDon(maHoaDon, tongTien, khuVuc, phong, banAn, tenNhanVien, ngayLap, tenKhachHang, ngayDat);
-	            hoaDonList.add(hoaDon);
-	        }
-	    } catch (SQLException e) {
-	        throw new RuntimeException(e);
-	    }
-	    return hoaDonList;
-	}
 	public boolean themHoaDon(HoaDon hd){
         ConnectDB.getInstance();
         Connection con = ConnectDB.getConnection();

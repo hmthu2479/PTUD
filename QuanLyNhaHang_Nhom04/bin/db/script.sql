@@ -153,7 +153,7 @@ VALUES
     ('MN001',N'Nước ngọt', N'String',20000 ),
     ('MN002', N'Món nước khác', N'Trà tắc',15000);
 INSERT INTO dbo.PhieuDatBan (maPhieuDatBan, maKhuVuc, maPhong, maBan, soNguoi, ngayDat, ngayLap, gioDat, maKH, maNV)
-VALUES ('PH001', 'KV01', null, 'B005', 4, '2024-04-12', '2024-04-11', '10:00', 'KH001', 'NV001');
+VALUES ('PH001', 'KV02', null, 'B005', 4, '2024-04-12', '2024-04-11', '10:00', N'KH001', N'NV001');
 
 INSERT INTO dbo.HoaDon (maHoaDon, tongTien, maKhuVuc, maPhong,maBan,maNV,ngayLap,maKH,ngayDat)
 VALUES 

@@ -133,7 +133,7 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		cmbLoaiMon.addItem("Lẩu");
 		cmbLoaiMon.addItem("Cơm");
 		cmbLoaiMon.addItem("Món ăn khác");
-		cmbLoaiMon.addItem("Nước Ngọt");
+		cmbLoaiMon.addItem("Nước ngọt");
 		cmbLoaiMon.addItem("Bia");
 		cmbLoaiMon.addItem("Nước uống khác");
 		panelThongTin.add(cmbLoaiMon);
@@ -539,24 +539,28 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		        Ban tenBan = timTenBan(dsBan, ban);
 		        NhanVien nhanVien = timTenNhanVien(dsNV, cmbNhanVien.getSelectedItem().toString());
 		        
-		        KhachHang kh = timTenKhachHang(dsKH, khachHang);
-		        if(khachHang != null){
-		        	 kh = timTenKhachHang(dsKH, khachHang);
+		        KhachHang kh = null;
+		        String KhachHang = (String) cmbKhachHang.getSelectedItem();
+		        if (cmbKhachHang.isVisible() && KhachHang != null) {
+		            kh = timTenKhachHang(dsKH, KhachHang);
 		        }
-		        ArrayList<PhieuDatBan> pdb = phieu_dao.layPhieuTheoTenKH(khachHang);
+
+		        ArrayList<PhieuDatBan> pdb = phieu_dao.layPhieuTheoTenKH(KhachHang);
 		        String ngayDat = layNgayDatTuCmbKhachHang(pdb, cmbKhachHang);
+		        System.out.println(ngayDat);
 
-		        //Chuyển từ String sang Date
-		        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		        Date ngayDatDate;
-		        try {
-		            ngayDatDate = sdf.parse(ngayDat);
-		        } catch (ParseException e1) {
-		            e1.printStackTrace();
-		            // Handle the exception as needed
-		            return;
+		        //Chuyển từ String sang Date     
+		        java.util.Date ngayDatDate = null;
+		        if (ngayDat != null) {
+		            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		            try {
+		                ngayDatDate = sdf.parse(ngayDat);
+		            } catch (ParseException e1) {
+		                e1.printStackTrace();
+		                // Handle the exception as needed
+		                return;
+		            }
 		        }
-
 		        HoaDon hd = new HoaDon(maHD, tongTien, kv, ph, tenBan, nhanVien, ngayLap, kh, ngayDatDate);
 		        if (hd_dao.timHoaDon(maHD).isEmpty()) {
 		            if (hd_dao.themHoaDon(hd)) {
@@ -638,14 +642,16 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 	
 	// Lấy tên khách hàng đã lấy được từ ds Phiếu so sánh với tên trên cmb để lấy ngày đặt phiếu
 	private String layNgayDatTuCmbKhachHang(ArrayList<PhieuDatBan> dsPDB, JComboBox<String> cmbKhachHang) {
-	    String chonTenKH = (String) cmbKhachHang.getSelectedItem();
-	    for (PhieuDatBan pdb : dsPDB) {
-	        String maKH = pdb.getKhachHang().getMaKH();
-	        if (maKH.equals(chonTenKH)) {
-                return pdb.getNgayDat();
-            }
-        }
-	    return null;
+		if (cmbKhachHang.isVisible()) {
+			String chonTenKH = (String) cmbKhachHang.getSelectedItem();
+		    for (PhieuDatBan pdb : dsPDB) {
+		        String maKH = pdb.getKhachHang().getMaKH();
+		        if (maKH.equals(chonTenKH)) {
+	                return pdb.getNgayDat();
+	            }
+	        }
+		}
+		return null;
 	}
 	
 	
@@ -720,7 +726,12 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 	    }
 	    cmbPhong.removeAllItems();
 	    for (String phong : phongSet) {
-	        cmbPhong.addItem(phong);
+	    	if (phong == null ) {
+	            cmbPhong.addItem("Chọn phòng");
+	        } else {
+	            cmbPhong.addItem(phong);
+	        }
+	    	
 	    }
 	    for (String ban : banSet) {
 	        cmbBan.addItem(ban);
