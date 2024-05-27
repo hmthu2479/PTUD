@@ -51,9 +51,9 @@ import javax.swing.border.LineBorder;
 
 public class Frm_DatMon extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private JTextField txtTenMon, txtDonGia, txtsoLuong, txtTongTien;
+	private JTextField  txtDonGia, txtsoLuong, txtTongTien;
 	private DefaultTableModel model;
-	private JButton btnThem, btnTim, btnXoa, btnSua, btnLamMoi,btnTaoDon,btnDatDon;
+	private JButton btnThem,  btnXoa, btnLamMoi,btnTaoDon;
 	private JComboBox<String> cmbLoaiMon, cmbKhuVuc, cmbBan, cmbPhong, cmbTenMon;
 	private JTable table;
 	private KhuVucDAO kv_dao;
@@ -67,10 +67,12 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 	private MonNuocDao mn_dao;
 	private JComboBox<String> cmbNhanVien;
 	private JButton btnDatTruoc;
-	private JComboBox<String> cmbKhachHang;
 	private JLabel lblKhachHang;
 	private JLabel lblNhanVien;
 	private PhieuDatBanDAO phieu_dao;
+	private JComboBox<String> cmbMaPhieu;
+	private JLabel lblMaPhieu;
+	private JTextField txtKhachHang;
 
 	
 
@@ -181,6 +183,7 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		txtDonGia.setEditable(false);
 		txtDonGia.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtDonGia.setBounds(900, 125, 200, 40);
+		txtDonGia.setBackground(Color.LIGHT_GRAY);
 		panelThongTin.add(txtDonGia);
 		txtDonGia.setColumns(10);
 
@@ -225,9 +228,6 @@ public class Frm_DatMon extends JPanel implements ActionListener {
         for (Ban b : listBan) {
             cmbBan.addItem(b.getSoBan());
         }
-
-        
-	    
 
         cmbBan.setBounds(200, 125, 200, 40);
         panelThongTin.add(cmbBan);
@@ -279,28 +279,43 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		//Khách hàng
 		lblKhachHang = new JLabel("Khách hàng:");
 		lblKhachHang.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblKhachHang.setBounds(1152, 175, 100, 40);
+		lblKhachHang.setBounds(807, 175, 100, 40);
 		panelThongTin.add(lblKhachHang);
 		lblKhachHang.setVisible(false);
-
-		cmbKhachHang = new JComboBox<String>();
-		cmbKhachHang.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		cmbKhachHang.setEditable(false);
-        ArrayList<KhachHang> listKH = kh_dao.layThongTin();
-        for (KhachHang kh : listKH) { 
-        	cmbKhachHang.addItem(kh.getTenKH());
-        }
-        cmbKhachHang.setBounds(1260, 175, 200, 40);
-		panelThongTin.add(cmbKhachHang);
-		cmbKhachHang.setVisible(false);
+	
+		txtKhachHang = new JTextField();
+		txtKhachHang.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txtKhachHang.setColumns(10);
+		txtKhachHang.setBounds(900, 175, 200, 40);
+		txtKhachHang.setVisible(false);
+		txtKhachHang.setEditable(false);
+		txtKhachHang.setBackground(Color.LIGHT_GRAY);
+		panelThongTin.add(txtKhachHang);
+	
 		
-		cmbKhachHang.addActionListener(new ActionListener() {
+
+		lblMaPhieu = new JLabel("Mã Phiếu ĐB:");
+		lblMaPhieu.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblMaPhieu.setBounds(1152, 175, 100, 40);
+		panelThongTin.add(lblMaPhieu);
+		lblMaPhieu.setVisible(false);
+		cmbMaPhieu = new JComboBox<String>();
+		cmbMaPhieu.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		cmbMaPhieu.setEditable(false);
+        ArrayList<PhieuDatBan> listPhieu = phieu_dao.layThongTin();
+        for (PhieuDatBan phieu : listPhieu) { 
+        	cmbMaPhieu.addItem(phieu.getMaPhieu());
+        }
+        cmbMaPhieu.setBounds(1260, 175, 200, 40);
+		panelThongTin.add(cmbMaPhieu);
+		cmbMaPhieu.setVisible(false);
+		cmbMaPhieu.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				String chonKH = (String) cmbKhachHang.getSelectedItem();
-				capNhatCmbTheoTenKH(chonKH);
+				String chonPhieu = (String) cmbMaPhieu.getSelectedItem();
+				capNhatCmbTheoMaPhieDB(chonPhieu);
 			}
 		});
 		
@@ -320,26 +335,26 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 
 		// Nút thêm
 		btnThem = new JButton("Thêm");
-		btnThem.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnThem.setBounds(100, 175, 200, 50);
+		btnThem.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnThem.setBounds(40, 180, 130, 45);
 		panelThongTin.add(btnThem);
 
 		// Nút xóa
 		btnXoa = new JButton("Xóa");
-		btnXoa.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnXoa.setBounds(375, 175, 200, 50);
+		btnXoa.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnXoa.setBounds(205, 180, 130, 45);
 		panelThongTin.add(btnXoa);
 
 		// Nút làm mới
 		btnLamMoi = new JButton("Làm mới");
-		btnLamMoi.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnLamMoi.setBounds(630, 175, 200, 50);
+		btnLamMoi.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnLamMoi.setBounds(380, 180, 130, 45);
 		panelThongTin.add(btnLamMoi);
 		
 		// Nút đặt trước
 		btnDatTruoc = new JButton("Đặt trước");
-		btnDatTruoc.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnDatTruoc.setBounds(870, 175, 200, 50);
+		btnDatTruoc.setFont(new Font("Tahoma", Font.BOLD, 18));
+		btnDatTruoc.setBounds(580, 180, 150, 45);
 		panelThongTin.add(btnDatTruoc);
 
 
@@ -378,14 +393,14 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		JLabel lblTongTien = new JLabel("Tổng tiền:");
 		lblTongTien.setForeground(Color.RED);
 		lblTongTien.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblTongTien.setBounds(10, 129, 100, 30);
+		lblTongTien.setBounds(30, 129, 100, 30);
 		panelTaoDon.add(lblTongTien);
 
 		// Ô nhập liệu tổng tiền
 		txtTongTien = new JTextField();
 		txtTongTien.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtTongTien.setEditable(false);
-		txtTongTien.setBounds(119, 121, 344, 49);
+		txtTongTien.setBounds(139, 119, 284, 49);
 		panelTaoDon.add(txtTongTien);
 		txtTongTien.setColumns(10);
 
@@ -393,7 +408,7 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		btnTaoDon = new JButton("Tạo Đơn");
 		btnTaoDon.setForeground(new Color(0, 139, 139));
 		btnTaoDon.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnTaoDon.setBounds(39, 240, 152, 60);
+		btnTaoDon.setBounds(170, 240, 152, 60);
 		panelTaoDon.add(btnTaoDon);
 
 		// Thêm sự kiện cho các nút
@@ -444,8 +459,10 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		// Nút đặt trước
 		if (source == btnDatTruoc) {
 			// TODO: Implement search functionality
-			cmbKhachHang.setVisible(true);
+			txtKhachHang.setVisible(true);
 			lblKhachHang.setVisible(true);
+			cmbMaPhieu.setVisible(true);
+			lblMaPhieu.setVisible(true);
 		}
 
 		
@@ -486,10 +503,12 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 			cmbKhuVuc.setSelectedIndex(0);
 			cmbPhong.setSelectedIndex(0);
 			cmbNhanVien.setSelectedIndex(0);
-			cmbKhachHang.setVisible(false);
+			txtKhachHang.setVisible(false);
 			lblKhachHang.setVisible(false);
 			cmbNhanVien.setVisible(true);
 			lblNhanVien.setVisible(true);
+			cmbMaPhieu.setVisible(false);
+			lblMaPhieu.setVisible(false);
 			txtDonGia.setText("");
 			txtsoLuong.setText("");
 		}
@@ -517,7 +536,6 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		        String khuVuc = cmbKhuVuc.getSelectedItem().toString();
 		        String phong = cmbPhong.getSelectedItem().toString().equals("Chọn phòng") ? null : cmbPhong.getSelectedItem().toString();
 		        String ban = cmbBan.getSelectedItem().toString();
-		        String khachHang = cmbKhachHang.getSelectedItem().toString();
 
 
 		        KhuVucDAO khuVucDAO = new KhuVucDAO();
@@ -540,14 +558,21 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		        NhanVien nhanVien = timTenNhanVien(dsNV, cmbNhanVien.getSelectedItem().toString());
 		        
 		        KhachHang kh = null;
-		        String KhachHang = (String) cmbKhachHang.getSelectedItem();
-		        if (cmbKhachHang.isVisible() && KhachHang != null) {
+		        String KhachHang = (String) txtKhachHang.getText();
+		        if (txtKhachHang.isVisible() && KhachHang != null) {
 		            kh = timTenKhachHang(dsKH, KhachHang);
 		        }
+		        
+		        String ngayDat = null;
+		        String phieu = (String) cmbMaPhieu.getSelectedItem().toString();
+		        if (cmbMaPhieu.isVisible() && phieu != null) {
+			        ArrayList<PhieuDatBan> pdb = phieu_dao.layPhieuTheoMa(phieu);
+			        
+			        ngayDat = layNgayDatTuMaPhieu(pdb, cmbMaPhieu);
+			        System.out.println(ngayDat);
+		        }
 
-		        ArrayList<PhieuDatBan> pdb = phieu_dao.layPhieuTheoTenKH(KhachHang);
-		        String ngayDat = layNgayDatTuCmbKhachHang(pdb, cmbKhachHang);
-		        System.out.println(ngayDat);
+;
 
 		        //Chuyển từ String sang Date     
 		        java.util.Date ngayDatDate = null;
@@ -641,12 +666,12 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 	
 	
 	// Lấy tên khách hàng đã lấy được từ ds Phiếu so sánh với tên trên cmb để lấy ngày đặt phiếu
-	private String layNgayDatTuCmbKhachHang(ArrayList<PhieuDatBan> dsPDB, JComboBox<String> cmbKhachHang) {
-		if (cmbKhachHang.isVisible()) {
-			String chonTenKH = (String) cmbKhachHang.getSelectedItem();
+	private String layNgayDatTuMaPhieu(ArrayList<PhieuDatBan> dsPDB, JComboBox<String> cmbMaPhieu) {
+		if (cmbMaPhieu.isVisible()) {
+			String chonMa = (String) cmbMaPhieu.getSelectedItem();
 		    for (PhieuDatBan pdb : dsPDB) {
-		        String maKH = pdb.getKhachHang().getMaKH();
-		        if (maKH.equals(chonTenKH)) {
+		        String ma = pdb.getMaPhieu();
+		        if (ma.equals(chonMa)) {
 	                return pdb.getNgayDat();
 	            }
 	        }
@@ -701,15 +726,18 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 	    count = Integer.parseInt(ma.substring(2)) + 1; 
 	    return String.format("HD%03d", count);
 	}
-	private void capNhatCmbTheoTenKH(String tenKH) {
-	    List<PhieuDatBan> phieuDatBanList = phieu_dao.layPhieuTheoTenKH(tenKH);
+	private void capNhatCmbTheoMaPhieDB(String maPhieu) {
+	    List<PhieuDatBan> phieuDatBanList = phieu_dao.layPhieuTheoMa(maPhieu);
+	    
 
 	    // Xóa các giá trị trong cmb
 	    cmbKhuVuc.removeAllItems();
 	    cmbPhong.removeAllItems();
 	    cmbBan.removeAllItems();
+	    txtKhachHang.setText("");
 
 	    // Thêm các giá trị duy nhất từ các đối tượng Phieudatban được truy xuất
+	    Set<String> khachHangSet = new HashSet<>();
 	    Set<String> khuVucSet = new HashSet<>();
 	    Set<String> phongSet = new HashSet<>();
 	    Set<String> banSet = new HashSet<>();
@@ -718,6 +746,7 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 	        khuVucSet.add(phieuDatBan.getKhuVuc().getMaKhuVuc());
 	        phongSet.add(phieuDatBan.getPhong().getMaPhong());
 	        banSet.add(phieuDatBan.getTenBan().getMaBan());
+	        khachHangSet.add(phieuDatBan.getKhachHang().getMaKH());
 	    }
 
 	    // Thêm giá trị vào combobox
@@ -730,12 +759,17 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 	            cmbPhong.addItem("Chọn phòng");
 	        } else {
 	            cmbPhong.addItem(phong);
-	        }
-	    	
+	        }    	
 	    }
 	    for (String ban : banSet) {
 	        cmbBan.addItem(ban);
 	    }
+	    for(String kH : khachHangSet) {
+	    	txtKhachHang.setText(kH);
+	    	break;
+	    }
+
+	    
 	}
 	private void capNhatCmbTheoKhuVuc(String chonKV) {
 	    cmbPhong.removeAllItems();
