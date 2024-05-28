@@ -4,9 +4,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -531,7 +534,8 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		                nv = new NhanVien(ab.getMaNV());
 		            }
 		        }
-		        Date ngayLap = Calendar.getInstance().getTime();
+		        LocalDateTime ngayLap = LocalDateTime.now(); 
+		        
 		        double tongTien = Double.parseDouble(txtTongTien.getText());
 		        String khuVuc = cmbKhuVuc.getSelectedItem().toString();
 		        String phong = cmbPhong.getSelectedItem().toString().equals("Chọn phòng") ? null : cmbPhong.getSelectedItem().toString();
@@ -729,11 +733,6 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 	private void capNhatCmbTheoMaPhieDB(String maPhieu) {
 	    List<PhieuDatBan> phieuDatBanList = phieu_dao.layPhieuTheoMa(maPhieu);
 	    
-
-	    // Xóa các giá trị trong cmb
-	    cmbKhuVuc.removeAllItems();
-	    cmbPhong.removeAllItems();
-	    cmbBan.removeAllItems();
 	    txtKhachHang.setText("");
 
 	    // Thêm các giá trị duy nhất từ các đối tượng Phieudatban được truy xuất
@@ -751,18 +750,18 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 
 	    // Thêm giá trị vào combobox
 	    for (String khuVuc : khuVucSet) {
-	        cmbKhuVuc.addItem(khuVuc);
+	        cmbKhuVuc.setSelectedItem(khuVuc);
 	    }
 	    cmbPhong.removeAllItems();
 	    for (String phong : phongSet) {
 	    	if (phong == null ) {
 	            cmbPhong.addItem("Chọn phòng");
 	        } else {
-	            cmbPhong.addItem(phong);
+	            cmbPhong.setSelectedItem(phong);
 	        }    	
 	    }
 	    for (String ban : banSet) {
-	        cmbBan.addItem(ban);
+	        cmbBan.setSelectedItem(ban);
 	    }
 	    for(String kH : khachHangSet) {
 	    	txtKhachHang.setText(kH);

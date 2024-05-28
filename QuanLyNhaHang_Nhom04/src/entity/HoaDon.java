@@ -1,5 +1,6 @@
 package entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class HoaDon {
@@ -10,13 +11,13 @@ public class HoaDon {
     private Phong phong;
     private Ban banAn;
     private NhanVien nhanVien;
-    private Date ngayLap;
+    private LocalDateTime ngayLap;
     private KhachHang khachHang;
     private Date ngayDat;
 
     
 	public HoaDon(String maHoaDon, double tongTien, KhuVuc khuVuc, Phong phong, Ban banAn, NhanVien nhanVien,
-			Date ngayLap, KhachHang khachHang, Date ngayDat) {
+			LocalDateTime ngayLap, KhachHang khachHang, Date ngayDat) {
 		super();
 		this.maHoaDon = maHoaDon;
 		this.tongTien = tongTien;
@@ -108,13 +109,13 @@ public class HoaDon {
 
 
 
-	public Date getNgayLap() {
+	public LocalDateTime getNgayLap() {
 		return ngayLap;
 	}
 
 
 
-	public void setNgayLap(Date ngayLap) {
+	public void setNgayLap(LocalDateTime ngayLap) {
 		this.ngayLap = ngayLap;
 	}
 

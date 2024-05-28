@@ -6,8 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +45,10 @@ public class HoaDonDAO {
                 Phong phong = resultSet.getString(4) != null ? new Phong(resultSet.getString(4).trim()) : new Phong(null);
                 Ban banAn = new Ban( resultSet.getString(5));
                 NhanVien tenNhanVien = new NhanVien ( resultSet.getString(6));
-                Date ngayLap = resultSet.getDate(7);
+                Timestamp timestamp = resultSet.getTimestamp(7);
+                
+                // Step 2: Convert Timestamp to LocalDateTime
+                LocalDateTime ngayLap = timestamp.toLocalDateTime();
                 KhachHang tenKhachHang = new KhachHang( resultSet.getString(8));
                 Date ngayDat = resultSet.getDate(9);
 
@@ -74,7 +79,9 @@ public class HoaDonDAO {
 	        }
             statement.setString(5,hd.getBanAn().getMaBan());
             statement.setString(6,hd.getNhanVien().getMaNV());
-            statement.setDate(7, new java.sql.Date(hd.getNgayLap().getTime()));
+            LocalDateTime ngayLap = hd.getNgayLap();
+		     Timestamp timestamp = Timestamp.valueOf(ngayLap);
+		     statement.setTimestamp(7, timestamp);
 	        if (hd.getKhachHang() != null) {
 	            statement.setString(8, hd.getKhachHang().getMaKH());
 	        } else {
@@ -124,7 +131,8 @@ public class HoaDonDAO {
                 Phong phong = new Phong( rs.getString(4));
                 Ban banAn = new Ban( rs.getString(5));
                 NhanVien tenNhanVien = new NhanVien ( rs.getString(6));
-                Date ngayLap = rs.getDate(7);
+                Timestamp timestamp = rs.getTimestamp(7);
+                LocalDateTime ngayLap = timestamp.toLocalDateTime();
                 KhachHang tenKhachHang = new KhachHang( rs.getString(8));
                 Date ngayDat = rs.getDate(9);
 
