@@ -10,6 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import connectDB.ConnectDB;
 import entity.MonAn;
@@ -90,7 +91,7 @@ public class Frm_CapNhatMonAn extends JPanel {
         txtMa.setColumns(10);
         
 
-        comboBox = new JComboBox<>(new String[]{"Món nước", "Cơm","Lẩu", "Món ăn khác"});
+        comboBox = new JComboBox<>(new String[]{"Món Nước", "Cơm","Lẩu", "Món ăn khác"});
         comboBox.setFont(new Font("Arial", Font.BOLD, 18));
         comboBox.setBounds(210, 362, 245, 39);
         add(comboBox);
@@ -104,24 +105,26 @@ public class Frm_CapNhatMonAn extends JPanel {
 
         model = new DefaultTableModel(columnNames, 0);
 		table = new JTable(model);
-		table.setFont(new Font("Arial", Font.PLAIN, 15));
-		table.setRowHeight(20);
+        JTableHeader Header = table.getTableHeader();
+        Header.setFont(new Font("Arial", Font.BOLD, 20));
+		table.setFont(new Font("Arial", Font.PLAIN, 17));
+		table.setRowHeight(25);
         scrollPane.setViewportView(table);
 
         JButton btnNewButton = new JButton("Thêm");
-        btnNewButton.setFont(new Font("Arial", Font.BOLD, 18));
+        btnNewButton.setFont(new Font("Arial", Font.BOLD, 19));
         btnNewButton.setBounds(40, 529, 85, 38);
         add(btnNewButton);
 
         JButton btnXoa = new JButton("Xóa");
-        btnXoa.setFont(new Font("Arial", Font.BOLD, 18));
+        btnXoa.setFont(new Font("Arial", Font.BOLD, 19));
         btnXoa.setBounds(185, 529, 85, 38);
         add(btnXoa);
 
-        JButton btnThoat = new JButton("Thoát");
-        btnThoat.setFont(new Font("Arial", Font.BOLD, 18));
-        btnThoat.setBounds(330, 529, 95, 38);
-        add(btnThoat);
+        JButton btnXoaRong = new JButton("Xóa Rỗng");
+        btnXoaRong.setFont(new Font("Arial", Font.BOLD, 19));
+        btnXoaRong.setBounds(330, 529, 125, 38);
+        add(btnXoaRong);
 
         txtTenMon = new JTextField();
         txtTenMon.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -149,10 +152,13 @@ public class Frm_CapNhatMonAn extends JPanel {
                 deleteSelectedRow();
             }
         });
-        btnThoat.addActionListener(new ActionListener() {
+        btnXoaRong.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                txtMa.setText("");
+                txtTenMon.setText("");
+                txtDonGia.setText("");
+                comboBox.setSelectedIndex(0);
             }
         });
         docDuLieuDBVaoTable();

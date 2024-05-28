@@ -12,7 +12,7 @@ import java.util.Map;
 import connectDB.ConnectDB;
 
 
-public class bieudoDAO {
+public class BieuDoDAO {
     public Map<LocalDate, Double> thongKeTongTienTheoNgay() {
         Map<LocalDate, Double> thongKe = new HashMap<>();
 

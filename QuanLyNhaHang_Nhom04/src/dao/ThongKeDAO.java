@@ -1,17 +1,25 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import connectDB.ConnectDB;
+import entity.ChiTietHoaDon;
+import entity.HoaDon;
+import entity.KhachHang;
+import entity.NhanVien;
 
 public class ThongKeDAO {
+
 
     public Map<LocalDate, Integer> thongKeTheoNgayLap() {
         Map<LocalDate, Integer> thongKe = new HashMap<>();

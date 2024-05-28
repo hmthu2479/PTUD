@@ -15,6 +15,7 @@ import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -44,8 +45,7 @@ import entity.NhanVien;
 public class Frm_DanhSachHoaDon extends JPanel implements ActionListener{
 	  private static final long serialVersionUID = 1L;
 	    private JTable table;
-	    private JButton btnNewButton;
-	    private Frm_DanhSachHoaDon inhoadon;
+	    private JButton btnThanhToan;
 	    private JTable table_1;
 		private HoaDonDAO hd_dao;
 		private DefaultTableModel tablemodel;
@@ -172,14 +172,14 @@ public class Frm_DanhSachHoaDon extends JPanel implements ActionListener{
 			dateNgayLap.setBounds(609, 50, 307, 35);
 			
 	                        
-	        btnNewButton = new JButton("In hóa đơn");
-	        btnNewButton.setBounds(1166, 685, 138, 43);
-	        add(btnNewButton);
-	        btnNewButton.setBackground(new Color(135, 149, 248));
-	        btnNewButton.setForeground(new Color(0, 0, 0));
-	        btnNewButton.setFont(new Font("Arial", Font.BOLD, 20));   
+	        btnThanhToan = new JButton("Thanh toán");
+	        btnThanhToan.setBounds(1166, 685, 158, 43);
+	        add(btnThanhToan);
+	        btnThanhToan.setBackground(Color.white);
+	        btnThanhToan.setForeground(new Color(0, 0, 0));
+	        btnThanhToan.setFont(new Font("Arial", Font.BOLD, 20));   
 	        
-	        btnNewButton.addActionListener(this);
+	        btnThanhToan.addActionListener(this);
 	        btnLamMoi.addActionListener(this);
 	        btnTimHoaDon.addActionListener(this);
 	        docDuLieuHD();
@@ -246,6 +246,34 @@ public class Frm_DanhSachHoaDon extends JPanel implements ActionListener{
 				dateNgayLap.setDate(null);
 				table.setRowSorter(null);
 				docDuLieuHD();
+			}
+			if (o.equals(btnThanhToan)) {
+			    int selectedRow = table.getSelectedRow();
+
+			    if (selectedRow != -1) {
+			        // Lấy mã từ bảng
+			        String maHD = tablemodel.getValueAt(selectedRow, 0).toString();
+			        
+			        // Tìm chi tiết hóa đơn từ mã
+			        List<ChiTietHoaDon> chiTietList = cthd_dao.TimHoaDon(maHD);
+			            // Xóa các chi tiết hóa đơn
+			            for (ChiTietHoaDon chiTiet : chiTietList) {
+			                cthd_dao.xoaCTHoaDon(chiTiet.getHoaDon().getMaHoaDon());
+			            }
+			            
+			            // Xóa hóa đơn
+			            boolean deletedHoaDon = hd_dao.xoaHoaDon(maHD);
+			            if (deletedHoaDon) {
+			                // Hiển thị thông báo xóa thành công
+			                JOptionPane.showMessageDialog(this, "Thanh toán thành công: " + maHD);
+			                // Cập nhật lại bảng
+			                docDuLieuHD();
+			                while (cthdModel.getRowCount() > 0) {
+			                    cthdModel.removeRow(0);
+			                }
+			            
+			        }
+			    }
 			}
 	}
 }

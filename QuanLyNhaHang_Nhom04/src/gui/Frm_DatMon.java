@@ -224,11 +224,11 @@ public class Frm_DatMon extends JPanel implements ActionListener {
         cmbBan.setFont(new Font("Tahoma", Font.PLAIN, 16));
         cmbBan.setEditable(false);
 
-        ArrayList<Ban> listBan = ban_dao.layThongTin();
-        for (Ban b : listBan) {
+        ArrayList<Ban> listB = ban_dao.layThongTin();
+        for (Ban b : listB) {
             cmbBan.addItem(b.getSoBan());
         }
-
+      
         cmbBan.setBounds(200, 125, 200, 40);
         panelThongTin.add(cmbBan);
 

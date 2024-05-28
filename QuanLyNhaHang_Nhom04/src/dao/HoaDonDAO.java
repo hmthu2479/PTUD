@@ -14,6 +14,7 @@ import java.util.List;
 
 import connectDB.ConnectDB;
 import entity.Ban;
+import entity.ChiTietHoaDon;
 import entity.HoaDon;
 import entity.KhachHang;
 import entity.KhuVuc;
@@ -135,6 +136,25 @@ public class HoaDonDAO {
         }
         return dsHoaDon;
         }
-
+	
+	public boolean xoaHoaDon(String idHD) {
+	    ConnectDB.getInstance();
+	    Connection con = ConnectDB.getConnection();
+	    PreparedStatement statement = null;
+	    try {
+	        String SQL = "DELETE FROM HoaDon WHERE maHoaDon = ?";
+	        statement = con.prepareStatement(SQL);
+	        statement.setString(1, idHD);
+	        int r = statement.executeUpdate();
+	        if (r > 0) {
+	            return true; // Hóa đơn đã được xóa thành công
+	        } else {
+	            return false; // Không tìm thấy hóa đơn để xóa
+	        }
+	    } catch (SQLException e) {
+	        throw new RuntimeException(e);
+	    } 
+	    
+	}
 }
 

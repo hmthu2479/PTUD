@@ -1,5 +1,6 @@
 package gui;
 
+
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,7 +9,6 @@ import java.util.Map;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -17,6 +17,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import dao.ThongKeDAO;
+
 
 public class Frm_ThongKeTheoNgay extends JFrame implements ActionListener {
     private JComboBox<String> cbThongKe;
@@ -97,8 +98,7 @@ public class Frm_ThongKeTheoNgay extends JFrame implements ActionListener {
 
         chartPanel.setChart(chart);
     }
-
-       public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Frm_ThongKeTheoNgay().setVisible(true));
-    }
+    public static void main(String[] args) {
+		new Frm_ThongKeTheoNgay().setVisible(true);
+	}
 }

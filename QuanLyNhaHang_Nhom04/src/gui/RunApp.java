@@ -9,6 +9,8 @@ public class RunApp {
 			public void run() {
 				Frm_MenuBar frm = new Frm_MenuBar();
 				frm.setVisible(true);
+				
+
 			}
 		});
 	}

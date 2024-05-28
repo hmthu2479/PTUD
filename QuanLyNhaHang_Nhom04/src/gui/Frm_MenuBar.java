@@ -1,5 +1,3 @@
-
-
 package gui;
 
 import java.awt.BorderLayout;
@@ -12,8 +10,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -74,7 +70,7 @@ public class Frm_MenuBar extends JFrame implements MouseListener {
         nhanVienMenu.add(mniCapNhatNhanVien);
         nhanVienMenu.add(mniTimKiemNhanVien);
         nhanVienMenu.add(mniHoaDon);
-        nhanVienMenu.add(mniThongKe);
+//        nhanVienMenu.add(mniThongKe);
 
 
         JMenu khachHangMenu = new JMenu("Khách hàng");

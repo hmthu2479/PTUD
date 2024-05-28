@@ -9,6 +9,7 @@ import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import connectDB.ConnectDB;
 import entity.MonNuoc;
@@ -102,24 +103,26 @@ public class Frm_CapNhatMonNuoc extends JPanel {
 
         model = new DefaultTableModel(columnNames, 0);
 		table = new JTable(model);
-		table.setFont(new Font("Arial", Font.PLAIN, 15));
-		table.setRowHeight(20);
+        JTableHeader Header = table.getTableHeader();
+        Header.setFont(new Font("Arial", Font.BOLD, 20));
+		table.setFont(new Font("Arial", Font.PLAIN, 17));
+		table.setRowHeight(25);
         scrollPane.setViewportView(table);
 
         JButton btnNewButton = new JButton("Thêm");
-        btnNewButton.setFont(new Font("Arial", Font.BOLD, 15));
+        btnNewButton.setFont(new Font("Arial", Font.BOLD, 19));
         btnNewButton.setBounds(40, 529, 85, 38);
         add(btnNewButton);
 
         JButton btnXoa = new JButton("Xóa");
-        btnXoa.setFont(new Font("Arial", Font.BOLD, 15));
+        btnXoa.setFont(new Font("Arial", Font.BOLD, 19));
         btnXoa.setBounds(185, 529, 85, 38);
         add(btnXoa);
 
-        JButton btnThoat = new JButton("Thoát");
-        btnThoat.setFont(new Font("Arial", Font.BOLD, 15));
-        btnThoat.setBounds(330, 529, 85, 38);
-        add(btnThoat);
+        JButton btnXoaRong = new JButton("Xóa Rỗng");
+        btnXoaRong.setFont(new Font("Arial", Font.BOLD, 19));
+        btnXoaRong.setBounds(330, 529, 125, 38);
+        add(btnXoaRong);
 
         txtTenMon = new JTextField();
         txtTenMon.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -147,10 +150,13 @@ public class Frm_CapNhatMonNuoc extends JPanel {
                 deleteSelectedRow();
             }
         });
-        btnThoat.addActionListener(new ActionListener() {
+        btnXoaRong.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                txtMa.setText("");
+                txtTenMon.setText("");
+                txtDonGia.setText("");
+                comboBox.setSelectedIndex(0);
             }
         });
         docDuLieuDBVaoTable();

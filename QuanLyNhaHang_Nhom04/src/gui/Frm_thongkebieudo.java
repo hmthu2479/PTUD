@@ -1,29 +1,27 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.time.LocalDate;
-import java.util.Map;
-
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import dao.bieudoDAO;
+import dao.BieuDoDAO;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.Map;
 
 public class Frm_thongkebieudo extends JFrame implements ActionListener {
     private JComboBox<String> cbThongKe;
     private ChartPanel chartPanel;
-    private bieudoDAO thongKeDAO;
+    private BieuDoDAO thongKeDAO;
 
     public Frm_thongkebieudo() {
-        thongKeDAO = new bieudoDAO();
+        thongKeDAO = new BieuDoDAO();
         
         setTitle("Thống kê theo ngày/tháng lập hóa đơn");
         setSize(800, 600);

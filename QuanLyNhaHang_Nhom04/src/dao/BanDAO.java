@@ -2,15 +2,18 @@ package dao;
 
 import connectDB.ConnectDB;
 import entity.Ban;
+import entity.HoaDon;
 import entity.KhuVuc;
 import entity.Phong;
+import dao.HoaDonDAO;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BanDAO {
-    //lấy danh sách Bàn
+    private HoaDonDAO hd_dao;
+	//lấy danh sách Bàn
 	public ArrayList<Ban> layThongTin() {
 	    ArrayList<Ban> dsBan = new ArrayList<Ban>();
 	    try {
@@ -65,35 +68,48 @@ public class BanDAO {
 	    return dsBan;
 	}
 
-
 	public ArrayList<Ban> layThongTinTheoPhong(String tenPhong, String tenKhuVuc) {
 	    ArrayList<Ban> dsBan = new ArrayList<>();
+	    List<String> banCanXoa = new ArrayList<>();
+
 	    try {
 	        Connection con = ConnectDB.getInstance().getConnection();
-	        String SQL = "SELECT b.maBan, b.soBan, b.soGhe, b.maKhuVuc, b.maPhong " +
+	        String SQL = "SELECT b.maBan, b.soBan, b.soGhe, b.maKhuVuc, b.maPhong, " +
+	                     "h.maBan AS banDaDung, h.maKH AS khachHangDaDat " +
 	                     "FROM Ban b " +
 	                     "LEFT JOIN Phong p ON b.maPhong = p.maPhong " +
 	                     "LEFT JOIN KhuVuc k ON b.maKhuVuc = k.maKhuVuc " +
-	                     "WHERE (p.tenPhong = ? OR p.tenPhong IS NULL) AND k.tenKhuVuc = ? ";
+	                     "LEFT JOIN HoaDon h ON b.maBan = h.maBan " +
+	                     "WHERE (p.tenPhong = ? OR p.tenPhong IS NULL) AND k.tenKhuVuc = ?";
 	        PreparedStatement statement = con.prepareStatement(SQL);
 	        statement.setString(1, tenPhong);
 	        statement.setString(2, tenKhuVuc);
 	        ResultSet rs = statement.executeQuery();
+
 	        while (rs.next()) {
 	            String maBan = rs.getString(1).trim();
 	            String soBan = rs.getString(2);
 	            int soGhe = rs.getInt(3);
 	            String maKhuVuc = rs.getString(4);
 	            String maPhong = rs.getString(5);
+	            String banDaDung = rs.getString(6);
+	            String khachHangDaDat = rs.getString(7);
+	            
 	            Phong phong = new PhongDAO().layThongTinBangMaPhong(maPhong);
 	            KhuVuc khuVuc = new KhuVucDAO().timKhuVuc(maKhuVuc);
 	            Ban ban = new Ban(maBan, soBan, soGhe, khuVuc, phong);
-	            dsBan.add(ban);
+
+	            // Check nếu bàn đã dùng 
+	            if (banDaDung != null && (khachHangDaDat == null || khachHangDaDat != null)) {
+	                banCanXoa.add(maBan);
+	            } else {
+	                dsBan.add(ban);
+	            }
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
-	    return dsBan;
+		return dsBan;
 	}
 
 	// thêm Bàn
