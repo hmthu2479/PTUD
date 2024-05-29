@@ -75,7 +75,7 @@ public class BanDAO {
 	    try {
 	        Connection con = ConnectDB.getInstance().getConnection();
 	        String SQL = "SELECT b.maBan, b.soBan, b.soGhe, b.maKhuVuc, b.maPhong, " +
-	                     "h.maBan AS banDaDung, h.maKH AS khachHangDaDat " +
+	                     "h.maBan, h.maKH " +
 	                     "FROM Ban b " +
 	                     "LEFT JOIN Phong p ON b.maPhong = p.maPhong " +
 	                     "LEFT JOIN KhuVuc k ON b.maKhuVuc = k.maKhuVuc " +

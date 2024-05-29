@@ -97,7 +97,7 @@ CREATE TABLE dbo.HoaDon(
 	maPhong nvarchar(10) NULL,
 	maBan nvarchar(30) NULL,
 	maNV nvarchar(10) NULL,
-    ngayLap date NULL,
+    ngayLap datetime NULL,
 	maKH nvarchar(10) NULL,
 	ngayDat date NULL,
     PRIMARY KEY CLUSTERED (maHoaDon),
@@ -157,7 +157,7 @@ VALUES ('PH001', 'KV02', null, 'B005', 4, '2024-04-12', '2024-04-11', '10:00', N
 
 INSERT INTO dbo.HoaDon (maHoaDon, tongTien, maKhuVuc, maPhong,maBan,maNV,ngayLap,maKH,ngayDat)
 VALUES 
-	('HD014',50000,'KV01',null,'B005','NV001','2024-04-12','KH001','2024-04-12');
+	('HD014',50000,'KV01',null,'B005','NV001','2024-04-12T09:00:00','KH001','2024-04-12');
 INSERT INTO dbo.ChiTietHoaDon (maHoaDon, tenMon, soLuongMon, donGia,thanhTien)
 VALUES
 	('HD014',N'Bún bò Huế',1,50000,50000);

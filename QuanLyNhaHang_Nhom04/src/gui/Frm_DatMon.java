@@ -455,7 +455,7 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 				txtDonGia.setText("");
 				txtsoLuong.setText("");
 			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(null, "Đơn giá và số lượng phải là số!");
+				JOptionPane.showMessageDialog(null, "Số lượng phải là số!");
 			}
 		}
 
@@ -471,21 +471,14 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		
 		// Nút xóa
 		if (source == btnXoa) {
-			// Get the selected row indices from the table
 			int[] selectedRows = table.getSelectedRows();
-
-			// Check if at least one row is selected
 			if (selectedRows.length > 0) {
-				// Confirm the deletion with the user
 				int confirm = JOptionPane.showConfirmDialog(null, "Bạn có muốn xóa các dòng đã chọn?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
 
 				if (confirm == JOptionPane.YES_OPTION) {
-					// Remove the selected rows from the table
 					for (int i = selectedRows.length - 1; i >= 0; i--) {
 						model.removeRow(selectedRows[i]);
 					}
-
-					// Recalculate the total price
 					capNhatTongTien();
 				}
 			} else {
@@ -526,14 +519,6 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		        JOptionPane.showMessageDialog(null, "Vui lòng chọn nhân viên thanh toán");
 		    } else {
 		        String maHD = maTangDan();
-		        // lấy ra mã nhân viên
-		        NhanVien nv = new NhanVien();
-		        ArrayList<NhanVien> dsnv = nv_dao.layThongTin();
-		        for (NhanVien ab : dsnv) {
-		            if (ab.getHoTenNV().equalsIgnoreCase(cmbNhanVien.getSelectedItem().toString())) {
-		                nv = new NhanVien(ab.getMaNV());
-		            }
-		        }
 		        LocalDateTime ngayLap = LocalDateTime.now(); 
 		        
 		        double tongTien = Double.parseDouble(txtTongTien.getText());
@@ -570,10 +555,8 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 		        String ngayDat = null;
 		        String phieu = (String) cmbMaPhieu.getSelectedItem().toString();
 		        if (cmbMaPhieu.isVisible() && phieu != null) {
-			        ArrayList<PhieuDatBan> pdb = phieu_dao.layPhieuTheoMa(phieu);
-			        
+			        ArrayList<PhieuDatBan> pdb = phieu_dao.layPhieuTheoMa(phieu);			        
 			        ngayDat = layNgayDatTuMaPhieu(pdb, cmbMaPhieu);
-			        System.out.println(ngayDat);
 		        }
 
 ;
@@ -606,7 +589,7 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 
 		                JOptionPane.showMessageDialog(null, "Tạo đơn thành công");
 		                txtTongTien.setText("");
-		                // xóa hết dữ liệu trong bảng đơn hàng
+		                // xóa hết dữ liệu trong bảng
 		                int rowCount = model.getRowCount();
 		                for (int t = rowCount - 1; t >= 0; t--) {
 		                    model.removeRow(t);
@@ -669,7 +652,7 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 	}
 	
 	
-	// Lấy tên khách hàng đã lấy được từ ds Phiếu so sánh với tên trên cmb để lấy ngày đặt phiếu
+	// Lấy mã phiếu đã lấy được từ ds Phiếu so sánh với tên trên cmb để lấy ngày đặt phiếu
 	private String layNgayDatTuMaPhieu(ArrayList<PhieuDatBan> dsPDB, JComboBox<String> cmbMaPhieu) {
 		if (cmbMaPhieu.isVisible()) {
 			String chonMa = (String) cmbMaPhieu.getSelectedItem();
@@ -730,46 +713,30 @@ public class Frm_DatMon extends JPanel implements ActionListener {
 	    count = Integer.parseInt(ma.substring(2)) + 1; 
 	    return String.format("HD%03d", count);
 	}
+
 	private void capNhatCmbTheoMaPhieDB(String maPhieu) {
 	    List<PhieuDatBan> phieuDatBanList = phieu_dao.layPhieuTheoMa(maPhieu);
 	    
 	    txtKhachHang.setText("");
 
-	    // Thêm các giá trị duy nhất từ các đối tượng Phieudatban được truy xuất
-	    Set<String> khachHangSet = new HashSet<>();
-	    Set<String> khuVucSet = new HashSet<>();
-	    Set<String> phongSet = new HashSet<>();
-	    Set<String> banSet = new HashSet<>();
+	    String khuVuc = null;
+	    String phong = null;
+	    String ban = null;
+	    String khachHang = null;
 
 	    for (PhieuDatBan phieuDatBan : phieuDatBanList) {
-	        khuVucSet.add(phieuDatBan.getKhuVuc().getMaKhuVuc());
-	        phongSet.add(phieuDatBan.getPhong().getMaPhong());
-	        banSet.add(phieuDatBan.getTenBan().getMaBan());
-	        khachHangSet.add(phieuDatBan.getKhachHang().getMaKH());
+	        khuVuc = phieuDatBan.getKhuVuc().getMaKhuVuc();
+	        phong = phong != null ? phong : phieuDatBan.getPhong().getMaPhong();
+	        ban = ban != null ? ban : phieuDatBan.getTenBan().getMaBan();
+	        khachHang = khachHang != null ? khachHang : phieuDatBan.getKhachHang().getMaKH();
 	    }
 
-	    // Thêm giá trị vào combobox
-	    for (String khuVuc : khuVucSet) {
-	        cmbKhuVuc.setSelectedItem(khuVuc);
-	    }
-	    cmbPhong.removeAllItems();
-	    for (String phong : phongSet) {
-	    	if (phong == null ) {
-	            cmbPhong.addItem("Chọn phòng");
-	        } else {
-	            cmbPhong.setSelectedItem(phong);
-	        }    	
-	    }
-	    for (String ban : banSet) {
-	        cmbBan.setSelectedItem(ban);
-	    }
-	    for(String kH : khachHangSet) {
-	    	txtKhachHang.setText(kH);
-	    	break;
-	    }
-
-	    
+	    cmbKhuVuc.setSelectedItem(khuVuc);
+	    cmbPhong.setSelectedItem(phong != null ? phong : "Chọn phòng");
+	    cmbBan.setSelectedItem(ban);
+	    txtKhachHang.setText(khachHang);
 	}
+
 	private void capNhatCmbTheoKhuVuc(String chonKV) {
 	    cmbPhong.removeAllItems();
 	    cmbBan.removeAllItems();

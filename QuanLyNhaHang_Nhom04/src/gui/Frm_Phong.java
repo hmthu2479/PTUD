@@ -104,8 +104,9 @@ public class Frm_Phong extends JDialog implements ActionListener, MouseListener 
 
         cmbkhuVuc = new JComboBox<String>();
         cmbkhuVuc.setEditable(false);	
-		cmbkhuVuc.revalidate();
-		cmbkhuVuc.repaint();
+//		cmbkhuVuc.revalidate();
+//		cmbkhuVuc.repaint();
+        cmbkhuVuc.removeAllItems();
 		ArrayList<KhuVuc> listKV = kv_dao.layThongTin() ;
 		for (KhuVuc kv : listKV) {
 			cmbkhuVuc.addItem(kv.getTenKhuVuc());
